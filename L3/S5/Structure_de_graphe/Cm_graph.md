@@ -4,8 +4,8 @@
 - graphe bipartie
 - decomposition en cycle
 - tour euclidien
-- Parcour de graphe
-  - generique
+- Parcours de graphe
+  - générique
   - en largeur
   - en profondeur
 - couplage
@@ -13,100 +13,108 @@
 # C'est quoi un graphe {#def}
 
 Graphe :
-: G=(V,E) avec V l'ensemble des sommet et E l'ensemble des arrete ,E inclus dans V x V
+: $G=(V,E)$ avec $V$ l'ensemble des sommets et $E$ l'ensemble des arêtes ,$E \subseteq  V \times V$
 
-> Ex: G ~1~ = ({1,2,3,4},{{1,2},{2,3},{3,4},{1,4}}
+**Ex:** 
 
-dessin graph
-'''
-1->2
-2->3
-3->4
-1->4
-'''
-arete :
+$G_1 = \left( \big\{1,2,3,4 \big\},\big\{\{1,2\},\{2,3\},\{3,4\},\{1,4\} \big\} \right)$
+```mermaid
+graph LR
+1---2
+1---4
+2---3
+3---4
+```
+
+Arête :
 : {1,2} 1->2 et 2->1
 
-arc :
+Arc :
 : (a,b) a->b != (b->a)
 
-boulce:
-: il existe x dans V tq {x,x} ou (x,x)
+Boucle:
+: $\exist x \in V , \{x,x\} \text{ ou } (x,x) \in E$
 
 Graphe simple :
-: Graphe sans arrte parrallele
+: Graphe sans arête parallèle
 
 ## motivation
 
-- Outils pour modeliser des pb de la vie reel
-- outils theorique puissant
-- Minimisation de Camera (pour une galerie d'art)
+- Outils pour modéliser des problèmes de la vie réelle
+- Outils théoriques puissants
+- Minimisation de caméras (pour une galerie d'art)
 
 ## Approche 
 
-- vision algebrique
-- Mathematique discrete<br> Trouver des condition nessecaire et suffisante pour l'existance dun objet
+- Vision algébrique
+- Mathématique discrète<br>Trouver des condition nessecaire et suffisante pour l'existence d'un objet
 
-## Algotrithme de resolution
+## Algorithme de résolution
 
-Representation d'un graphe:
+Représentation d'un graphe:
 
-- matrice d'adjacence
-- Liste d'ajacence
+- Matrice d'adjacence
+- Liste d'adjacence
 
-### matrice d'adjacence
+### Matrice d'adjacence
 
-dans un graphe a n sommet l'espace meemoire utilise et en O(n^2^)
- le nombre max d'arrete est de $\frac{n(n-1)}{2}$ il s'aggit d'un graphe complet
+Dans un graphe à $n$ sommet l'espace mémoire utilisé est en $O(n^2)$
+Le nombre max d'arêtes est de $\frac{n(n-1)}{2}$ il s'agit d'un graphe complet
 
-### Liste d'ajacence
+### Liste d'adjacence
  
-Liste de liste des voision
+Liste de listes des voisins
 
-1->2
-2->3,1,4
-3->4,2
-4->3,2
+1->[2]
+2->[3,1,4]
+3->[4,2]
+4->[3,2]
 
 $$d_G(x) = \left|\{w \mid \{w, x\} \in E(G)\}\right|$$
-d~G~(2)=3,d~G~(1)=1,d~G~(3)=2
+**Ex:** 
+
+$d_G(2)=3,d_G(1)=1,d_G(3)=2$
 
 $$n + \sum_{x \in V} d_G(x)$$
+$$et$$
+$$\sum_{x \in V} d_G(x) = 2m$$
 
-$$\sum_{x \in V} d_G(x) = 2 * m$$ (2)
+$$\implies n+2m \in O(n+m)$$
 
-$$(1) et (2) -> n+2m \in O(n+m)$$
-
-dans un graphe oriente on distigue les voison entrant et sortant
+Dans un graphe orienté on distingue les voisins entrants et sortants
 on note:
-- d^+^~G~ le nombre de voision sortant 
-- d^-^~G~ le nombre de voision entrant
+- $d_G^+$ le nombre de voisins sortants 
+- $d_G^-$ le nombre de voisins entrants
 
 $$S(G) = \min \left\{ d_G(x)\mid x \in V(G) \right\} $$
 $$\Delta(G) = \max \left\{ d_G(x)\mid x \in V(G) \right\} $$
-$$N_G(v) =  \left\{w| \left\{v,w\right\} \in V(G)\right\}$$
+$$N_G(v) =  \left\{w \mid \left\{v,w\right\} \in V(G)\right\}$$
 
-on dit qu'un graphe est  k-regulier si tous les somment ont des degres identiques 
+On dit qu'un graphe est  $k-$regulier si tous les sommets ont des degrés identiques 
 
-## chemin et cycles
+## Chemins et Cycles
 
-chemin : 
-: $P = (v~1~,v~2~,v~3~,...,v~k~) , pour tout i dans [1,k-1] v~i~ != v~i+1~ et {v~i~,v~i+1~} appartient a E(G)$
+Chemins : 
+: $P = (v_1,v_2,v_3,...,v_k), \forall{i} \in{[1,k-1]},v_i \neq v_{i+1} \text{ et } {v_i,v_{i+1}}\in{E(G)}$
 
-graphe non oriente
+**Ex:** 
+
+```mermaid
+graph LR
+    1 --- 2
+    2 --- 6
+    6 --- 5
+    5 --- 7
+    2 --- 3
+    3 --- 6
+    3 --- 4
+    4 --- 5
+    4 --- 6
 ```
-1->2
-2->3,6
-3->6,4
-4->6,5
-5->6,7
-6->2,3,4,5
-7->5
-```
 
-Ex: P~1~ = (1,2,6,3,4,6,5,7) n'est pas un chemin elem car il y a 2 fois le sommet 6
-P~2~ = (1,2,3,4,5,7) est un chemin
-P~3~ = (1,2,6,7) n'est  pas un chemin car l'arrete {6,7} n'existe pas dans le graphe
+- $P_1 = (1,2,6,3,4,6,5,7)$ n'est pas un chemin élémentaire car il y a 2 fois le sommet 6
+- $P_2 = (1,2,3,4,5,7)$ est un chemin
+- $P_3 = (1,2,6,7)$ n'est pas un chemin élémentaire car l'arête {6,7} n'existe pas dans le graphe
 
-cycles:
-: Un cycle est un chemin et {V~1~,v~k~} appartient a E(G)
+Cycles:
+: Un cycle est un chemin et $\{v_1,v_k\} \in{E(G)}$
