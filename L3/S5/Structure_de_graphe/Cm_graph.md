@@ -12,31 +12,26 @@
 
 # C'est quoi un graphe {#def}
 
-Graphe :
-: $G=(V,E)$ avec $V$ l'ensemble des sommets et $E$ l'ensemble des arêtes ,$E \subseteq  V \times V$
+***Graphe :***
+&emsp; $G=(V,E)$ avec $V$ l'ensemble des sommets et $E$ l'ensemble des arêtes ,$E \subseteq  V \times V$
 
 **Ex:** 
 
 $G_1 = \left( \big\{1,2,3,4 \big\},\big\{\{1,2\},\{2,3\},\{3,4\},\{1,4\} \big\} \right)$
-```mermaid
-graph LR
-1---2
-1---4
-2---3
-3---4
-```
 
-Arête :
-: {1,2} 1->2 et 2->1
+![](./graphes/IwrldSxteUFKlfEX.svg)
 
-Arc :
-: (a,b) a->b != (b->a)
+***Arête :***
+&emsp; {1,2} 1->2 et 2->1
 
-Boucle:
-: $\exist x \in V , \{x,x\} \text{ ou } (x,x) \in E$
+***Arc :***
+&emsp; (a,b) a->b != (b->a)
 
-Graphe simple :
-: Graphe sans arête parallèle
+***Boucle:***
+&emsp; $\exist x \in V , \{x,x\} \text{ ou } (x,x) \in E$
+
+***Graphe simple :***
+&emsp; Graphe sans arête parallèle
 
 ## Motivation
 
@@ -44,7 +39,7 @@ Graphe simple :
 - Outils théoriques puissants
 - Minimisation de caméras (pour une galerie d'art)
 
-## Approche 
+## Approche
 
 - Vision algébrique
 - Mathématique discrète<br>Trouver des condition nessecaire et suffisante pour l'existence d'un objet
@@ -62,7 +57,7 @@ Dans un graphe à $n$ sommet l'espace mémoire utilisé est en $O(n^2)$
 Le nombre max d'arêtes est de $\frac{n(n-1)}{2}$ il s'agit d'un graphe complet
 
 ### Liste d'adjacence
- 
+
 Liste de listes des voisins
 
 1->[2]
@@ -70,25 +65,32 @@ Liste de listes des voisins
 3->[4,2]
 4->[3,2]
 
-$$d_G(x) = \left|\{w \mid \{w, x\} \in E(G)\}\right|$$
+$$
+d_G(x) = \left|\{w \mid \{w, x\} \in E(G)\}\right|
+$$
+
 **Ex:** 
 
 $d_G(2)=3,d_G(1)=1,d_G(3)=2$
 
-$$n + \sum_{x \in V} d_G(x)$$
-$$et$$
-$$\sum_{x \in V} d_G(x) = 2m$$
-
-$$\implies n+2m \in O(n+m)$$
+$$
+n + \sum_{x \in V} d_G(x)
+\\et\\
+\sum_{x \in V} d_G(x) = 2m\\
+\implies n+2m \in O(n+m)
+$$
 
 Dans un graphe orienté on distingue les voisins entrants et sortants
 on note:
+
 - $d_G^+$ le nombre de voisins sortants 
 - $d_G^-$ le nombre de voisins entrants
 
-$$S(G) = \min \left\{ d_G(x)\mid x \in V(G) \right\} $$
-$$\Delta(G) = \max \left\{ d_G(x)\mid x \in V(G) \right\} $$
-$$N_G(v) =  \left\{w \mid \left\{v,w\right\} \in V(G)\right\}$$
+$$
+S(G) = \min \left\{ d_G(x)\mid x \in V(G) \right\}\\
+\Delta(G) = \max \left\{ d_G(x)\mid x \in V(G) \right\}\\
+N_G(v) =  \left\{w \mid \left\{v,w\right\} \in V(G)\right\}
+$$
 
 On dit qu'un graphe est  $k-$régulier si tous les sommets ont des degrés identiques 
 
@@ -99,25 +101,14 @@ Chemins :
 
 **Ex:** 
 
-```mermaid
-graph LR
-    1 --- 2
-    2 --- 6
-    6 --- 5
-    5 --- 7
-    2 --- 3
-    3 --- 6
-    3 --- 4
-    4 --- 5
-    4 --- 6
-```
+![](./graphes/hisobSVByPYjcUwC.svg)
 
 - $P_1 = (1,2,\bold{6},3,4,\bold{6},5,7)$ n'est pas un chemin élémentaire car il y a 2 $\times$ le sommet 6
 - $P_2 = (1,2,3,4,5,7)$ est un chemin
 - $P_3 = (1,2,6,7)$ n'est pas un chemin élémentaire car l'arête {6,7} n'existe pas dans le graphe
 
-Cycles:
-: Un cycle est un chemin et $\{v_1,v_k\} \in{E(G)}$
+***Cycles :***
+&emsp; Un cycle est un chemin et $\{v_1,v_k\} \in{E(G)}$
 
 ## Famille de graphe particuliere
 
@@ -127,14 +118,14 @@ $K_{1,n}$ un sommet dominant $n$ sommets
 
 ### Foret et Arbre
 
-Foret:
-: Graphe sans cycle
+***Foret :***
+&emsp; Graphe sans cycle
 
-Arbre :
-: Graphe connexe acyclique
+***Arbre :***
+&emsp; Graphe connexe acyclique
 
-Connexe:
-: $G=(V,E)$ est connexe si $\forall$ paire de sommet $\exist$ un chemin qui les relies.  
+***Connexe :***
+&emsp; $G=(V,E)$ est connexe si $\forall$ paire de sommet $\exist$ un chemin qui les relies.  
 
 Si le graphe n'est pas connexe on peut partitioner l'ensemble des sommets de $G$ en composantes connexe
 
@@ -154,24 +145,9 @@ $G=(V,E)$ est un graphe bipartie $ssi$ on peut partitioner $V$ en deux parties $
 **Ex:**
 
 - Graphe bipartie
-```mermaid
-graph LR
-1---2
-1---6
-2---3
-2---5
-3---4
-4---5
-5---6
-```
+![](./graphes/qqGnmcurKIxMXlMF.svg)
 - Graphe non-bipartie
-  
-```mermaid 
-graph LR
-A---B
-A---C
-B---C
-```
+![](./graphes/QtcQZSyMAysthvmj.svg)
 
 #### Stables/Ensemble independants
 
@@ -186,50 +162,85 @@ Pour obtenir $H$ on peut supprimer de $V$ des sommets et des arêtes.
 
 ### Sous graphe induit
 
-$H=(W,F), W\subseteq V \space F= E \cap (W,W)$  
-On garde toutes les arete de E qui ont leur 2 extremite dans W.
+$H=(W,F), W\subseteq V \space F= E \cap (W,W)$ 
 
-**Notation :** $H=G[W]$ H est le sous graphe induit par $W$ et $G$ 
+On garde toutes les arêtes de $E$ qui ont leur 2 extremite dans $W$.
+
+**Notation :** $H=G[W] \space H$ est le sous graphe induit par $W$ et $G$ 
 
 $G$ est Bipartie $ssi$ $G[A]$ et $G[B]$ induisent des stables
 
 ### Sous graphe couvrant
 
-Soit $G(V,E)$ un graphe et $H(W,F)$ un sous graphe de $G$.  
+Soit $G(V,E)$ un graphe et $H(W,F)$ un sous graphe de $G$.
 $H$ est couvrant (pour $G$) $si$:
+
 - $W=V$
 - $H$ est connexe
 
-### Graphe complementaire 
+### Graphe complementaire
 
-$G=(V,E)\space \bar{G} = (v_1 \binom{V}{2}\backslash E)$
+$G=(V,E)\space \bar{G} = (V,\binom{V}{2}\backslash E)$
 
-```mermaid
-graph LR
-1---2
-2---3
-3---4
-4---1
-```
-```mermaid
-graph LR
-1---3
-2---4
-```
+$G :$ 
+![](./graphes/nycwjhskbbGiYqNA.svg)
+$\bar{G} :$
+![](./graphes/tZmxQWwdcQWJusDN.svg)
+
 ---
 
-$G(V,E) \space H(W,F)$
-$G$ et $H$ sont isomorphe $ssi \space \exist$ une bijection #finir_la_def
+Deux graphes $G=(V,E)$ et $H=(W,F)$ sont isomorphes $ssi \space \exist$ une bijection $f : V \to W$ telle que :
+
+$$\forall (u, v) \in V^2, \quad (u, v) \in E \iff (f(u), f(v)) \in F$$
+
+---
 
 
-# Graphe Bipartie
+# Graphe Biparti
 
-**Remarque:** 
-- Tous les cylces impair $(C_{2k+1})$ ne sont pas bipartie.
-- Si $G$ contient un cycle impair comme sous graphe alors il n'est pas biparti.
+**Remarques :** 
+- Aucun cycle impair $(C_{2k+1})$ n'est biparti (ou : *Tous les cycles impairs ne sont pas bipartis*).
+- Si $G$ contient un cycle impair comme sous-graphe, alors il n'est pas biparti.
 
-**Theoreme:** Un graphe $G$ est bipartie $ssi$ $G$ ne contient pas de cycle Impaire.
+**Théorème :** Un graphe $G$ est biparti si et seulement si $G$ ne contient pas de cycle impair.
 
 **Preuve:**
 $\implies$ obvious
 $\impliedby$ SI $G$ ne contient pas de cycle impair alors tous les cylces sont de longeur paires
+
+Soit $T$ un Arbre couvrant de $G$ pour determiner facilement une Bipartition des sommets $(A,B)$ pour toutes les arretes en suivant le procede d'Affectation de parties chaque arrete a une extreminter dans $A$ et l'autre dans $B$.
+
+On dois montrer que pour toute arrete $e \in G\backslash{T}$ a exactement une extremite dans $A$ et l'autre dans $B$.
+
+Tous les cycles sont de longeur paire et le graphe n'est pas bipartie $\implies \exists e \in G\backslash{T}$ tq sans pair de generalite que ses deux extremite sont dans $A$.
+
+**Remarque :** Dans un arbre entre 2 sommet $x$ et $y$ $\exist !$ chemin qui les relie.
+
+il existe dans T un chemin de $x$à$y$. Si $x$et $y$ sont dans la meme partie $A$ cela signifie que le chemin qui relie $x$ à $y$ est de longeur paire.
+Si je concatene le chemin pair+ arrete $e$,j 'obtiens un cycle de longeur impair = contradiction.
+
+**Marche :** chemin dans lequelle on peut avooir plusiuer fois une arrete ou un noeud.
+
+# Decomposition en cycle:
+
+une partition des arretes.$C=\{E_1,E_2,...,E_k\},\space E_i \subseteq E$
+
+Chaque $E_i$ est un cycle
+
+#fairecycle
+
+Ce graphe admet une decomposition en cycle.
+
+**Lemme :** Si $G$ admet une decomposition en cycle, alors chaque sommet a degres pair.
+
+**Preuve :** Pour chaque sommet $v$, onpeut faire une liste de cycle $C^v_i$ auquel  v participe à un ou plusieur cycle et chauqe sycle utilise exactement 2 arrete.
+Comme chaque arrete est couverte par exactement un cycle alors le nombre d'arrete est pair.**
+
+**Lemme :** Soit $G=(V,E)$ un graphe .si $\delta(G) \geq 2$, alors $G$ contient au moins un cycle.
+
+**Preuve :**
+
+Soit $P=(v_1,v_2,v_3,...,v_k)$ un chemin de longeur maximun.
+par hypothes e $v_1$ et $v_k$ ont respectivement un autre voisin different de $v_2$ et resp $v_{k-1}$.
+
+L'autre voisin de $v_1$ est necessairement un sommet de $P \neq v_2$ on apelle ce voisin $v_j$ meme chose pour $v_k$ , un autre voisin $v_i \neq v_{k-1}$
