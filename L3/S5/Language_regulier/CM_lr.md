@@ -47,6 +47,97 @@ $L= \{a^ib^ic^i \mid i=j\}\cup \{a^ib^ic^i \mid j=k\}$
 
 $L=\{a^ib^i \mid i=j\}. \{c^k \mid k>=0\} \cup ...$
 
-$X->aXb \mid \epsilon ,\space C->cC\mid \epsilon\\S->AC$
+$X \to aXb \mid \epsilon ,\space C \to cC\mid \epsilon\\S \to AC$
 
 #finir
+
+**Prop :**
+
+Soient $G_1$ et $G_2$ deux grammaires. 
+
+$\exist$ les grammaires :
+
+- $G_\cup$ tq $L(G_\cup) = L(G_1) \cup L(G_2)$
+
+- $G_.$ tq $L(G_.) = L(G_1) . L(G_2)$
+
+- $G_*$ tq $L(G_*) = (L(G_1))^*$
+
+**Preuve :**
+
+On fixe $G_1=(V_1,\Sigma,R_1,S_1) \space et \space G_2=(V_2,\Sigma,R_2,S_2) \space avec \space V_1 \cap V_2 =\empty$
+
+Soit $S \notin V_1 \cup V_2 $
+
+On definit :
+
+- $G_{\cup} =(V_1 \cup V_2 \cup \{ S\},\Sigma,R_1 \cup R_2 \cup \{S \to S_1,S-SS_2\},S)$
+- $G_. =(V_1 \cup V_2 \cup \{ S\},\Sigma,R_1 \cup R_2 \cup \{S \to S_1S_2\},S)$
+- $G_* =(V_1 \cup \{ S\},\Sigma,R_1 \cup \{S \to SS \mid \epsilon \},S)$
+
+**Corollaire :**
+
+Tout language regulier est génere par une grammaire 
+
+**Preuve :**
+
+base :
+
+si $L=\empty $ alors $ G_\empty = S \to S$
+si $L=\{a\} $ pour $a\in \Sigma$ alors $ G_a = S \to a$
+
+heredite:
+
+Si $L=L_1 \cup L_2 \text{ ou } L=L_1 . L_2 \text{ ou } L=L_1^*$ consequece dde la prop precedente.
+
+**Remarque :**
+
+La reciproque est fausse : $S \to aSb \mid \epsilon$
+
+---
+
+**Prop :** 
+
+$$
+L \space regulier \iff \exist G \text{ est regulier a droite tq }L=\mathcal{L}(G)
+$$
+
+**Preuve :**
+
+
+
+$ \implies :$
+
+init : $S\to S \space et \space S\to a$
+
+heredite: Soient $G_1(V_1,\Sigma,R_1,S_1)$ et $G_2(V_2,\Sigma,R_2,S_2)$ linéaires a droites.
+
+il suffit de montrer $\exist$ :
+
+- $G_\cup$ linéaire à droite tq $\mathcal{L}(G_\cup) = \mathcal{L}(G_1) \cup \mathcal{L}(G_2)$ 
+
+- $G_.$ linéaire à droite  tq $\mathcal{L}(G_.) = \mathcal{L}(G_1) . \mathcal{L}(G_2)$
+
+- $G_*$ linéaire à droite  tq $\mathcal{L}(G_*) = (\mathcal{L}(G_1))^*$
+
+$G_\cup$ : $(S->S_1\mid S_2)$
+
+$G_.$ :
+
+$S_1\to bX_1 \mid aS_1 ,X_1 \to bS_1\mid \epsilon$
+
+$S_2 \to ccS_2\mid c$
+
+donc $G_. = (\{ (vS_2) \mid v \in V_1\} \cup V_2,\Sigma,R_1^{()} \cup R_2,(S_1S_2)$
+
+avec $R^{()}= \{ (vS_2) \to ...$
+
+
+
+$\impliedby :$
+
+Si $G$ est lineaire a droite alors$\mathcal{L}(G)$ est regulier
+
+soit $G=(V,\Sigma,R,S)$
+
+il faut montre quil existe ue relation entre une regle de la grammaire et la construction de ca dans un automate

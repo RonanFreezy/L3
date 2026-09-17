@@ -2,8 +2,8 @@
 
 - [def de base](#def)
 - [graphe bipartie](#graphe-bipartie)
-- decomposition en cycle
-- tour euclidien
+- [decomposition en cycle](#decomposition-en-cycle-)
+- [tour euclidien]()
 - Parcours de graphe
   - générique
   - en largeur
@@ -96,18 +96,18 @@ On dit qu'un graphe est  $k-$régulier si tous les sommets ont des degrés ident
 
 ## Chemins et Cycles
 
-Chemins : 
-: $P = (v_1,v_2,v_3,...,v_k), \forall{i} \in{[1,k-1]},v_i \neq v_{i+1} \text{ et } {v_i,v_{i+1}}\in{E(G)}$
+**Chemins :**
+$P = (v_1,v_2,v_3,...,v_k), \forall{i} \in{[1,k-1]},v_i \neq v_{i+1} \text{ et } {v_i,v_{i+1}}\in{E(G)}$
 
 **Ex:** 
 
-![](./graphes/hisobSVByPYjcUwC.svg)
+<img src="./graphes/hisobSVByPYjcUwC.svg" title="" alt="" width="448">
 
 - $P_1 = (1,2,\bold{6},3,4,\bold{6},5,7)$ n'est pas un chemin élémentaire car il y a 2 $\times$ le sommet 6
 - $P_2 = (1,2,3,4,5,7)$ est un chemin
 - $P_3 = (1,2,6,7)$ n'est pas un chemin élémentaire car l'arête {6,7} n'existe pas dans le graphe
 
-***Cycles :***
+**Cycles :**
 &emsp; Un cycle est un chemin et $\{v_1,v_k\} \in{E(G)}$
 
 ## Famille de graphe particuliere
@@ -145,9 +145,9 @@ $G=(V,E)$ est un graphe bipartie $ssi$ on peut partitioner $V$ en deux parties $
 **Ex:**
 
 - Graphe bipartie
-![](./graphes/qqGnmcurKIxMXlMF.svg)
+  ![](./graphes/qqGnmcurKIxMXlMF.svg)
 - Graphe non-bipartie
-![](./graphes/QtcQZSyMAysthvmj.svg)
+  ![](./graphes/QtcQZSyMAysthvmj.svg)
 
 #### Stables/Ensemble independants
 
@@ -191,14 +191,16 @@ $\bar{G} :$
 
 Deux graphes $G=(V,E)$ et $H=(W,F)$ sont isomorphes $ssi \space \exist$ une bijection $f : V \to W$ telle que :
 
-$$\forall (u, v) \in V^2, \quad (u, v) \in E \iff (f(u), f(v)) \in F$$
+$$
+\forall (u, v) \in V^2, \quad (u, v) \in E \iff (f(u), f(v)) \in F
+$$
 
 ---
-
 
 # Graphe Biparti
 
 **Remarques :** 
+
 - Aucun cycle impair $(C_{2k+1})$ n'est biparti (ou : *Tous les cycles impairs ne sont pas bipartis*).
 - Si $G$ contient un cycle impair comme sous-graphe, alors il n'est pas biparti.
 
@@ -219,9 +221,9 @@ Tous les cycles sont de longeur paire et le graphe n'est pas bipartie $\implies 
 il existe dans T un chemin de $x$à$y$. Si $x$et $y$ sont dans la meme partie $A$ cela signifie que le chemin qui relie $x$ à $y$ est de longeur paire.
 Si je concatene le chemin pair+ arrete $e$,j 'obtiens un cycle de longeur impair = contradiction.
 
-**Marche :** chemin dans lequelle on peut avooir plusiuer fois une arrete ou un noeud.
+**Marche :** chemin dans lequelle on peut avoir plusieur fois une arrete ou un noeud.
 
-# Decomposition en cycle:
+# Decomposition en cycle :
 
 une partition des arretes.$C=\{E_1,E_2,...,E_k\},\space E_i \subseteq E$
 
@@ -234,13 +236,104 @@ Ce graphe admet une decomposition en cycle.
 **Lemme :** Si $G$ admet une decomposition en cycle, alors chaque sommet a degres pair.
 
 **Preuve :** Pour chaque sommet $v$, onpeut faire une liste de cycle $C^v_i$ auquel  v participe à un ou plusieur cycle et chauqe sycle utilise exactement 2 arrete.
-Comme chaque arrete est couverte par exactement un cycle alors le nombre d'arrete est pair.**
+Comme chaque arrete est couverte par exactement un cycle alors le nombre d'arrete est pair.
 
 **Lemme :** Soit $G=(V,E)$ un graphe .si $\delta(G) \geq 2$, alors $G$ contient au moins un cycle.
 
 **Preuve :**
 
 Soit $P=(v_1,v_2,v_3,...,v_k)$ un chemin de longeur maximun.
-par hypothes e $v_1$ et $v_k$ ont respectivement un autre voisin different de $v_2$ et resp $v_{k-1}$.
+par hypothese $v_1$ et $v_k$ ont respectivement un autre voisin different de $v_2$ et resp $v_{k-1}$.
 
 L'autre voisin de $v_1$ est necessairement un sommet de $P \neq v_2$ on apelle ce voisin $v_j$ meme chose pour $v_k$ , un autre voisin $v_i \neq v_{k-1}$
+
+**Def  :**
+
+Graphe $G$ est pair si tous les sommet ont un degres pair.
+
+**Théoreme :** Un graphe admet une decomposition en cycle ssi il est pair.
+
+**Preuve :**
+
+$\implies$: Deja prouve dans l'avant dernier lemme.
+
+$\impliedby$: Par recurrence descendant
+
+Soit $G^1 =G$ 
+
+on applique le lemme ($S(G) \geq 2$) pour trouve un cycle C
+
+On considere $G^2 = G\backslash E(C)$ et $G^2$ est pair.
+
+On réiter le procede sur les sommets de $G^2$ qui sont de degres non nul, donc $G^2$ est pair et $\delta(G) \geq 2$.
+
+On reitere les etapes . $G^i =$ trouve un cycle C de $G^{i-1}$,Supprimer $E(C)$ et les sommet de degres 0.
+
+Le procede s'arrete quand le graphe n'a plus aucun sommet.
+
+**Lemme :** Si $G=(V,E)$ admet un Tour Eulèrien alors $G$ est pair
+
+**Preuve :**
+
+Comme le tour passe par toute les arretes, pour chaque sommet $v$ le tour arrive sur $v$ et reppart de $v$, le tour arrive autant de fois sur $v$ qu'il en repart de $v$ donc le degres est pair.
+
+**Notation :**
+
+Si on a deux ensemble de sommets $X \text{ et } Y, \space e=(X,Y)$ esemble des arrete avec une extremite dans $X$ et l'autre dans $Y$. La coupe d'un ensemble $X$ noté $\delta(X) =$l'ensemble des arrete avec une extremite dans $X$ et l'autre dans $V\backslash X$  
+
+**Algorithme de Fleury :**
+
+Input : $G=(V,E)$ pair
+
+Output : un tour eulèrien en u $\gets$ sommet de pair arbitraire
+
+$w : = u$ // tour en construction
+
+$x := u$ Dernier sommet du tour
+
+$F :=G$ graphe couvrant
+
+```
+While deg_F(x) != None :
+    Choisir = e={x,y} dans deg_F(x):
+        e n'est pas deconnectante pour F sauf si c'est la seule disponible
+        w = w . {x,y} , x := y
+        F := F\{e}
+    retrun w
+```
+
+$e =\{x,y\}$ est une arrete deconectante si el nombre de composante connexe de $G-e$ est strictement plus grande que celui de $G$
+
+#graphe
+
+**Theoreme :** L'algorithme de Fleury trouve toujour un tour Eulèrien si le graphe est pair
+
+**Preuve :**
+
+on veut montrer que $w$ est un tour Eulerien.
+
+1. chaque arreete est utilise au plus 1 fois
+
+2. toutes les arrete sont utilise et qu'on revient au sommet de depart au l'on a choisis.
+
+Pour 1 :
+
+Au depart $w$ est une marche et chaque arrete qu'on rajoute à la marche , on la supprime de $F$ donc on peut l'utilise d'une seul fois. La condition d'arret $\delta_F(X) = \empty$ à priori on s'arrete quand $x=u$
+
+Pour 2 :
+
+Montrer par l'absurde que toute les arretes sont utilisee.
+
+L'algorithme s'arrete et il reste des arrete de G qui ne participe pas à $w$ 
+
+Soit X l'ensemble des sommets de degres positif de $F$ quand l'algorithme s'arrete.
+
+$F[x]$ est un graphe pair, on a $V\backslash X \neq \empty$ car $u \notin X$
+
+Comme le graphe de depart $G$ est connexe on a $\delta_F(X) \neq \empty$, la derniere arrete $e'$ de $\delta_F(X)$ qui à ete ajoute à $w$ le tour en construction dans le graphe a l'etape ou elle a ete choisie, elle est deconectante pour $F$.
+
+Ca contredit le choix imposé par l'algorithme qui aurait du choisir une autre arrete incidente à $x$ dans $F$ donc contradictoire.
+
+$$
+\text{Decomposition en cycle } \iff G \text{ est pair } \iff \text{Tour Eulerien}
+$$
