@@ -4,16 +4,16 @@ Si $L$ est regulier alors $L$ satisfait la condition de pompage regulier
 
 c'est a dire :
 
-- $\exist N>0 \space \forall w \in L \space |w|>N$
+- $\exists N>0 \space \forall w \in L \space |w|>N$
 
-- $\exist x,y,z \space w=xyz, \space y\neq \epsilon$
+- $\exists x,y,z \space w=xyz, \space y\neq \epsilon$
 
-- $\forall i \in \N \text{ on a } xy^iz \in L$
+- $\forall i \in \mathbb{N} \text{ on a } xy^iz \in L$
 
 **Average Proof:**
 
 $$
-Soit N>0 \text{ Posons } w=... \text{ On a bien } w \in L \space et |w| >N\\
+Soit \space N>0 \text{ Posons } w=... \text{ On a bien } w \in L \space et |w| >N\\
 Soient \space x,y,z \space tq \space w=xyz,\space y\neq \epsilon \space et \space  |xy|<N\\
 \text{Posons }i=...\\
 .\\
@@ -23,20 +23,20 @@ $$
 
 **Ex :**
 
-Montrer que $L=\left\{ a^nb^mc^k \mid n\neq{m} \text{ ou } m\neq k\right\}$ n'est pas regulier.
+Montrer que $L=\{ a^nb^mc^k \mid n\neq{m} \text{ ou } m\neq k\}$ n'est pas regulier.
 
 **Preuve :**
 
 $$
-\bar{L} = \left( \Sigma^* \setminus a^* b^* c^* \right) \cup \{ a^n b^n c^n \mid n \ge 0 \} \\
+\bar{L} = ( \Sigma^{*} \backslash a^{*} b^{*} c^{*} ) \cup \{ a^n b^n c^n \mid n \ge 0 \} \\
 \text{Montrons que }\bar{L} \text{ n'est pas regulier} (\overline{L} \text{ non régulier} \iff L \text{ non régulier})\\
-et \space R=\{a^*b^*c^*\} \space regulier\\
+et \space R=\{a^{*}b^{*}c^{*}\} \space regulier\\
 \overline{L} \cap R = \{ a^n b^n c^n \mid n \ge 0 \} \text{ par distribution de l'} \cap \\
 \text{Comme R est regulier , si } L' \text{ n'est pas régulier alors }\overline{L} \text{ n'est pas regulier} \\
 \text{Prouvons que }L'=\{a^nb^nc^n\mid n >= 0\} \text{ n'est pas regulier}\\
 Soit \space N>0 \text{ Posons } w=a^Nb^Nc^N \text{ On a bien } w \in L' \space et |w| >N\\
 Soient \space x,y,z \space tq \space w=xyz,\space y\neq \epsilon \space et \space  |xy|<N\\
-|xy|<N,\space y\in a^* et\space  y\neq \epsilon\\
+|xy|<N,\space y\in a^{*} et\space  y\neq \epsilon\\
 \text{Posons }i=2\\
 |xy^2z|_a = |x|_a + |y|_a + |y|_a + |z|_a = (|x|_a + |y|_a + |z|_a) + |y|_a\\
 = |xyz|_a + |y|_a = N + |y|_a = N + |y|>N\\
@@ -60,7 +60,7 @@ $X \to aXb \mid \epsilon ,\space C \to cC\mid \epsilon\\S \to AC$
 
 Soient $G_1$ et $G_2$ deux grammaires. 
 
-$\exist$ les grammaires :
+$\exists $ les grammaires :
 
 - $G_\cup$ tq $L(G_\cup) = L(G_1) \cup L(G_2)$
 
@@ -70,7 +70,7 @@ $\exist$ les grammaires :
 
 **Preuve :**
 
-On fixe $G_1=(V_1,\Sigma,R_1,S_1) \space et \space G_2=(V_2,\Sigma,R_2,S_2) \space avec \space V_1 \cap V_2 =\empty$
+On fixe $G_1=(V_1,\Sigma,R_1,S_1) \space et \space G_2=(V_2,\Sigma,R_2,S_2) \space avec \space V_1 \cap V_2 =\emptyset$
 
 Soit $S \notin V_1 \cup V_2 $
 
@@ -104,7 +104,7 @@ La reciproque est fausse : $S \to aSb \mid \epsilon$
 **Prop :** 
 
 $$
-L \space regulier \iff \exist G \text{ est regulier a droite tq }L=\mathcal{L}(G)
+L \space regulier \iff \exists G \text{ est regulier a droite tq }L=\mathcal{L}(G)
 $$
 
 **Preuve :**
@@ -115,7 +115,7 @@ init : $S\to S \space et \space S\to a$
 
 heredite: Soient $G_1(V_1,\Sigma,R_1,S_1)$ et $G_2(V_2,\Sigma,R_2,S_2)$ linéaires a droites.
 
-il suffit de montrer $\exist$ :
+il suffit de montrer $\exists$ :
 
 - $G_\cup$ linéaire à droite tq $\mathcal{L}(G_\cup) = \mathcal{L}(G_1) \cup \mathcal{L}(G_2)$ 
 
@@ -127,7 +127,7 @@ $G_\cup$ : $(S \to S_1\mid S_2)$
 $G_.$ :
 $S_1\to bX_1 \mid aS_1 ,X_1 \to bS_1\mid \epsilon$
 $S_2 \to ccS_2\mid c$
-donc $G_. = \{ (vS_2) \mid v \in V_1\} \cup V_2,\Sigma,R_1^{()} \cup R_2,(S_1S_2)\}$
+donc $G_. = (\{ (vS_2) \mid v \in V_1\} \cup V_2,\Sigma,R_1^{()} \cup R_2,(S_1S_2))$
 avec $R^{()}= \{ (vS_2) \to ... \}$
 
 $\impliedby :$
@@ -142,7 +142,7 @@ Nb binaire sans 0 non-significatif:
 $S\to 1X|0;X \to 1X|0X|\epsilon$
 
 Expresion regulière sur $\{a,b\}$
-$E\to a|b|\empty|E+E|EE|E^*|(E)$
+$E\to a|b|\emptyset|E+E|EE|E^*|(E)$
 
 algo 1:
 

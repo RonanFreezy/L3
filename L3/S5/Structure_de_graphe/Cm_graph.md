@@ -10,7 +10,7 @@
   - en profondeur
 - couplage
 
-# C'est quoi un graphe {#def}
+# C'est quoi un graphe
 
 ***Graphe :***
 &emsp; $G=(V,E)$ avec $V$ l'ensemble des sommets et $E$ l'ensemble des arêtes ,$E \subseteq  V \times V$
@@ -264,6 +264,7 @@ On reitere les etapes . $G^i =$ trouve un cycle C de $G^{i-1}$,Supprimer $E(C)$ 
 Le procede s'arrete quand le graphe n'a plus aucun sommet.
 
 **Lemme :** 
+
 $$
 \text{G connexe et } G \text{ admet un tour eulerien} \iff G \text{ est connexe et pair}
 $$
@@ -279,8 +280,9 @@ Si on a deux ensemble de sommets $X \text{ et } Y, \space e=(X,Y)$ esemble des a
 Input : $G=(V,E)$ pair
 Output : un tour eulèrien en u $\gets$ sommet de pair arbitraire
 
-$w : = u$ // tour en construction
-$x := u$ Dernier sommet du tour
+$w : = u$ // tour en construction  
+$x := u$ Dernier sommet du tour  
+
 $F :=G$ graphe couvrant
 
 ```
@@ -303,7 +305,7 @@ on veut montrer que $w$ est un tour Eulerien.
 
 1. chaque arrete est utilise au plus 1 fois.
 2. toutes les arrete sont utilise et qu'on revient au sommet de depart que l'on a choisis.
-   
+
 Pour 1 :
 Au depart $w$ est une marche et chaque arrete qu'on rajoute à la marche , on la supprime de $F$ donc on peut l'utilise d'une seul fois. La condition d'arret $\delta_F(X) = \empty$ à priori on s'arrete quand $x=u$
 
