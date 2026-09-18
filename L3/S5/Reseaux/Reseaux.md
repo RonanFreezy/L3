@@ -278,14 +278,12 @@ Taille min : 20 octets
 
 ## Fragmentation :
 
-Lorsqu' un paquet va de A a B il peut traverser plusieur reseaux physiques avec des MTU : Maximum Trasfer Unit taille max d'info dans un paquet qui peut etre transporté sur un reseaux physique (Ethernet $\approx$ 1 500 octets).
+Lorsqu' un paquet va de A a B il peut traverser plusieur reseaux physiques avec des **MTU**(Maximum Transfer Unit): taille max d'info dans un paquet qui peut etre transporté sur un reseaux physique (Ethernet $\approx$ 1 500 octets).
 
 3 parametre utile:
 
 - Identifiant
-
 - Deplacment Fragment
-
 - Drapeaux More fragment
 
 ```mermaid
@@ -298,17 +296,13 @@ R4--400-->B
 ```
 
 Si le message $m$ de A à B fait 1 800 octets avec en-tete sans option (header :20 oct 1 780 data)
-
 A envoie le message à B, le premier reseaux traverse est "Reseaux 1"
-
 A vas decouper le paquet IP en plusieur morceaux pour le resaux 1 on peut decouper $m$ en $m_1$et $m_2$
 
 Je decoupe est sequentiel : 
 
 $m_1$ contient le debut de la donné
-
 $m_2$ contient la fin de la donné
-
 $m_1$ sur R2 doit etre decoupe en 3 morceaux
 
 Identifiant unique entre IP(A) et IP(B) , quand on fragmente un pquet les ID restent les memes 
@@ -317,9 +311,12 @@ Deplacement fragement
 
 Drapeaux more fragment =1 si d'autre Fragment ensuite:
 
-- $m_1$ header : 20oct, data : 1 480oct MF : 1 Dep_frag : 0
-
-- $m_2$ header : 20oct, data : 300oct MF : 0 Dep_frag : 1 480 
+||$m_1$|$m_2$|
+|---|---|---|
+|En-tete|20|20|
+|Données|1480|300|
+|Drapeaux more fragment|1|0|
+|Deplacement fragment|0|1480|
 
 ---
 
@@ -332,11 +329,11 @@ L'ordre de la reception sur B des paquets et des fragment n'est pas garanti.
 
 **Drapeaux particulier :** DNF (Do Not Fragment) commande stricte indique au roteur de ne pas fragmenter.
 
-Si DNF est mis à 1 et que al taille du paquet ,est plus grand que le MTU le routeur en charge détruit le paquet et envoie un message d'erreur ICMP.
+Si DNF est mis à 1 et que la taille du paquet ,est plus grand que le MTU le routeur en charge détruit le paquet et envoie un message d'erreur ICMP.
 
 ## Principe du Routage :
 
-Les reseaux sont interconnecte par des equipement speciaux appele Routeurs. Les routeurs ont une adresse IP par reseaux auquel ils sont connectés.
+Les reseaux sont interconnecte par des equipement spéciaux appele Routeurs. Les routeurs ont une adresse IP par reseaux auquel ils sont connectés.
 
 Pour acheminer un paquet Ip on differencie le niveau Direct et Indirect
 
@@ -361,28 +358,27 @@ Les routeur travaille jusqu'à la couche 3
 
 Il es possible de definir des routeur par defaut.
 
-Notion sous reseaux /sur reseaux:
+## Notion Sous reseaux/ Sur reseaux:
 
-il ya 3 calsse s(A,B,C) qui sont utilisable pour un usage normal. Les separation sur la taille des reseaux est d'une grande amplitude .
+Il y a 3 classes (A,B,C) qui sont utilisable pour un usage normal. Les separation sur la taille des reseaux est d'une grande amplitude .
 
-Les reseaux de classe A ou B peuvent etre trop grand par rapport a l'usage que l'on en a donc, on partitionne ces reseaux ,en plus petit sous reseaux .
+Les réseaux de classe A ou B peuvent etre trop grand par rapport a l'usage que l'on en a,on partitionne donc ces reseaux en plus petit sous reseaux .
 
-on va utiliser la partie adressage machine pour definir une notion de sous reseaux.
+On va utiliser la partie adressage machine pour definir une notion de sous reseaux.
 
-on peut utiliser un octet de la partie machine pour definir des sous reseaux : 2.X.0.0
+On peut utiliser un octet de la partie machine pour definir des sous reseaux : 2.X.0.0
 
 2.1.0.0 : sous reseaux à part entier 
-
 2.17.0.0 :sera different du sous reseaux
 
-la partie consacree au sous reseuax est dans la partie Adressage machine et la norme autorise d'utiliser n'importe quelle partie ,en pratique on utilise des prefixe.
+La partie consacree au sous réseaux est dans la partie adressage machine et la norme autorise d'utiliser n'importe quelle partie, en pratique on utilise des prefixe.
 2.0.0.0/16
 
-chaque reseaux peut etre partitioneer de manier dkfferente 
+Chaque réseaux peut etre partitionner de manière différente 
 
 Complexite de routage
 
-pour chaque adresse reseaux on doit avoir le masue de sous reseaux assosie , pour les classe A,B,C classiques:
+Pour chaque adresse reseaux on doit avoir le masque de sous reseaux assosié, pour les classe A,B,C classiques:
 
 - **A** 255.0.0.0
 
@@ -394,7 +390,7 @@ pour chaque adresse reseaux on doit avoir le masue de sous reseaux assosie , pou
 
 Le but du protocole UDP est de permettre l'utilisation du reseaux au niveua utilisateur (Sans privilege particulier)
 
- Un protocole "non contolé"
+Un protocole "non contolé"
 
 Chaque message est independant des autres (equivalent d'envoie de carte postale)
 
@@ -452,18 +448,17 @@ La somme de control est calculé sur un pseudo-entête qui permet de verifier si
 ```mermaid
 packet
 
-+32:
-+32:
-+8:
-+8:
-+16:
++32:"Adresse Source"
++32:"Adresse Destination"
++8:"Zeros"
++8:"Protocole"
++16:"Taille UDP"
 ```
 
+On peut ne pas renseigne le port source .
 
+## Avantage :
 
-on peut ne pas renseigne le port source .
-
-avantage : protocol leger donc  rapide
-
-Utile pour les usage où on peut se permettre des donnée (streaming video,Jeux video,rensfert de fichier)
-fonctione bien sur les reseux locaux.
+- Protocol leger donc rapide
+- Utile pour les usage où on peut se permettre des donnée (streaming video,Jeux video,rensfert de fichier)
+- Fonctionent bien sur les reseaux locaux.

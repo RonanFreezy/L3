@@ -25,11 +25,16 @@ $$
 
 Montrer que $L=\left\{ a^nb^mc^k \mid n\neq{m} \text{ ou } m\neq k\right\}$ n'est pas regulier.
 
-**Preuve :**#monter mes etape de L a L'
+**Preuve :**
 
 $$
-\text{Prouvons que }L'=\{a^nb^nc^n\mid n >= 0\}\\
-Soit N>0 \text{ Posons } w=a^Nb^Nc^N \text{ On a bien } w \in L' \space et |w| >N\\
+\bar{L} = \left( \Sigma^* \setminus a^* b^* c^* \right) \cup \{ a^n b^n c^n \mid n \ge 0 \} \\
+\text{Montrons que }\bar{L} \text{ n'est pas regulier} (\overline{L} \text{ non régulier} \iff L \text{ non régulier})\\
+et \space R=\{a^*b^*c^*\} \space regulier\\
+\overline{L} \cap R = \{ a^n b^n c^n \mid n \ge 0 \} \text{ par distribution de l'} \cap \\
+\text{Comme R est regulier , si } L' \text{ n'est pas régulier alors }\overline{L} \text{ n'est pas regulier} \\
+\text{Prouvons que }L'=\{a^nb^nc^n\mid n >= 0\} \text{ n'est pas regulier}\\
+Soit \space N>0 \text{ Posons } w=a^Nb^Nc^N \text{ On a bien } w \in L' \space et |w| >N\\
 Soient \space x,y,z \space tq \space w=xyz,\space y\neq \epsilon \space et \space  |xy|<N\\
 |xy|<N,\space y\in a^* et\space  y\neq \epsilon\\
 \text{Posons }i=2\\
@@ -41,11 +46,11 @@ $$
 
 **Exo :**
 
-Transformer ce Language en grammaire $L=\{a^ib^ic^i \mid i=j \text{ ou }j=k\}$
+Transformer ce Language en grammaire $L=\{a^ib^jc^k \mid i=j \text{ ou }j=k\}$
 
-$L= \{a^ib^ic^i \mid i=j\}\cup \{a^ib^ic^i \mid j=k\}$
+$L= \{a^ib^jc^k \mid i=j\}\cup \{a^ib^jc^k \mid j=k\}$
 
-$L=\{a^ib^i \mid i=j\}. \{c^k \mid k>=0\} \cup ...$
+$L=\{a^ib^j \mid i=j\}. \{c^k \mid k>=0\} \cup ...$
 
 $X \to aXb \mid \epsilon ,\space C \to cC\mid \epsilon\\S \to AC$
 
@@ -118,32 +123,25 @@ il suffit de montrer $\exist$ :
 
 - $G_*$ linéaire à droite  tq $\mathcal{L}(G_*) = (\mathcal{L}(G_1))^*$
 
-$G_\cup$ : $(S->S_1\mid S_2)$
-
+$G_\cup$ : $(S \to S_1\mid S_2)$
 $G_.$ :
-
 $S_1\to bX_1 \mid aS_1 ,X_1 \to bS_1\mid \epsilon$
-
 $S_2 \to ccS_2\mid c$
-
-donc $G_. = (\{ (vS_2) \mid v \in V_1\} \cup V_2,\Sigma,R_1^{()} \cup R_2,(S_1S_2)$
-
-avec $R^{()}= \{ (vS_2) \to ...$
+donc $G_. = \{ (vS_2) \mid v \in V_1\} \cup V_2,\Sigma,R_1^{()} \cup R_2,(S_1S_2)\}$
+avec $R^{()}= \{ (vS_2) \to ... \}$
 
 $\impliedby :$
 
 Si $G$ est lineaire a droite alors$\mathcal{L}(G)$ est regulier
-
-soit $G=(V,\Sigma,R,S)$
-
-il faut montre quil existe ue relation entre une regle de la grammaire et la construction de ca dans un automate.
+Soit $G=(V,\Sigma,R,S)$
+Il faut montre qu'il existe ue relation entre une regle de la grammaire et la construction de ca dans un automate.
 
 Ex:
 
-nb binaire sans 0 non-significatif:
+Nb binaire sans 0 non-significatif:
 $S\to 1X|0;X \to 1X|0X|\epsilon$
 
-expresion regulière sur $\{a,b\}$
+Expresion regulière sur $\{a,b\}$
 $E\to a|b|\empty|E+E|EE|E^*|(E)$
 
 algo 1:
@@ -165,30 +163,30 @@ Soit $G=(V,\Sigma,R,S)$ On definit $G'=(V',\Sigma,R',S)$ où $R'=\{X \to \overle
 Montrons que $\mathcal{L}(G') = \overleftarrow{\mathcal{L}(G)}$ par recurence
 
 $(P_n)$  $S \xrightarrow{n} \alpha \in G \iff S \xrightarrow{n} \overleftarrow{\alpha} \in G'$
+
 init n=0: $S \xrightarrow{0} \alpha \in G \iff \alpha = S = \overleftarrow{S} \iff S \xrightarrow{0} \overleftarrow{\alpha} \in G'
 $
 heredite : Soit $n>= 0$ Supposon $(P_n)$ vraie et montrons $(P_{n+1})$.
-Supposons $S \xrightarrow{n+1} \alpha \in G$ alors $\exists \alpha_1,\alpha_2,\alpha_3$ tq $\alpha=\alpha_1\alpha_2\alpha_3,\space S \xrightarrow{n} \alpha_1X\alpha_3;\space X\to \alpha_2$
-Par rcurrecne : $\space S \xrightarrow{n} \alpha_1X\alpha_3 \in G'$
 
-#piquer a sylou la fin de la demo
+Supposons $S \xrightarrow{n+1} \alpha \in G$ alors $\exists \alpha_1,\alpha_2,\alpha_3$ tq $\alpha=\alpha_1\alpha_2\alpha_3,\space S \xrightarrow{n} \alpha_1X\alpha_3;\space X\to \alpha_2$
+Par récurence : $\space S \xrightarrow{n} \alpha_1X\alpha_3 \in G'$ et $X \to \overleftarrow{\alpha_2} \in G'$
+d'ou $S \xrightarrow{n+1} \overleftarrow{\alpha_1} \space \overleftarrow{\alpha_2} \space \overleftarrow{\alpha_3} = \overleftarrow{\alpha} \in G'$
+Pareil pour $\impliedby$ car le mirroir est involutif
+
 
 **Definition :**
 
 Soit $G=(V,\Sigma,R,S)$ une grammaire.
-Un arbre de derivation de $G$ est un arbre ordonné (oles fils d'un meme perer sont ordonée) etiqueté par $V\cup\Sigma$ tq :
+Un arbre de derivation de $G$ est un arbre ordonné (dont les fils d'un meme pere sont ordonée) etiqueté par $V\cup\Sigma$ tq :
 
 - la racine est ethiqueté par $S$
-
 - les noeuds internes sont etiquetée par $V$
-
 - les feuilles par $\Sigma \cup \{\epsilon\}$
-
 - si $\alpha_1,\alpha_2,...,\alpha_r$ sont les etiquette des fils d'un noeud etiqueté par $X$ alors $X \to \alpha_1\alpha_2...\alpha_r$ est une regle
 
 **Definition :**
 
-La frontier ed'un arbre de derivation est le mot sur $\Sigma$ formé par les etiquette des feuilles prises dans l'ordre de visite d'un parcours en profondeur à gauche d'abord.
+La frontiere d'un arbre de derivation est le mot sur $\Sigma$ formé par les etiquette des feuilles prises dans l'ordre de visite d'un parcours préfixe.
 
 **Proposition :**
 
