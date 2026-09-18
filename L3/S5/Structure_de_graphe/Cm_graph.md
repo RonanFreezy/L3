@@ -1,6 +1,6 @@
 # Plan
 
-- [def de base](#def)
+- [def de base]()
 - [graphe bipartie](#graphe-bipartie)
 - [decomposition en cycle](#decomposition-en-cycle-)
 - [tour euclidien]()
@@ -53,17 +53,17 @@ Représentation d'un graphe:
 
 ### Matrice d'adjacence
 
-Dans un graphe à $n$ sommet l'espace mémoire utilisé est en $O(n^2)$
+Dans un graphe à $n$ sommet l'espace mémoire utilisé est en $O(n^2)$  
 Le nombre max d'arêtes est de $\frac{n(n-1)}{2}$ il s'agit d'un graphe complet
 
 ### Liste d'adjacence
 
 Liste de listes des voisins
 
-1->[2]
-2->[3,1,4]
-3->[4,2]
-4->[3,2]
+1->[2]  
+2->[3,1,4]  
+3->[4,2]  
+4->[3,2]  
 
 $$
 d_G(x) = \left|\{w \mid \{w, x\} \in E(G)\}\right|
@@ -80,8 +80,8 @@ n + \sum_{x \in V} d_G(x)
 \implies n+2m \in O(n+m)
 $$
 
-Dans un graphe orienté on distingue les voisins entrants et sortants
-on note:
+Dans un graphe orienté on distingue les voisins entrants et sortants  
+On note:
 
 - $d_G^+$ le nombre de voisins sortants 
 - $d_G^-$ le nombre de voisins entrants
@@ -118,13 +118,13 @@ $K_{1,n}$ un sommet dominant $n$ sommets
 
 ### Foret et Arbre
 
-**Foret :**
+**Foret :**  
 &emsp; Graphe sans cycle
 
-**Arbre :**
+**Arbre :**  
 &emsp; Graphe connexe acyclique
 
-**Connexe :**
+**Connexe :**  
 &emsp; $G=(V,E)$ est connexe si $\forall$ paire de sommet $\exist$ un chemin qui les relies.  
 
 Si le graphe n'est pas connexe on peut partitioner l'ensemble des sommets de $G$ en composantes connexe
@@ -133,8 +133,8 @@ $C \subseteq V(G)$ est une composante connexe si le sous graphe Induit epar $C$ 
 
 La partition en composant connexe est unique.
 
-Pour n'importe quel graphe à $n$ sommets , le nombre de composante connexe esst au plus $n$.
-nombre min = 1 $\implies$ le graphe est connexe 
+Pour n'importe quel graphe à $n$ sommets , le nombre de composante connexe esst au plus $n$.  
+Nombre min = 1 $\implies$ le graphe est connexe 
 
 > Etoile $\subseteq$ Arbre $\subsetneq$ Foret $\subsetneq$ Bipartie
 
@@ -151,17 +151,17 @@ $G=(V,E)$ est un graphe bipartie $ssi$ on peut partitioner $V$ en deux parties $
 
 #### Stables/Ensemble independants
 
-Noté $I_n$ graphe à $n$ sommets sans aucune arrete.
+Noté $I_n$ graphe à $n$ sommets sans aucune arrete.  
 Un graphe est bipartie $ssi$ il peut être partitioné en deux stables.
 
 ### Sous graphe/Graphe partiel
 
-$H=(W,F),W\subseteq V \text{ et } F \subseteq E$
+$H=(W,F),W\subseteq V \text{ et } F \subseteq E$  
 Pour obtenir $H$ on peut supprimer de $V$ des sommets et des arêtes.
 
 ### Sous graphe induit
 
-$H=(W,F), W\subseteq V \space F= E \cap (W,W)$ 
+$H=(W,F), W\subseteq V \space F= E \cap (W,W)$  
 On garde toutes les arêtes de $E$ qui ont leur 2 extremite dans $W$.
 
 **Notation :** $H=G[W] \space H$ est le sous graphe induit par $W$ et $G$ 
@@ -170,7 +170,7 @@ $G$ est Bipartie $ssi$ $G[A]$ et $G[B]$ induisent des stables
 
 ### Sous graphe couvrant
 
-Soit $G(V,E)$ un graphe et $H(W,F)$ un sous graphe de $G$.
+Soit $G(V,E)$ un graphe et $H(W,F)$ un sous graphe de $G$.  
 $H$ est couvrant (pour $G$) $si$:
 
 - $W=V$
@@ -203,23 +203,25 @@ $$
 - Si $G$ contient un cycle impair comme sous-graphe, alors il n'est pas biparti.
 
 **Théorème :** 
+
 $$
 \text{G bipartie} \iff \forall k \ge 1, \space C_{2k+1} \not\subseteq G
 $$
+
 Un graphe $G$ est biparti si et seulement si $G$ ne contient pas de cycle impair.
 
 **Preuve:**
 
-$\implies$ obvious
+$\implies$ obvious  
 $\impliedby$ SI $G$ ne contient pas de cycle impair alors tous les cylces sont de longeur paires
 
-Soit $T$ un Arbre couvrant de $G$ pour determiner facilement une Bipartition des sommets $(A,B)$ pour toutes les arretes en suivant le procede d'Affectation de parties chaque arrete a une extreminter dans $A$ et l'autre dans $B$.
-On dois montrer que pour toute arrete $e \in G\backslash{T}$ a exactement une extremite dans $A$ et l'autre dans $B$.
+Soit $T$ un Arbre couvrant de $G$ pour determiner facilement une Bipartition des sommets $(A,B)$ pour toutes les arretes en suivant le procede d'Affectation de parties chaque arrete a une extreminter dans $A$ et l'autre dans $B$.  
+On dois montrer que pour toute arrete $e \in G\backslash{T}$ a exactement une extremite dans $A$ et l'autre dans $B$.  
 Tous les cycles sont de longeur paire et le graphe n'est pas bipartie $\implies \exists e \in G\backslash{T}$ tq sans pair de generalite que ses deux extremite sont dans $A$.
 
 **Remarque :** Dans un arbre entre 2 sommet $x$ et $y$ $\exist !$ chemin qui les relie.
 
-Il existe dans T un chemin de $x$à$y$. Si $x$et $y$ sont dans la meme partie $A$ cela signifie que le chemin qui relie $x$ à $y$ est de longeur paire.
+Il existe dans T un chemin de $x$à$y$. Si $x$et $y$ sont dans la meme partie $A$ cela signifie que le chemin qui relie $x$ à $y$ est de longeur paire.  
 Si je concatene le chemin pair+ arrete $e$,j 'obtiens un cycle de longeur impair = contradiction.
 
 **Marche :** chemin dans lequelle on peut avoir plusieur fois une arrete ou un noeud.
@@ -236,15 +238,15 @@ Ce graphe admet une decomposition en cycle.
 
 **Lemme :** Si $G$ admet une decomposition en cycle, alors chaque sommet a degres pair.
 
-**Preuve :**
-Pour chaque sommet $v$, on peut faire une liste de cycle $C^v_i$ auquel $v$ participe à un ou plusieur cycle et chaque cycle utilise exactement 2 arrete.
+**Preuve :**  
+Pour chaque sommet $v$, on peut faire une liste de cycle $C^v_i$ auquel $v$ participe à un ou plusieur cycle et chaque cycle utilise exactement 2 arrete.  
 Comme chaque arrete est couverte par exactement un cycle alors le nombre d'arrete est pair.
 
 **Lemme :** Soit $G=(V,E)$ un graphe. Si $\delta(G) \geq 2$, alors $G$ contient au moins un cycle.
 
-**Preuve :**
-Soit $P=(v_1,v_2,v_3,...,v_k)$ un chemin de longeur maximun.
-par hypothese $v_1$ et $v_k$ ont respectivement un autre voisin different de $v_2$ et resp $v_{k-1}$.
+**Preuve :**  
+Soit $P=(v_1,v_2,v_3,...,v_k)$ un chemin de longeur maximun.  
+par hypothese $v_1$ et $v_k$ ont respectivement un autre voisin different de $v_2$ et resp $v_{k-1}$.  
 L'autre voisin de $v_1$ est necessairement un sommet de $P \neq v_2$ on apelle ce voisin $v_j$ meme chose pour $v_k$ , un autre voisin $v_i \neq v_{k-1}$
 
 **Def  :** Graphe $G$ est pair si tous les sommet ont un degres pair.
@@ -253,14 +255,14 @@ L'autre voisin de $v_1$ est necessairement un sommet de $P \neq v_2$ on apelle c
 
 **Preuve :**
 
-$\implies$: Deja prouve dans l'avant dernier lemme.
+$\implies$: Deja prouve dans l'avant dernier lemme.  
 $\impliedby$: Par recurrence descendant
 
-Soit $G^1 =G$ 
-on applique le lemme ($S(G) \geq 2$) pour trouve un cycle C
-On considere $G^2 = G\backslash E(C)$ et $G^2$ est pair.
-On réiter le procede sur les sommets de $G^2$ qui sont de degres non nul, donc $G^2$ est pair et $\delta(G) \geq 2$.
-On reitere les etapes . $G^i =$ trouve un cycle C de $G^{i-1}$,Supprimer $E(C)$ et les sommet de degres 0.
+Soit $G^1 =G$  
+On applique le lemme ($S(G) \geq 2$) pour trouve un cycle C  
+On considere $G^2 = G\backslash E(C)$ et $G^2$ est pair.  
+On réiter le procede sur les sommets de $G^2$ qui sont de degres non nul, donc $G^2$ est pair et $\delta(G) \geq 2$.  
+On reitere les etapes. $G^i =$ trouve un cycle C de $G^{i-1}$,Supprimer $E(C)$ et les sommet de degres 0.  
 Le procede s'arrete quand le graphe n'a plus aucun sommet.
 
 **Lemme :** 
@@ -269,20 +271,19 @@ $$
 \text{G connexe et } G \text{ admet un tour eulerien} \iff G \text{ est connexe et pair}
 $$
 
-**Preuve :**
+**Preuve :**  
 Comme le tour passe par toute les arretes, pour chaque sommet $v$ le tour arrive sur $v$ et reppart de $v$, le tour arrive autant de fois sur $v$ qu'il en repart de $v$ donc le degres est pair.
 
-**Notation :**
+**Notation :**  
 Si on a deux ensemble de sommets $X \text{ et } Y, \space e=(X,Y)$ esemble des arrete avec une extremite dans $X$ et l'autre dans $Y$. La coupe d'un ensemble $X$ noté $\delta(X) =$l'ensemble des arrete avec une extremite dans $X$ et l'autre dans $V\backslash X$  
 
 ## Algorithme de Fleury :
 
-Input : $G=(V,E)$ pair
+Input : $G=(V,E)$ pair  
 Output : un tour eulèrien en u $\gets$ sommet de pair arbitraire
 
 $w : = u$ // tour en construction  
 $x := u$ Dernier sommet du tour  
-
 $F :=G$ graphe couvrant
 
 ```
@@ -306,15 +307,15 @@ on veut montrer que $w$ est un tour Eulerien.
 1. chaque arrete est utilise au plus 1 fois.
 2. toutes les arrete sont utilise et qu'on revient au sommet de depart que l'on a choisis.
 
-Pour 1 :
+Pour 1 :  
 Au depart $w$ est une marche et chaque arrete qu'on rajoute à la marche , on la supprime de $F$ donc on peut l'utilise d'une seul fois. La condition d'arret $\delta_F(X) = \empty$ à priori on s'arrete quand $x=u$
 
-Pour 2 :
-Montrer par l'absurde que toutes les arretes sont utilisées.
-L'algorithme s'arrete et il reste des arretes de $G$ qui ne participent pas à $w$ 
-Soit X l'ensemble des sommets de degres positif de $F$ quand l'algorithme s'arrete.
-$F[X]$ est un graphe pair, on a $V\backslash X \neq \empty$ car $u \notin X$
-Comme le graphe de depart $G$ est connexe on a $\delta_F(X) \neq \empty$, la derniere arrete $e'$ de $\delta_F(X)$ qui à ete ajoute à $w$ le tour en construction dans le graphe a l'etape ou elle a ete choisie, elle est deconectante pour $F$.
+Pour 2 :  
+Montrer par l'absurde que toutes les arretes sont utilisées.  
+L'algorithme s'arrete et il reste des arretes de $G$ qui ne participent pas à $w$  
+Soit X l'ensemble des sommets de degres positif de $F$ quand l'algorithme s'arrete.  
+$F[X]$ est un graphe pair, on a $V\backslash X \neq \empty$ car $u \notin X$  
+Comme le graphe de depart $G$ est connexe on a $\delta_F(X) \neq \empty$, la derniere arrete $e'$ de $\delta_F(X)$ qui à ete ajoute à $w$ le tour en construction dans le graphe a l'etape ou elle a ete choisie, elle est deconectante pour $F$.  
 Ca contredit le choix imposé par l'algorithme qui aurait du choisir une autre arrete incidente à $x$ dans $F$ donc contradictoire.
 
 $$

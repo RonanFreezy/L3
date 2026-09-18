@@ -88,7 +88,7 @@ Tout language regulier est génere par une grammaire
 
 base :
 
-si $L=\empty $ alors $ G_\empty = S \to S$
+si $L=\empty $ alors $ G_\empty = S \to S$  
 si $L=\{a\} $ pour $a\in \Sigma$ alors $ G_a = S \to a$
 
 heredite:
@@ -123,25 +123,25 @@ il suffit de montrer $\exists$ :
 
 - $G_*$ linéaire à droite  tq $\mathcal{L}(G_*) = (\mathcal{L}(G_1))^*$
 
-$G_\cup$ : $(S \to S_1\mid S_2)$
-$G_.$ :
-$S_1\to bX_1 \mid aS_1 ,X_1 \to bS_1\mid \epsilon$
-$S_2 \to ccS_2\mid c$
-donc $G_. = (\{ (vS_2) \mid v \in V_1\} \cup V_2,\Sigma,R_1^{()} \cup R_2,(S_1S_2))$
+$G_\cup$ : $(S \to S_1\mid S_2)$  
+$G_.$ :  
+$S_1\to bX_1 \mid aS_1 ,X_1 \to bS_1\mid \epsilon$  
+$S_2 \to ccS_2\mid c$  
+donc $G_. = (\{ (vS_2) \mid v \in V_1\} \cup V_2,\Sigma,R_1^{()} \cup R_2,(S_1S_2))$  
 avec $R^{()}= \{ (vS_2) \to ... \}$
 
 $\impliedby :$
 
-Si $G$ est lineaire a droite alors$\mathcal{L}(G)$ est regulier
-Soit $G=(V,\Sigma,R,S)$
+Si $G$ est lineaire a droite alors $\mathcal{L}(G)$ est regulier  
+Soit $G=(V,\Sigma,R,S)$  
 Il faut montre qu'il existe ue relation entre une regle de la grammaire et la construction de ca dans un automate.
 
 Ex:
 
-Nb binaire sans 0 non-significatif:
+Nb binaire sans 0 non-significatif:  
 $S\to 1X|0;X \to 1X|0X|\epsilon$
 
-Expresion regulière sur $\{a,b\}$
+Expresion regulière sur $\{a,b\}$ :  
 $E\to a|b|\emptyset|E+E|EE|E^*|(E)$
 
 algo 1:
@@ -159,24 +159,23 @@ Si $G$ est une grammaire alors il existe $G'$ tq $\mathcal{L}(G') = \overleftarr
 
 **Preuve :**
 
-Soit $G=(V,\Sigma,R,S)$ On definit $G'=(V',\Sigma,R',S)$ où $R'=\{X \to \overleftarrow{\alpha}|X \to \alpha \in R \}$
+Soit $G=(V,\Sigma,R,S)$ On definit $G'=(V',\Sigma,R',S)$ où $R'=\{X \to \overleftarrow{\alpha}|X \to \alpha \in R \}$  
 Montrons que $\mathcal{L}(G') = \overleftarrow{\mathcal{L}(G)}$ par recurence
 
 $(P_n)$  $S \xrightarrow{n} \alpha \in G \iff S \xrightarrow{n} \overleftarrow{\alpha} \in G'$
 
-init n=0: $S \xrightarrow{0} \alpha \in G \iff \alpha = S = \overleftarrow{S} \iff S \xrightarrow{0} \overleftarrow{\alpha} \in G'
-$
+init n=0: $S \xrightarrow{0} \alpha \in G \iff \alpha = S = \overleftarrow{S} \iff S \xrightarrow{0} \overleftarrow{\alpha} \in G'$  
 heredite : Soit $n>= 0$ Supposon $(P_n)$ vraie et montrons $(P_{n+1})$.
 
-Supposons $S \xrightarrow{n+1} \alpha \in G$ alors $\exists \alpha_1,\alpha_2,\alpha_3$ tq $\alpha=\alpha_1\alpha_2\alpha_3,\space S \xrightarrow{n} \alpha_1X\alpha_3;\space X\to \alpha_2$
-Par récurence : $\space S \xrightarrow{n} \alpha_1X\alpha_3 \in G'$ et $X \to \overleftarrow{\alpha_2} \in G'$
-d'ou $S \xrightarrow{n+1} \overleftarrow{\alpha_1} \space \overleftarrow{\alpha_2} \space \overleftarrow{\alpha_3} = \overleftarrow{\alpha} \in G'$
+Supposons $S \xrightarrow{n+1} \alpha \in G$ alors $\exists \alpha_1,\alpha_2,\alpha_3$ tq $\alpha=\alpha_1\alpha_2\alpha_3,\space S \xrightarrow{n} \alpha_1X\alpha_3;\space X\to \alpha_2$  
+Par récurence : $\space S \xrightarrow{n} \alpha_1X\alpha_3 \in G'$ et $X \to \overleftarrow{\alpha_2} \in G'$  
+d'ou $S \xrightarrow{n+1} \overleftarrow{\alpha_1} \space \overleftarrow{\alpha_2} \space \overleftarrow{\alpha_3} = \overleftarrow{\alpha} \in G'$  
 Pareil pour $\impliedby$ car le mirroir est involutif
 
 
 **Definition :**
 
-Soit $G=(V,\Sigma,R,S)$ une grammaire.
+Soit $G=(V,\Sigma,R,S)$ une grammaire.  
 Un arbre de derivation de $G$ est un arbre ordonné (dont les fils d'un meme pere sont ordonée) etiqueté par $V\cup\Sigma$ tq :
 
 - la racine est ethiqueté par $S$
