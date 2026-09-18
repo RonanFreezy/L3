@@ -2,7 +2,7 @@
 
 - [Modèle en couches](#modles-en-couches)
 - [Protocole IP](#ip-internet-protocol)
-- Protocole TCP
+- [Protocole TCP](#udp-user-datagram-protocol-)
 - Protocole UDP
 - Routage (Interne)
 - ICMP
@@ -346,8 +346,6 @@ Si A et B ne sont pas sur le meme reseau déterminer l'adresse reseau de B et de
 
 Au niveau des routeur pour chaque paquet recus il faut determiner le routeur suivant . Chaque routeur a une table de routage valide.
 
-
-
 **R1 :**
 
 | Reseaux | Routeur |
@@ -360,3 +358,112 @@ Au niveau des routeur pour chaque paquet recus il faut determiner le routeur sui
 | VI      | R4      |
 
 Les routeur travaille jusqu'à la couche 3
+
+Il es possible de definir des routeur par defaut.
+
+Notion sous reseaux /sur reseaux:
+
+il ya 3 calsse s(A,B,C) qui sont utilisable pour un usage normal. Les separation sur la taille des reseaux est d'une grande amplitude .
+
+Les reseaux de classe A ou B peuvent etre trop grand par rapport a l'usage que l'on en a donc, on partitionne ces reseaux ,en plus petit sous reseaux .
+
+on va utiliser la partie adressage machine pour definir une notion de sous reseaux.
+
+on peut utiliser un octet de la partie machine pour definir des sous reseaux : 2.X.0.0
+
+2.1.0.0 : sous reseaux à part entier 
+
+2.17.0.0 :sera different du sous reseaux
+
+la partie consacree au sous reseuax est dans la partie Adressage machine et la norme autorise d'utiliser n'importe quelle partie ,en pratique on utilise des prefixe.
+2.0.0.0/16
+
+chaque reseaux peut etre partitioneer de manier dkfferente 
+
+Complexite de routage
+
+pour chaque adresse reseaux on doit avoir le masue de sous reseaux assosie , pour les classe A,B,C classiques:
+
+- **A** 255.0.0.0
+
+- **B** 255.255.0.0
+
+- **C** 255.255.255.0
+
+# UDP User Datagram Protocol :
+
+Le but du protocole UDP est de permettre l'utilisation du reseaux au niveua utilisateur (Sans privilege particulier)
+
+ Un protocole "non contolé"
+
+Chaque message est independant des autres (equivalent d'envoie de carte postale)
+
+
+
+**Notion de Port :** la notion de port a dusens à l'echelle de la machine/station.
+sa permet d'identifier quel programme est concerné.
+
+
+Quand un programme va utiliser le protocole UDP, il vas demander à l'OS de lui fournir un numero de port , il faut que se numero soit unique.
+
+Les ports < 1024 sont réservé pas utilisable sans privilège particulier.
+
+
+
+**Mode Client :**
+
+Un programme qui est connecte au reseaux et envoie une requete à une entite pour avoir un service.
+Le client a besoin d'un numero de port mais pas nécéssairement de le choisir.
+
+
+
+**Mode Serveur :**
+
+Un programme qui attend les demande de communication et qui fournit un service.
+Le serveur doit disposer d'un numero de port et cce numero doit pouvoir etre choisi.
+
+
+
+Numero de port code sur 16bits.
+
+
+deconecte chaque message est envoye individuellement. L'ordre de remise n'a pas d'importance
+
+la livraison des données n'est pas garanti.
+
+
+
+```mermaid
+packet
+
++16: "Port Source"
++16: "Port Destination"
++16: "Longeur Message"
++16: "CheckSum"
++32: "Données ..."
+```
+
+Longueur du message en nombre total d'octets
+
+La somme de control est calculé sur un pseudo-entête qui permet de verifier si le segment est valide ou corrompu. Si le message est ccorompu le systeme detruit le segment .
+
+
+
+```mermaid
+packet
+
++32:
++32:
++8:
++8:
++16:
+```
+
+
+
+on peut ne pas renseigne le port source .
+
+avantage : protocol leger donc  rapide
+
+Utile pour les usage où on peut se permettre des donnée (streaming video,Jeux video,rensfert de fichier)
+fonctione bien sur les reseux locaux.

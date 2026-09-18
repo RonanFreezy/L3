@@ -104,8 +104,6 @@ $$
 
 **Preuve :**
 
-
-
 $ \implies :$
 
 init : $S\to S \space et \space S\to a$
@@ -132,12 +130,66 @@ donc $G_. = (\{ (vS_2) \mid v \in V_1\} \cup V_2,\Sigma,R_1^{()} \cup R_2,(S_1S_
 
 avec $R^{()}= \{ (vS_2) \to ...$
 
-
-
 $\impliedby :$
 
 Si $G$ est lineaire a droite alors$\mathcal{L}(G)$ est regulier
 
 soit $G=(V,\Sigma,R,S)$
 
-il faut montre quil existe ue relation entre une regle de la grammaire et la construction de ca dans un automate
+il faut montre quil existe ue relation entre une regle de la grammaire et la construction de ca dans un automate.
+
+Ex:
+
+nb binaire sans 0 non-significatif:
+$S\to 1X|0;X \to 1X|0X|\epsilon$
+
+expresion regulière sur $\{a,b\}$
+$E\to a|b|\empty|E+E|EE|E^*|(E)$
+
+algo 1:
+
+$\mathcal{A}$ ensemble des varriable accessible
+
+base : $S \in \mathcal{A}$
+regle : si $X \in \mathcal{A}$et $\exists \alpha,\beta,\gamma$ tq $X\to  \alpha\beta\gamma$ alors $Y \in \mathcal{A}$
+
+---
+
+**Proposition :**
+
+Si $G$ est une grammaire alors il existe $G'$ tq $\mathcal{L}(G') = \overleftarrow{\mathcal{L}(G)}$
+
+**Preuve :**
+
+Soit $G=(V,\Sigma,R,S)$ On definit $G'=(V',\Sigma,R',S)$ où $R'=\{X \to \overleftarrow{\alpha}|X \to \alpha \in R \}$
+Montrons que $\mathcal{L}(G') = \overleftarrow{\mathcal{L}(G)}$ par recurence
+
+$(P_n)$  $S \xrightarrow{n} \alpha \in G \iff S \xrightarrow{n} \overleftarrow{\alpha} \in G'$
+init n=0: $S \xrightarrow{0} \alpha \in G \iff \alpha = S = \overleftarrow{S} \iff S \xrightarrow{0} \overleftarrow{\alpha} \in G'
+$
+heredite : Soit $n>= 0$ Supposon $(P_n)$ vraie et montrons $(P_{n+1})$.
+Supposons $S \xrightarrow{n+1} \alpha \in G$ alors $\exists \alpha_1,\alpha_2,\alpha_3$ tq $\alpha=\alpha_1\alpha_2\alpha_3,\space S \xrightarrow{n} \alpha_1X\alpha_3;\space X\to \alpha_2$
+Par rcurrecne : $\space S \xrightarrow{n} \alpha_1X\alpha_3 \in G'$
+
+#piquer a sylou la fin de la demo
+
+**Definition :**
+
+Soit $G=(V,\Sigma,R,S)$ une grammaire.
+Un arbre de derivation de $G$ est un arbre ordonné (oles fils d'un meme perer sont ordonée) etiqueté par $V\cup\Sigma$ tq :
+
+- la racine est ethiqueté par $S$
+
+- les noeuds internes sont etiquetée par $V$
+
+- les feuilles par $\Sigma \cup \{\epsilon\}$
+
+- si $\alpha_1,\alpha_2,...,\alpha_r$ sont les etiquette des fils d'un noeud etiqueté par $X$ alors $X \to \alpha_1\alpha_2...\alpha_r$ est une regle
+
+**Definition :**
+
+La frontier ed'un arbre de derivation est le mot sur $\Sigma$ formé par les etiquette des feuilles prises dans l'ordre de visite d'un parcours en profondeur à gauche d'abord.
+
+**Proposition :**
+
+$w$ est la frontiere d'un rabre de derivation de $G \text{ ssi } w \in \mathcal{L}(G)$ 
