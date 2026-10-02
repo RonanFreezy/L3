@@ -282,8 +282,6 @@ $R$: depuis $X_{p,q}$:
 
 - $X_{p,q} \to X_{r,s}$ si $p\xrightarrow{\epsilon,\epsilon,x}r $ et $ s\xrightarrow{\epsilon,x,\epsilon}t$
 
-
-
 ```mermaid
 graph
 
@@ -296,3 +294,41 @@ X,P0'e-->X,P0e
 X,P0'e-->X,ee
 X,ee-->epsilon
 ```
+
+**Def :** Forme normal de Chomsky
+
+Une grammaire hors contexte $(V,\Sigma,R,S)$ est un FNC si:
+
+- La grammaire est reduite.
+
+- $X \to \alpha \in R$ alors 
+  
+  - Soit $\alpha \in (V \backslash \{S\})^2$ $(X \to YZ \text{ avec }Y\neq S \space et \space Z \neq S)$
+  
+  - Soit $\alpha \in \Sigma$ $(X \to a)$
+  
+  - Soit $\alpha = \epsilon \space et \space X=S$ $(S \to \epsilon)$ 
+
+**Propriete :** Toute GHC est equivalente a une GHC en FNC
+
+$$
+S \to TE|\epsilon\\
+E\to TE | PA \\
+P \to + \\
+A \to a \\
+T \to AT | a | b \\
+$$
+
+![](C:\Users\ronan\cours\L3\S5\Language_regulier\Automate\FNC1.png)
+
+**Prop :**
+
+Soit $\alpha \in V^* \space \alpha \xrightarrow{*}u\beta$ par une derivation a gauche ssi $(m,\overleftarrow{\alpha} \xrightarrow{u} m,\overleftarrow{\beta})$
+
+
+
+$$
+E \to E+E | E\times E | (E) | N\\
+N \to 0|1C\\
+C \to 0C|1C|\epsilon
+$$
