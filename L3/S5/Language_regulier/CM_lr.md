@@ -165,13 +165,12 @@ Montrons que $\mathcal{L}(G') = \overleftarrow{\mathcal{L}(G)}$ par recurence
 $(P_n)$  $S \xrightarrow{n} \alpha \in G \iff S \xrightarrow{n} \overleftarrow{\alpha} \in G'$
 
 init n=0: $S \xrightarrow{0} \alpha \in G \iff \alpha = S = \overleftarrow{S} \iff S \xrightarrow{0} \overleftarrow{\alpha} \in G'$  
-heredite : Soit $n>= 0$ Supposon $(P_n)$ vraie et montrons $(P_{n+1})$.
+heredite : Soit $n \geq 0$ Supposon $(P_n)$ vraie et montrons $(P_{n+1})$.
 
 Supposons $S \xrightarrow{n+1} \alpha \in G$ alors $\exists \alpha_1,\alpha_2,\alpha_3$ tq $\alpha=\alpha_1\alpha_2\alpha_3,\space S \xrightarrow{n} \alpha_1X\alpha_3;\space X\to \alpha_2$  
 Par récurence : $\space S \xrightarrow{n} \alpha_1X\alpha_3 \in G'$ et $X \to \overleftarrow{\alpha_2} \in G'$  
 d'ou $S \xrightarrow{n+1} \overleftarrow{\alpha_1} \space \overleftarrow{\alpha_2} \space \overleftarrow{\alpha_3} = \overleftarrow{\alpha} \in G'$  
 Pareil pour $\impliedby$ car le mirroir est involutif
-
 
 **Definition :**
 
@@ -190,3 +189,110 @@ La frontiere d'un arbre de derivation est le mot sur $\Sigma$ formé par les eti
 **Proposition :**
 
 $w$ est la frontiere d'un rabre de derivation de $G \text{ ssi } w \in \mathcal{L}(G)$ 
+
+---
+
+**Transformer un AEF en Grammaire linéaire a droite :**
+
+![](./Automate/AEF1.png)
+
+$$
+X_1 \to aX_1 | bX_2 | \epsilon\\
+X_2 \to aX_3 | bX_1 \\
+X_3 \to aX_2 | bX_3 | \epsilon\\
+$$
+
+---
+
+**Definition :**  
+Un automate à pile (non-deterministe)(APND) est un sixtuplet $(Q,\Sigma,\Gamma,\delta,I,F)$ avec :
+
+- $Q$ est l'ensemble fini dont les élement sont apelle etat
+- $I \subseteq Q$ appelé ensemble d'etat initiaux
+- $F \subseteq Q$ appelé ensemble d'etat finaux
+- $\Sigma$ alphabet appele alphabet d'entrée
+- $\Gamma$ alphabet appele alphabet de pile
+- $\delta \subseteq Q \times (\Sigma \cup \{\epsilon\}) \times (\Gamma \cup \{\epsilon\})$
+
+Depuis $p$ lire $\sigma \in (\Sigma \cup \{\epsilon\})$, déplacer $\alpha \in (\Gamma \cup \{\epsilon\})$, empile $\beta \in (\Gamma \cup \{\epsilon\})$ entrer $q$.
+
+**Definition :**
+Une configuration d'un APND $(Q,\Sigma,\Gamma,\delta,I,F)$ est une paire dans $Q \times \Gamma^*$
+
+- configuration initiale: $I \times \{\epsilon\}$
+- configuration finale: $F \times \Gamma^*$
+
+Exemple : $\boxed{p,12112}$
+
+**Definition :**
+$\delta$ induit une collection sur les configuration indexe par $\Sigma \cup \{\epsilon\} : \boxed{p,u} \space \xrightarrow{\sigma} \space \boxed{q,v}$
+
+Si $(p,\sigma,\alpha,\beta,q) \in \delta$ et $\exist w \space tq \space u=w\alpha; \space v=w\beta$
+
+On etand $\xrightarrow{\sigma}$ à $\xrightarrow{w}$ pour $w \in \Sigma^*$
+
+Base: $\boxed{p,u} \space \xrightarrow{\epsilon} \space \boxed{q,v}; \space \forall p \in Q,\forall u \in \Gamma^*$
+Regle: si $\boxed{p,u} \space \xrightarrow{x} \space \boxed{q,v}$ et $\boxed{q,v} \space \xrightarrow{\sigma} \space \boxed{r,w}$ alors $\boxed{p,u} \space \xrightarrow{x\sigma} \space \boxed{r,w}$
+
+**Definition :**
+$w\in \Sigma^*$ est accepte par l'APND si il existe $\boxed{q_i,\epsilon}$ une configuration initiale et $\boxed{q_f,\epsilon}$ un conf finale tq $\boxed{q_i,\epsilon} \xrightarrow{w} \boxed{q_f,\epsilon}$ .  
+Le language reconu par l'APND est l'ensemble des mot acceptés
+
+---
+
+$L=\{a^nb^{n+k} | n,k\geq0\}$
+
+<img src="file:///C:/Users/ronan/cours/L3/S5/Language_regulier/Automate/AAP1.png" title="" alt="" width="483">
+
+$L=\{a^{n+k}b^n | n,k\geq0\}$
+
+![AAP2.png](C:\Users\ronan\cours\L3\S5\Language_regulier\Automate\AAP2.png)
+
+---
+
+**Theoreme :**
+
+Soit $L \subseteq \Sigma^*$,$L$ est genere pas une grammaire hors contexte ssi $L$ est reconnu par un automate a pile non deterministe.
+
+**Def :**
+
+un APND $A=(Q,\Sigma,\Gamma,\delta,I,F)$ est en forme normale du cours si:
+
+- il y a un unique etat initial i ($I=\{i\}$)
+
+- il y a un unique etat final f ($F =\{f\}$)
+
+- tout calcul acceptant termine avec la pile vide.
+
+- les transition sont atomiques,c'est a dire font exacteme,nt une action parmi lire, deplier et empiler.
+
+aaabb
+
+etat: $i \to P_0 \to P_01 \to P_0 \to P_01 \to P_0 \to P_01 \to P_0 \to P_11 \to P_1 \to P...$
+pile:  $\epsilon \to Z \to Z1 \to Z11 \to Z111 \to Z11 \to Z1 \to Z \to \epsilon$
+
+$G=(V,\Sigma,R,S)$ avec $V=\{X_{p,q}|p,q \in Q\}$.  
+but : $X_{p,q} \to^* w \in \Sigma^*$ ssi depuis $\boxed{p,\epsilon}$ on peu rejoindre $\boxed{q,\epsilon}$ en lisant $w$.
+
+$R$: depuis $X_{p,q}$:
+
+- $X_{p,q} \to \epsilon$ si $p=q$
+
+- $X_{p,q} \to aX_{r,q}$ si il existe une a transition de $p$ à $r$.
+
+- $X_{p,q} \to X_{r,s}$ si $p\xrightarrow{\epsilon,\epsilon,x}r $ et $ s\xrightarrow{\epsilon,x,\epsilon}t$
+
+
+
+```mermaid
+graph
+
+X,if-->X,P0e
+X,if-->X,ff
+X,ff-->epsilon
+X,P0e-->a
+X,P0e-->X,P0'e
+X,P0'e-->X,P0e
+X,P0'e-->X,ee
+X,ee-->epsilon
+```

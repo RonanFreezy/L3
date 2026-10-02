@@ -26,14 +26,11 @@ public class ArbreB {
         }
 
         public String toString() {
-            StringBuffer b = new StringBuffer();
-            if (this.estFeuille)
-                b.append("Feuille(");
-            else
-                b.append("Noeud(");
+            StringBuilder b = new StringBuilder();
+            if (this.estFeuille) b.append("Feuille(");
+            else b.append("Noeud(");
 
-            if (!this.estFeuille)
-                b.append(this.enfants[0]).append(" | ");
+            if (!this.estFeuille) b.append(this.enfants[0]).append(" | ");
 
             for(int i = 0; i < this.taille; i++) {
                 b.append(this.cles[i]);
@@ -81,14 +78,15 @@ public class ArbreB {
     }
 
     private void decalerDeUn(Noeud n, int pos) {
-        if (pos>=n.taille-1){return;}
-        for (int i=n.taille;i>=pos;i--){
-            n.cles[i+1]=n.cles[i];
-            if(n.estFeuille) n.valeurs[i+1]=n.valeurs[i];
-            else n.enfants[i+2]=n.enfants[i+1];
+        if (pos>=n.taille){n.taille++; return;}
+        for (int i=n.taille;i>pos;i--){
+            n.cles[i]=n.cles[i-1];
+            if(n.estFeuille) n.valeurs[i]=n.valeurs[i-1];
+            else n.enfants[i+1]=n.enfants[i];
         }
         n.cles[pos]=null;
-        n.valeurs[pos]=null;
+        if(n.estFeuille) n.valeurs[pos]=null;
+        else n.enfants[pos+1]=null; 
         n.taille++;
     }
 
@@ -100,15 +98,39 @@ public class ArbreB {
     }
 
     public void ajouter(String cle, String valeur) {
-        ajouterRec(racine, cle, valeur);
+        Paire p =ajouterRec(racine, cle, valeur);
+        if (p!=null){
+            Noeud n=new Noeud(false);
+            n.cles[0]=p.cle;
+            n.enfants[0]=racine;
+            n.enfants[1]=p.noeud;
+            n.taille++;
+            racine=n;
+            //faire que quand on remonte j'usqua al racine on cree une nouvelle racine et racorde les 2 fils .
+        }
     }
 
-    private void ajouterRec(Noeud n, String cle, String valeur){
+    private Paire ajouterRec(Noeud n, String cle, String valeur){
         int pos =positionPour(n, cle);
         if (n.estFeuille){
-            insererA(n, pos, cle, valeur, null);
+            if(n.taille==M) {
+                return splitFeuille(n, cle, valeur);
+            }
+            else {
+                insererA(n, pos, cle, valeur, null);
+                return null;
+            }
         }
-        else ajouterRec(n.enfants[pos], cle, valeur);
+        else {
+            Paire p = ajouterRec(n.enfants[pos], cle, valeur);
+            if(p==null)return null;
+            if(n.taille==M){
+                return splitInterne(n, p.cle, p.noeud);
+            }
+            pos=positionPour(n, p.cle);
+            insererA(n, pos, p.cle, null, p.noeud);
+            return null;
+        }
     }
 
     
@@ -130,45 +152,23 @@ public class ArbreB {
     }
 
     private Paire splitFeuille(Noeud n, String cle, String valeur) {
-        Noeud droit = new Noeud(false);
+        Noeud droit = new Noeud(true);
         int posMed = M/2;
         int posAjout = positionPour(n, cle);
-        String medCle;
-        if(posAjout > posMed){
-            medCle =n.cles[posMed];
-            for (int i = posMed+1; i < ArbreB.M; i++) {
-                droit.cles[i-posMed+1]=n.cles[i];
-                droit.taille++;
-                n.cles[i]=null;
-                n.taille--;
-            }
-            //ajouter medCle dans droit
+        int decal = (posAjout <= posMed) ? 0 : 1;
+
+		for (int i = posMed+decal; i < ArbreB.M; i++) {
+			droit.cles[i-posMed-decal]=n.cles[i];
+			droit.valeurs[i-posMed-decal]=n.valeurs[i];
+            droit.taille++;
+            n.taille--;
         }
-        else if(posAjout == posMed){
-            medCle=cle;
-            for (int i = posMed; i < ArbreB.M; i++) {
-                droit.cles[i-posMed+1]=n.cles[i];
-                droit.taille++;
-                n.cles[i]=null;
-                n.taille--;
-            }
-            n.cles[posMed]=cle;
-        }
-        else {
-            medCle=n.cles[posMed-1];
-            for (int i = posMed; i < ArbreB.M; i++) {
-                droit.cles[i-posMed+1]=n.cles[i];
-                droit.taille++;
-                n.cles[i]=null;
-                n.taille--;
-            }
-            n.cles[posAjout]=cle;
-        }
+		if(posAjout > posMed) insererA(droit, posAjout-posMed-1, cle, valeur, null);
+		else insererA(n, posAjout, cle, valeur, null);
+
+		String medCle=n.cles[n.taille-1];
         Paire paire= new Paire(medCle, droit);
-
-        //tout ce qui a a droite de le mediane vas dans le nouveau noeud de droite et les enlever du noued de gauche
-
-
+		return paire;
     }
 
     private Paire splitInterne(Noeud n, String cle, Noeud enfant) {
@@ -205,14 +205,114 @@ public class ArbreB {
     }
 
     public String toString(){
-        StringBuffer b = new StringBuffer();
+        StringBuilder b = new StringBuilder();
         b.append(this.racine);
         return b.toString();
     }
     
     public static void main(String[] args) throws Exception {
-        testSimple();
+        //testSimple();
+        //testSplitPair();
+        //testSplitImpair();
+        //testCommunes();
+        testTd();
     }
+
+    public static void testTd() {
+        
+        M=4;
+        ArbreB a=new ArbreB();
+
+        a.ajouter("03","allier");
+        a.ajouter("36","indre");
+        a.ajouter("18","cher");
+        a.ajouter("75","paris");
+        a.ajouter("39","jura");
+        a.ajouter("09","arriege");
+        a.ajouter("81","tarn");
+        a.ajouter("11","aude");
+        a.ajouter("12","aveyron");
+        a.ajouter("25","doubs");
+        a.ajouter("73","savoie");
+        a.ajouter("55","meuse");
+        a.ajouter("15","cantal");
+        a.ajouter("51","marne");
+        a.ajouter("42","loire");
+        a.ajouter("40","landes");
+        a.ajouter("14","calvados");
+        a.ajouter("30","gard");
+        a.ajouter("84","vaucluse");
+        a.ajouter("07","ardeche");
+
+        System.out.println(a);
+    }
+
+    public static void testSplitPair(){
+
+        
+        System.out.println("\ncas M pair\n");
+        M =4;
+
+		ArbreB a = new ArbreB();
+		a.ajouter("a", "arbre");
+		a.ajouter("c", "chat");
+		a.ajouter("e", "env");
+		a.ajouter("g", "golf");
+        System.out.println(a);
+
+        a.ajouter("b", "bateau");
+        System.out.println(a);
+
+		ArbreB b = new ArbreB();
+		b.ajouter("a", "arbre");
+		b.ajouter("c", "chat");
+		b.ajouter("e", "env");
+		b.ajouter("g", "golf");
+
+        b.ajouter("d", "deep");
+        System.out.println(b);
+        
+		ArbreB c = new ArbreB();
+		c.ajouter("a", "arbre");
+		c.ajouter("c", "chat");
+		c.ajouter("e", "env");
+		c.ajouter("g", "golf");
+
+        c.ajouter("f", "file");
+        System.out.println(c);		
+	}
+
+    public static void testSplitImpair(){
+
+        
+        System.out.println("\ncas M impair\n");
+        M =3;
+
+		ArbreB a = new ArbreB();
+		a.ajouter("a", "arbre");
+		a.ajouter("c", "chat");
+		a.ajouter("e", "env");
+        System.out.println(a);
+
+        a.ajouter("b", "bateau");
+        System.out.println(a);
+
+		ArbreB b = new ArbreB();
+		b.ajouter("a", "arbre");
+		b.ajouter("c", "chat");
+		b.ajouter("e", "env");
+
+        b.ajouter("d", "deep");
+        System.out.println(b);
+        
+		ArbreB c = new ArbreB();
+		c.ajouter("a", "arbre");
+		c.ajouter("c", "chat");
+		c.ajouter("e", "env");
+
+        c.ajouter("f", "file");
+        System.out.println(c);		
+	}
 
     public static ArbreB testSimple() {
         ArbreB a = new ArbreB();
@@ -243,7 +343,6 @@ public class ArbreB {
 
         a.ajouter("g", "girafe");
         System.out.println(a);
-
         return a;
     }
 
