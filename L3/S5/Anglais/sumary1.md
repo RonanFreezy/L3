@@ -1,8 +1,6 @@
 # Bloomberg Primer - Here’s How Biocomputing Works And Matters For AI
 
-[video from 0min to 8min33](https://www.youtube.com/watch?v=txtDpCLHUkU)
-
-# Words that needed to be explained :
+video from 0min to 8min33 :https://www.youtube.com/watch?v=txtDpCLHUkU
 
 # Key words and sentences :
 
