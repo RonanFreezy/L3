@@ -52,4 +52,36 @@ a-->c
 f-->e
 ```
 
+# Q9
+
+**Theoreme :** G est bipartie ssi chaque niveau (l[i]) induit un stable.
+
+$\implies$ par contrapose:
+
+sil il existe un niveau $j$ qui contient un arrete $e=\{x,y\}$ soit $x$ et $y$ ont le meme parent $v$.  
+$G$ contient un cycle de taille 3 (donc pas bipartie).  
+Sinon $x$ a un parent $w$ et $y$ a un parent $z$.  
+Si on considere le chemin $P_x$ de $w$ à $s$ et le chemin $P_y$ de $z$ à $s$.  
+Soit $t$ le plus petit ancetre commun de $w$ et $z$. La longeur de $t$ à $x$ et la longeur de $t$ à $y$ sont identique. Si on considere $P_x , P_y$ on a un chemin de $x$ à $y$ de longeur paire. En ajoutant $\{x,y\}$ on ferme un cycle de longeur imapaire.  
+Donc $G$ n'est pas bipartie.
+
+
+
+$\impliedby :$
+
+On  constuit la partie A, tous les sommets qui sont sur un niveau pair.  
+On construit la partie B, tous les sommet qui sont que un niveau impair.  
+On doit prouver que $G[A]$ est un stable et $G[B]$ est un stable.
+
+spdg pour A.
+
+
+
+soit $x,y$ deux sommet de A:
+
+- on a $l[x]=l[y]$, comme ils sont au meme niveau: pas d'arrete.
+
+- on a $l[x]<l[y]$, comme $l[x] \equiv 0[2]$ et $l[y] \equiv 0[2]$, on a $|l[x] - l[y]|\geq 2$.  
+  Par l'exo 8 pas d'arette.
+
 

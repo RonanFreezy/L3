@@ -852,6 +852,56 @@ Comme la plupart des communication passe par al couche transport, on peut utilis
 | 10.0.0.1  | 2300        | TCP      | 16320       | www.uca.fr          | 1555                     |
 | 10.0.0.2  | 2400        | TCP      | 2754        | www.uca.fr          | 7000                     |
 
-
-
 Pour heberge un serveur ont peut configurer le routeru pour faire une association semi-permanente port forwarding
+
+# Routage
+
+Deja aborde au niveau de IP pour le fontionement du routage, fonctionne avec les table de routage.
+
+En realite il y a deux niveau de routage:
+
+- Intra AS
+
+- Inter AS
+
+AS : autonomous system  
+Un reseau gere par une entite specifique( entreprise, operateur internet, collectif d'universite, ...)
+
+RENATER ( reseaux d'universite)
+
+Pour Intra AS l'entite est libre de choisir le protocole de routage mis en oeuvre (RIP, OSPF, ...)  
+Pour Inter AS le protocol est unique (BGP: borden gateway protocol)
+
+## RIP: Routing Internet Protocol
+
+Basé sur la notion de vecteur de distance. On a les meme Information : @reseaux,@routeur, Distance en nombre de saut.
+
+Les protocole de routage doivent permetrre de router les paquets/datagramme qui leurs sont envoyés. Mettre a jour les Information des table de routage.
+
+Comme le reseaux evolue au cours du temps, un routeur peut etre ajoute, des equipement peuvetn tombe en panne.  
+En cas de panne les routeur qui etait connues peuvent devenir obsoletent.
+
+Vecteur de distance pour ùettre a jour sa table de routage, le routeur R va l'envoyer à ses voisin direct. Et va attendre des ses voisins les tables de routage.  
+R va comparer la table de routage a se voisin. $d(R,Y)$ la distance connue pour aller de R à Y, il va comparer la distance avec cell du routeur $R_i;\ d(R,Y) > d(R_i,Y)+1$.  
+Dans ce cas il met à jour sa table de routage. Pour allez vers Y on passe par $R_i$ avec distance  $d(R,Y) = d(R_i,Y)+1$ l'echange des table de routage intervient toutes les 180 secondes. Si les routes trouvées n'ameliorent pas la distance, on garde l'ancienne route.  
+Le chemin de plus court n'est pas forcement le meilleur chemin.
+
+Les table de routage de souer de reseaux peuve etre tes grande, donc beaucoup de données à traiter a chaque mise a jour.  
+Il est egalement possible que des muavaise information soient diffuse.
+
+
+
+$R_1$ envoie sa table de routage a $R_2$ et juste apres son interface connecte sur le reseau $N_1$ tombe en panne. Si à ce moment il recoitla table de routage de $R_2$, il va comparer la distance qu il avait vers $N_1$ et celle de $R_2$ à $N_1$: $d(R_1,N_1) = +\infty$ et $d(R_2,N_1)=1$ ce que va faire $R_1$ , il va mettre a jour sa route vers $N_1$ en passant par $R_2$, il y a une boucle et ca prendra beaucoup de temps pour stabiliser les routes du reseau. On considere que RIP est efficace pour les petit reseaux. Il gere au maximun des reseux de longeur au plus 16. Facile a configurer pour les petit reseaux.
+
+
+
+## Open Shortest Path Finst.
+
+Au lieu d'envoyer les table de routage. chaque routeur va envoyer l'etat de ses liens. chaque message sera de taille plus compacte que l'integralite de la table. Par schema de diffusion, chaque routeur propagera les etat des liens des autres Routeur.  
+Au final chaque routeur aura une cartographie global du reseau, il pourra determiner le meilleur chemin en fonction de la demande:
+
+- maximiser le debit
+
+- minimiser la latence
+
+- ...

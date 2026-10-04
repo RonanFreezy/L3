@@ -4,7 +4,7 @@ import java.util.*;
 public class TriExterne {
     // size of the cache in number of n-uplet
     // M >= 3
-    public static int M = 10;
+    public static int M = 5;
     public final String[][] cache;
     public final String path;
     public final String[] entete;
@@ -33,37 +33,136 @@ public class TriExterne {
     }
 
     public void trier() throws FileNotFoundException, IOException {
+        int nb=creerFragmentsInitiaux();
+        fusion(0, nb/M +1);
     }
 
     // tri le cache entre les indices 0 et taille - 1 inclus
     private void trierCache(int taille) {
-        Arrays.sort(this.cache, comparateur);
+        Arrays.sort(this.cache,0,taille,comparateur);
     }
 
     // écrit une ligne dans un fichier CSV pour les stocker les valeurs
     private static void ecrireLigneCSV(FileWriter fw, String[] valeurs) throws IOException {
+        for (int i = 0; i < valeurs.length; i++) {
+            fw.write(valeurs[i]);
+            if (i==valeurs.length-1) fw.write('\n');
+            else fw.write(';'); 
+        }
     }
 
     // écrit dans un fichier CSV le contenu du cache de l'indice 0 à taille - 1 (avec taille <= M)
     private void sauvegardeCache(String path, String[] entete, int taille) throws IOException {
+        FileWriter fw= new FileWriter(path);
+        ecrireLigneCSV(fw, entete);
+        for (int i = 0; i < taille; i++) {
+            ecrireLigneCSV(fw, cache[i]);
+        }
+        fw.close();
+
     }
 
     // lit le fichier CSV inital et le diviser en fichiers triée de taille M à l'exception du dernier
     // retourne le nombre de nuplets lus
     private int creerFragmentsInitiaux() throws IOException {
-        return 0;
+        String ligne;
+        int nb_nuplet=0;
+        while ((ligne = this.fichierInit.readLine()) != null){
+            String[] nuplet = nupletDepuis(ligne);
+            cache[nb_nuplet%M]=nuplet;
+            nb_nuplet++;
+            if(nb_nuplet%M==0){
+                trierCache(M);
+                sauvegardeCache(nomDeFragment(0, (nb_nuplet/M)-1), entete, M);
+            }
+        }
+        int nb_restant = nb_nuplet%(M);
+        if(nb_restant!=0){
+                trierCache(nb_restant);
+                sauvegardeCache(nomDeFragment(0, nb_nuplet/M), entete, nb_restant);
+            }
+        return nb_nuplet;
     }
 
     private int fusion(int niveau, int nombre) throws FileNotFoundException, IOException {
-        return 0;
+
+        if(nombre==1)return 1;
+
+        clearCache();
+        
+        BufferedReader[] files = new BufferedReader[nombre];//initialiser tout les fragment de se niveau
+        for (int i = 0; i < nombre; i++) {
+            files[i] = new BufferedReader(new FileReader(nomDeFragment(niveau, i)));
+        }
+        int nbMaxFusion = (nombre%(M-1)==0) ? nombre/(M-1): nombre/(M-1)+1;
+
+        for (int numFusion = 0; numFusion < nbMaxFusion; numFusion++) {
+
+            int nbFragment= (numFusion==nbMaxFusion-1 && nombre%(M-1)!=0) ? nombre%(M-1): M-1;
+            initCache(files, numFusion, nbFragment);
+
+            FileWriter fw= new FileWriter(nomDeFragment(niveau+1, numFusion));
+            ecrireLigneCSV(fw, entete);
+
+            int iMin; String tempLine;
+            while ((iMin=min())<M) {
+                ecrireLigneCSV(fw,cache[M-1]);
+
+                cache[M-1]=null;
+
+                tempLine = getLineFromFileAtIndex(files, numFusion, iMin);
+                cache[iMin] = (tempLine != null) ? tempLine.split(";") : null;
+            }
+            fw.close();
+        }
+        return fusion(niveau+1, nbMaxFusion);
     }
 
+    private void initCache(BufferedReader[] files, int numFusion,int nbFragment) throws IOException{
+        for (int numFragment = 0; numFragment < nbFragment; numFragment++) {
+                getLineFromFileAtIndex(files, numFusion, numFragment);// enleve les entete des ficheir
+                cache[numFragment]=getLineFromFileAtIndex(files, numFusion, numFragment).split(";"); // remplie le cache avec le premier n_uplet du fichier
+            }
+    }
+
+    private String getLineFromFileAtIndex(BufferedReader[] files,int numFusion,int numFragment) throws IOException{
+        return files[numFusion*(M-1)+numFragment].readLine();
+
+    }
+
+    private int min(){// ecrit a ladresse M-1 le minimun de cache et renvoie l'indice du min
+        int index=initFirstNotNull();
+        for (int i = index + 1; i < M-1; i++) {
+            if (cache[i]!=null){
+                if(comparateur.compare(cache[i],cache[M-1])<0){
+                    cache[M-1] = cache[i];
+                    index=i;
+                }
+            }
+        }
+        return index;
+    }
+
+    private void clearCache(){
+        for (int i = 0; i < M; i++) cache[i]=null;
+    }
+
+    private int initFirstNotNull(){//renvoie l'index que premier n-uplet non null et M si tout null
+        int i=0;
+        while(i<M && cache[i]==null){
+            i++;
+        }
+        if(i<M)cache[M-1] = cache[i];
+        return i;
+    }
+
+    @Override
     public String toString() {
         return Arrays.toString(this.cache);
     }
 
     private static String nomDeFragment(int niveau, int numero) {
-        return String.format("fragment_%s_%s.csv", niveau, numero);
+        return String.format("./temp/fragment_%s_%s.csv", niveau, numero);
     }
         
     public static String[] nupletDepuis(String ligne) {
@@ -87,8 +186,16 @@ public class TriExterne {
         System.out.println("Temps d'éxécution : " + (System.currentTimeMillis() - t1) + "ms");
     }*/
 
-    public static void main() {
-        testcompare();
+    public static void main() throws Exception{
+        //testcompare();
+        testcomune();
+    }
+
+    private static void testcomune() throws Exception{
+        String[] colones = new String[1];
+        colones[0]= "PTOT";
+        TriExterne test = new TriExterne("./communes_test.csv", colones);
+        test.trier();
     }
 
     private static void testcompare(){

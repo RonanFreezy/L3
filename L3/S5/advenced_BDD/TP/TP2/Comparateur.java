@@ -13,8 +13,17 @@ class Comparateur implements Comparator<String[]> {
     @Override 
     public int compare(String[] t1, String[] t2) {
         for (int indice : indices) {
-            int res = t1[indice].compareTo(t2[indice]);
-            if(res !=0) return res/Math.abs(res);
+            try {
+                int i1 =Integer.parseInt(t1[indice]);
+                int i2 =Integer.parseInt(t2[indice]);
+
+                if(i1 > i2) return 1;
+                else if (i1<i2) return -1;
+                
+            } catch (NumberFormatException e) {
+                int res = t1[indice].compareTo(t2[indice]);
+                if(res!=0) return res;
+            }
         }
         return 0;
     }
