@@ -25,6 +25,7 @@ public class ArbreB {
             }
         }
 
+        @Override
         public String toString() {
             StringBuilder b = new StringBuilder();
             if (this.estFeuille) b.append("Feuille(");
@@ -60,6 +61,7 @@ public class ArbreB {
             this.noeud = n;
         }
 
+        @Override
         public String toString() {
             return "(" + this.cle + ", " + this.noeud + ")";
         }
@@ -99,36 +101,33 @@ public class ArbreB {
 
     public void ajouter(String cle, String valeur) {
         Paire p =ajouterRec(racine, cle, valeur);
-        if (p!=null){
+        if (p!=null){ // si p != null alors on fait remonter la mediane et comme on est a la racine on doit cree une nouvelle racine
             Noeud n=new Noeud(false);
             n.cles[0]=p.cle;
             n.enfants[0]=racine;
             n.enfants[1]=p.noeud;
             n.taille++;
             racine=n;
-            //faire que quand on remonte j'usqua al racine on cree une nouvelle racine et racorde les 2 fils .
         }
     }
 
     private Paire ajouterRec(Noeud n, String cle, String valeur){
         int pos =positionPour(n, cle);
         if (n.estFeuille){
-            if(n.taille==M) {
-                return splitFeuille(n, cle, valeur);
-            }
+            if(n.taille==M) return splitFeuille(n, cle, valeur);
             else {
                 insererA(n, pos, cle, valeur, null);
                 return null;
             }
         }
-        else {
+        else {// si noeud interne
             Paire p = ajouterRec(n.enfants[pos], cle, valeur);
-            if(p==null)return null;
-            if(n.taille==M){
-                return splitInterne(n, p.cle, p.noeud);
+            if(p!=null){
+                if(n.taille==M) return splitInterne(n, p.cle, p.noeud);
+
+                pos=positionPour(n, p.cle);
+                insererA(n, pos, p.cle, null, p.noeud);
             }
-            pos=positionPour(n, p.cle);
-            insererA(n, pos, p.cle, null, p.noeud);
             return null;
         }
     }
@@ -141,9 +140,7 @@ public class ArbreB {
     private String rechercheRec(Noeud n, String cle) {
         if (n.estFeuille){
             int pos=0;
-            while(!(n.cles[pos].equals(cle))){
-                pos++;
-            }
+            while(!(n.cles[pos].equals(cle))) pos++;
             return n.cles[pos];
         }
         int pos=positionPour(n, cle);
@@ -155,20 +152,22 @@ public class ArbreB {
         Noeud droit = new Noeud(true);
         int posMed = M/2;
         int posAjout = positionPour(n, cle);
-        int decal = (posAjout <= posMed) ? 0 : 1;
+        int decal = (posAjout <= posMed) ? 0 : 1;// permet de factorise les 3 cas
 
+        //on split en 2 bloc a partir de la mediane
 		for (int i = posMed+decal; i < ArbreB.M; i++) {
 			droit.cles[i-posMed-decal]=n.cles[i];
 			droit.valeurs[i-posMed-decal]=n.valeurs[i];
             droit.taille++;
             n.taille--;
         }
-		if(posAjout > posMed) insererA(droit, posAjout-posMed-1, cle, valeur, null);
-		else insererA(n, posAjout, cle, valeur, null);
+
+        
+		if(posAjout > posMed) insererA(droit, posAjout-posMed-1, cle, valeur, null); //on ajoute dans le bloc droit
+		else insererA(n, posAjout, cle, valeur, null);// on ajoute dans le bloc gauche
 
 		String medCle=n.cles[n.taille-1];
-        Paire paire= new Paire(medCle, droit);
-		return paire;
+        return new Paire(medCle, droit);
     }
 
     private Paire splitInterne(Noeud n, String cle, Noeud enfant) {
@@ -204,6 +203,7 @@ public class ArbreB {
         return p;
     }
 
+    @Override
     public String toString(){
         StringBuilder b = new StringBuilder();
         b.append(this.racine);

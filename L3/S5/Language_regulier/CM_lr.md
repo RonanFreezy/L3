@@ -1,4 +1,4 @@
-### Lemme de pompage régulier
+# Lemme de pompage régulier
 
 Si $L$ est regulier alors $L$ satisfait la condition de pompage regulier  
 
@@ -9,6 +9,7 @@ c'est a dire :
 - $\exists x,y,z \space w=xyz, \space y\neq \epsilon$
 
 - $\forall i \in \mathbb{N} \text{ on a } xy^iz \in L$
+
 
 **Average Proof:**
 
@@ -21,9 +22,11 @@ Soient \space x,y,z \space tq \space w=xyz,\space y\neq \epsilon \space et \spac
 \text{On a } xy^iz \notin L
 $$
 
+
 **Ex :**
 
 Montrer que $L=\{ a^nb^mc^k \mid n\neq{m} \text{ ou } m\neq k\}$ n'est pas regulier.
+
 
 **Preuve :**
 
@@ -44,6 +47,7 @@ Soient \space x,y,z \space tq \space w=xyz,\space y\neq \epsilon \space et \spac
 \text{On a } xy^iz \notin L
 $$
 
+
 **Exo :**
 
 Transformer ce Language en grammaire $L=\{a^ib^jc^k \mid i=j \text{ ou }j=k\}$
@@ -55,6 +59,7 @@ $L=\{a^ib^j \mid i=j\}. \{c^k \mid k>=0\} \cup ...$
 $X \to aXb \mid \epsilon ,\space C \to cC\mid \epsilon\\S \to AC$
 
 #finir
+
 
 **Prop :**
 
@@ -68,6 +73,7 @@ $\exists $ les grammaires :
 
 - $G_*$ tq $L(G_*) = (L(G_1))^*$
 
+
 **Preuve :**
 
 On fixe $G_1=(V_1,\Sigma,R_1,S_1) \space et \space G_2=(V_2,\Sigma,R_2,S_2) \space avec \space V_1 \cap V_2 =\emptyset$
@@ -80,9 +86,11 @@ On definit :
 - $G_. =(V_1 \cup V_2 \cup \{ S\},\Sigma,R_1 \cup R_2 \cup \{S \to S_1S_2\},S)$
 - $G_* =(V_1 \cup \{ S\},\Sigma,R_1 \cup \{S \to SS \mid \epsilon \},S)$
 
+
 **Corollaire :**
 
 Tout language regulier est génere par une grammaire 
+
 
 **Preuve :**
 
@@ -95,17 +103,20 @@ heredite:
 
 Si $L=L_1 \cup L_2 \text{ ou } L=L_1 . L_2 \text{ ou } L=L_1^*$ consequece dde la prop precedente.
 
+
 **Remarque :**
 
 La reciproque est fausse : $S \to aSb \mid \epsilon$
 
 ---
 
+
 **Prop :** 
 
 $$
 L \space regulier \iff \exists G \text{ est regulier a droite tq }L=\mathcal{L}(G)
 $$
+
 
 **Preuve :**
 
@@ -153,9 +164,11 @@ regle : si $X \in \mathcal{A}$et $\exists \alpha,\beta,\gamma$ tq $X\to  \alpha\
 
 ---
 
+
 **Proposition :**
 
 Si $G$ est une grammaire alors il existe $G'$ tq $\mathcal{L}(G') = \overleftarrow{\mathcal{L}(G)}$
+
 
 **Preuve :**
 
@@ -172,6 +185,7 @@ Par récurence : $\space S \xrightarrow{n} \alpha_1X\alpha_3 \in G'$ et $X \to \
 d'ou $S \xrightarrow{n+1} \overleftarrow{\alpha_1} \space \overleftarrow{\alpha_2} \space \overleftarrow{\alpha_3} = \overleftarrow{\alpha} \in G'$  
 Pareil pour $\impliedby$ car le mirroir est involutif
 
+
 **Definition :**
 
 Soit $G=(V,\Sigma,R,S)$ une grammaire.  
@@ -182,15 +196,18 @@ Un arbre de derivation de $G$ est un arbre ordonné (dont les fils d'un meme per
 - les feuilles par $\Sigma \cup \{\epsilon\}$
 - si $\alpha_1,\alpha_2,...,\alpha_r$ sont les etiquette des fils d'un noeud etiqueté par $X$ alors $X \to \alpha_1\alpha_2...\alpha_r$ est une regle
 
+
 **Definition :**
 
 La frontiere d'un arbre de derivation est le mot sur $\Sigma$ formé par les etiquette des feuilles prises dans l'ordre de visite d'un parcours préfixe.
+
 
 **Proposition :**
 
 $w$ est la frontiere d'un rabre de derivation de $G \text{ ssi } w \in \mathcal{L}(G)$ 
 
 ---
+
 
 **Transformer un AEF en Grammaire linéaire a droite :**
 
@@ -204,6 +221,7 @@ $$
 
 ---
 
+
 **Definition :**  
 Un automate à pile (non-deterministe)(APND) est un sixtuplet $(Q,\Sigma,\Gamma,\delta,I,F)$ avec :
 
@@ -216,6 +234,7 @@ Un automate à pile (non-deterministe)(APND) est un sixtuplet $(Q,\Sigma,\Gamma,
 
 Depuis $p$ lire $\sigma \in (\Sigma \cup \{\epsilon\})$, déplacer $\alpha \in (\Gamma \cup \{\epsilon\})$, empile $\beta \in (\Gamma \cup \{\epsilon\})$ entrer $q$.
 
+
 **Definition :**
 Une configuration d'un APND $(Q,\Sigma,\Gamma,\delta,I,F)$ est une paire dans $Q \times \Gamma^*$
 
@@ -223,6 +242,7 @@ Une configuration d'un APND $(Q,\Sigma,\Gamma,\delta,I,F)$ est une paire dans $Q
 - configuration finale: $F \times \Gamma^*$
 
 Exemple : $\boxed{p,12112}$
+
 
 **Definition :**
 $\delta$ induit une collection sur les configuration indexe par $\Sigma \cup \{\epsilon\} : \boxed{p,u} \space \xrightarrow{\sigma} \space \boxed{q,v}$
@@ -234,8 +254,9 @@ On etand $\xrightarrow{\sigma}$ à $\xrightarrow{w}$ pour $w \in \Sigma^*$
 Base: $\boxed{p,u} \space \xrightarrow{\epsilon} \space \boxed{q,v}; \space \forall p \in Q,\forall u \in \Gamma^*$
 Regle: si $\boxed{p,u} \space \xrightarrow{x} \space \boxed{q,v}$ et $\boxed{q,v} \space \xrightarrow{\sigma} \space \boxed{r,w}$ alors $\boxed{p,u} \space \xrightarrow{x\sigma} \space \boxed{r,w}$
 
+
 **Definition :**
-$w\in \Sigma^*$ est accepte par l'APND si il existe $\boxed{q_i,\epsilon}$ une configuration initiale et $\boxed{q_f,\epsilon}$ un conf finale tq $\boxed{q_i,\epsilon} \xrightarrow{w} \boxed{q_f,\epsilon}$ .  
+$w\in \Sigma^*$ est accepte par l'APND si il existe $\boxed{q_i,\epsilon}$ une configuration initiale et $\boxed{q_f,\epsilon}$ une configuration finale tq $\boxed{q_i,\epsilon} \xrightarrow{w} \boxed{q_f,\epsilon}$ .  
 Le language reconu par l'APND est l'ensemble des mot acceptés
 
 ---
@@ -250,9 +271,11 @@ $L=\{a^{n+k}b^n | n,k\geq0\}$
 
 ---
 
+
 **Theoreme :**
 
 Soit $L \subseteq \Sigma^*$,$L$ est genere pas une grammaire hors contexte ssi $L$ est reconnu par un automate a pile non deterministe.
+
 
 **Def :**
 
@@ -264,7 +287,7 @@ un APND $A=(Q,\Sigma,\Gamma,\delta,I,F)$ est en forme normale du cours si:
 
 - tout calcul acceptant termine avec la pile vide.
 
-- les transition sont atomiques,c'est a dire font exacteme,nt une action parmi lire, deplier et empiler.
+- les transition sont atomiques,c'est a dire font exactement une action parmi lire, deplier et empiler.
 
 aaabb
 
@@ -295,6 +318,7 @@ X,P0'e-->X,ee
 X,ee-->epsilon
 ```
 
+
 **Def :** Forme normal de Chomsky
 
 Une grammaire hors contexte $(V,\Sigma,R,S)$ est un FNC si:
@@ -309,6 +333,7 @@ Une grammaire hors contexte $(V,\Sigma,R,S)$ est un FNC si:
   
   - Soit $\alpha = \epsilon \space et \space X=S$ $(S \to \epsilon)$ 
 
+
 **Propriete :** Toute GHC est equivalente a une GHC en FNC
 
 $$
@@ -321,14 +346,177 @@ $$
 
 ![](C:\Users\ronan\cours\L3\S5\Language_regulier\Automate\FNC1.png)
 
+
 **Prop :**
 
 Soit $\alpha \in V^* \space \alpha \xrightarrow{*}u\beta$ par une derivation a gauche ssi $(m,\overleftarrow{\alpha} \xrightarrow{u} m,\overleftarrow{\beta})$
-
-
 
 $$
 E \to E+E | E\times E | (E) | N\\
 N \to 0|1C\\
 C \to 0C|1C|\epsilon
 $$
+
+
+**Rappel FNC :** 
+
+- une regle est de la forme 
+  
+  - $X \to YZ$
+  
+  - $X \to a$
+  
+  - $X \to \epsilon$ a condition que $X=S$
+
+- $S$ n'apparait pas a droite d'un regle 
+
+- la grammaire est reduite
+
+
+**Prop :** Toute GHC admet une GHC en FNC equivalente.
+
+1. isolation de l'axiome : ajouter un nouvel $S_0 \notin V$ et la regle $S_0 \to S$
+
+2. isolation des terminaux : Pour chaque terminale, cree une vaariable $X_\sigma \notin V$ et ajouter la regle $X_\sigma \to \sigma$.  
+   Remplacer toutes les occurece de $\sigma$ dans les regle par $X_\sigma$.
+
+3. elimination des production vide:  
+   Pour chaque regle $V \to \epsilon$,  
+   Pour chaque regle $T \to \alpha$ ,  
+   Pour chaque $\alpha'$ obtenu depuis $\alpha$ en remplacant certains $V$ par $\epsilon$.  
+   ajouter $T \to \alpha$ sauf si $\alpha'=\epsilon$ et $T \to \epsilon$ deja traite  
+   Eliminer $T\to \epsilon$
+
+4. elimination des prod unitaire:  
+   Pour chaque regle $V\to T$  
+   Pour chauque regle $T \to \alpha$  
+   ajouter $V \to \alpha$ sauf si deja traite  
+   supprimer $V \to T$
+
+5. binarise: pour chaque $V \to \alpha$ avec $|\alpha|<2$
+   
+   1. choisir une factorisation $\alpha_1 \alpha_2=\alpha$
+   
+   2. cree des variable $X_{\alpha_1} \ et \ X_{\alpha_2}$
+   
+   3. ajouter $X_{\alpha_1} \to \alpha_1 \ et \ X_{\alpha_2} \to \alpha_2$
+   
+   4. remplacer $V \to \alpha$ par $V \to X_{\alpha_1}X_{\alpha_2}$
+
+Ex:
+
+$$
+S_0 \to S\\
+S \to XY \\
+X \to AXB|W \\
+Y \to AYB|WAW|S|\epsilon\\
+W \to AWZ | \epsilon \\
+Z \to AB\\
+A\to a \\
+B \to  b
+$$
+
+devient par l'etage 3.1$(W \to \epsilon)$:
+
+$$
+X \to AXB | W | \epsilon \\
+Y \to AYB | WAW|S|\epsilon|WA|AW|A\\
+W \to AWZ | AZ
+$$
+
+devient par l'etage 3.2$(Y \to \epsilon)$:
+
+$$
+S \to XY|X\\
+Y \to AYB | WAW|S|WA|AW|A|AB
+$$
+
+devient par l'etage 3.3$(X\to \epsilon)$:
+
+$$
+S \to XY|X|Y|\epsilon\\
+X \to AXB|AB|W\\
+$$
+
+devient par l'etage 3.4$(S\to \epsilon)$:
+
+$$
+S_0 \to S| \epsilon\\
+S \to XY|X|Y|\epsilon\\
+X \to AXB|AB|W\\
+Y \to AYB | WAW|S|WA|AW|A|AB\\
+W \to AWZ | AZ\\
+Z \to AB\\
+A\to a \\
+B \to  b
+
+
+$$
+
+devient par l'etape 4.1$(X \to W)$:
+
+$$
+X \to AXB|AB|AWZ|AZ
+$$
+
+deivent par letape 4.2 $(Y \to S \ et\ Y\to A)$:
+
+$$
+Y \to AYB |WAW|WA|AW|A|AB|XY|X|a
+$$
+
+devient par l'etape 4.3 $(Y \to X)$ :
+
+$$
+Y \to AYB |WAW|WA|AW|A|AB|XY|X|a|AXB|AWZ|AZ
+$$
+
+devient par l'etape 4.4$(S \to X \ et\ S \to Y)$:
+
+$$
+S \to AYB |WAW|WA|AW|A|AB|XY|X|a|AXB|AWZ|AZ
+$$
+
+devient par l'etape 4.5$(S_0 \to S)$:
+
+$$
+S_0 \to \epsilon |AYB |WAW|WA|AW|A|AB|XY|X|a|AXB|AWZ|AZ
+$$
+
+devient par l'etape 5
+
+$$
+S_0 \to \epsilon |[AY]B |W[AW]|WA|AW|A|AB|XY|X|a|[AX]B|[AW]Z|AZ\\
+S \to [AY]B |W[AW]|WA|AW|A|AB|XY|X|a|[AX]B|[AW]Z|AZ\\
+Y \to [AY]B |W[AW]|WA|AW|A|AB|XY|X|a|[AX]B|[AW]Z|AZ\\
+X \to [AX]B|AB|[AW]Z|AZ\\
+W \to [AW]Z | AZ\\
+Z \to AB\\
+[AW] \to AW\\
+[AX] \to AX\\
+[AY] \to Ay \\
+A\to a \\
+B \to  b
+$$
+
+$S$ n'etant pas accesible la grammaire sous FNC est :
+
+$$
+S_0 \to \epsilon |[AY]B |W[AW]|WA|AW|A|AB|XY|X|a|[AX]B|[AW]Z|AZ\\
+Y \to [AY]B |W[AW]|WA|AW|A|AB|XY|X|a|[AX]B|[AW]Z|AZ\\
+X \to [AX]B|AB|[AW]Z|AZ\\
+W \to [AW]Z | AZ\\
+Z \to AB\\
+[AW] \to AW\\
+[AX] \to AX\\
+[AY] \to Ay \\
+A\to a \\
+B \to  b
+$$
+
+
+# Lemme de pompage HC
+
+Si $L$ est HC alors :
+
+- $\exist N>0 $

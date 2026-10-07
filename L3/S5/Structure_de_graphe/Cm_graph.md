@@ -1,14 +1,18 @@
 # Plan
 
-- [def de base]()
-- [graphe bipartie](#graphe-bipartie)
-- [decomposition en cycle](#decomposition-en-cycle-)
-- [tour euclidien]()
-- Parcours de graphe
-  - générique
-  - en largeur
-  - en profondeur
-- couplage
+- [Def de base]()
+
+- [Graphe bipartie](#graphe-bipartie)
+
+- [Decomposition en cycle](#decomposition-en-cycle-)
+
+- [Parcours de graphe](#parcours-de-graphe-)
+  
+  - [générique](#parcours-generique-)
+  - [en largeur](#parcous-en-largeur)
+  - [en profondeur](#parcours-en-profondeur-)
+
+- [Couplage](#couplage-dans-les-graphes)
 
 # C'est quoi un graphe
 
@@ -771,3 +775,47 @@ $\implies$ :
 Si il existe un couplage $M$ qui couvre tous les sommets de $X$.  
 Si on considere n'importe quel sous ensemble $S$ de $X$ comme chause arrete de $X$ est couverte par une unique arrete de $A$.  
 On peut associer à chaque sommet $x_i\in X$ un sommet $y_i \in Y$ de maniere unique donc au final on peut garantir que $|N(S)|\geq|S|$.
+
+$\impliedby :$ Soit $G$ un graphe bipartie tq'il n'existe aucun couplage $M$ qui couvre tous les sommet de $X$.  
+On considere $M^*$ un couplage de cardinalite maximum. Soit $u$ un sommet non couvert par $M^*$. On designe l'ensemble $Z$ tous les sommet accesible depuis $u$ par un chemin $M^*$-alternant.  
+On peut couper $Z$ en 2 :
+
+- $R=X\cap Y$
+
+- $B=Y\cap Z$
+
+Par construction tous les sommet de $R\backslash \{u\}$ sont couver par $M^*$   
+$|B|=|R|-1$ (par la remarque precedente)  
+En realite on a $N(R)=B$. Comme $M^*$ est maximum , les chemis $M^*$-alternant ne sont pas augmentant.   
+$|N(R)|=|B|=|R|-1$.
+
+On a construit un ensemble $R$ tq $|N(R)|<|R|$.
+
+On peut trouver un couplage minimum dans les graphes bipartis en utilisant le flot maximum $\to$ Algo polinomial.
+
+**Vertex Cover/Couverture d'arete par des sommet**
+
+Probleme :
+
+Input : $G=(V,E)$  
+Output : $S\subseteq V$ tq $\forall e \in E(G)$ on a $S\cap e \neq \empty$.  
+On note $\beta(G)$ la taille du plus petit vertex cover de $G$.  
+$\Beta(G) \leq 2 \times \alpha'(G)$.
+
+**Theoreme Egevary konig :**
+
+Si $G=(X,Y,Z)$ est biparti alors on a $\beta(G)= \alpha'(G)$.
+
+**Preuve :**
+
+On considere $M$ un couplage de cardinalite maximum.  
+On considere l'nsemble des sommet de X non couvert par $M$.  
+On considere l'ensemble $V$ accesible à partir de sommet de $u$ par des chemins $Y$ $M^*$-alternant.  
+$V'$ on le decompose en 2 parties, $X'=X\cap V'$ et $Y'=Y\cap V'$ avec $X$ couvert par $Y'$.  
+Si on suppose qu'il existe $y_k$ dans le voisinage de $X'$ qui n'est pas couple alors le chemin qui relie à  $u$ est augmentant .**Pas possible**
+
+On a $N(X')=Y'$  
+On definit $K=Y' \cup (X\backslash X')$.  
+Toute arrete de $G$ a une extremite dans $K$ donc c'est une Vertex Cover.
+
+la cardinalite est $|M|$ car chaque arete est soit couverte par un sommet de $Y^*$ soit par un sommet de $(X\backslash X')$
