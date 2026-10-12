@@ -111,20 +111,17 @@ public class ArbreB {
         }
     }
 
-    private Paire ajouterRec(Noeud n, String cle, String valeur){
+    private Paire ajouterRec(Noeud n, String cle, String valeur){// chager le type de retour de void a Pairepour pouvoir faire remonter reccursivement la mediane.
         int pos =positionPour(n, cle);
         if (n.estFeuille){
             if(n.taille==M) return splitFeuille(n, cle, valeur);
-            else {
-                insererA(n, pos, cle, valeur, null);
-                return null;
-            }
+            insererA(n, pos, cle, valeur, null);
+            return null;   
         }
         else {// si noeud interne
             Paire p = ajouterRec(n.enfants[pos], cle, valeur);
             if(p!=null){
                 if(n.taille==M) return splitInterne(n, p.cle, p.noeud);
-
                 pos=positionPour(n, p.cle);
                 insererA(n, pos, p.cle, null, p.noeud);
             }
@@ -137,15 +134,15 @@ public class ArbreB {
         return rechercheRec(racine,cle);
     }
     
-    private String rechercheRec(Noeud n, String cle) {
+    private String rechercheRec(Noeud n, String cle) {// pour faire une recherche plus optimise , vu que le noeud est triee on peut faire un recherche dichotomique
         if (n.estFeuille){
             int pos=0;
-            while(!(n.cles[pos].equals(cle))) pos++;
-            return n.cles[pos];
+            while(pos<M && !n.cles[pos].equals(cle)) pos++;
+            if(pos<M)return n.valeurs[pos];
+            return "No key on tree";
         }
         int pos=positionPour(n, cle);
-        rechercheRec(n.enfants[pos], cle);
-        return "No key on tree";
+        return rechercheRec(n.enfants[pos], cle);
     }
 
     private Paire splitFeuille(Noeud n, String cle, String valeur) {
@@ -214,8 +211,8 @@ public class ArbreB {
         //testSimple();
         //testSplitPair();
         //testSplitImpair();
-        //testCommunes();
-        testTd();
+        testCommunes();
+        //testTd();
     }
 
     public static void testTd() {
@@ -286,7 +283,7 @@ public class ArbreB {
 
         
         System.out.println("\ncas M impair\n");
-        M =3;
+        M =3; 
 
 		ArbreB a = new ArbreB();
 		a.ajouter("a", "arbre");
@@ -348,7 +345,7 @@ public class ArbreB {
 
     public static ArbreB testCommunes() throws Exception {
         ArbreB a = new ArbreB();
-        File f = new File("communes.txt");
+        File f = new File("./communes.txt");
         Scanner sc = new Scanner(f);
         int compteur = 0;
         long t0 = System.currentTimeMillis();

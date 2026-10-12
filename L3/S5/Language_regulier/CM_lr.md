@@ -10,7 +10,6 @@ c'est a dire :
 
 - $\forall i \in \mathbb{N} \text{ on a } xy^iz \in L$
 
-
 **Average Proof:**
 
 $$
@@ -22,11 +21,9 @@ Soient \space x,y,z \space tq \space w=xyz,\space y\neq \epsilon \space et \spac
 \text{On a } xy^iz \notin L
 $$
 
-
 **Ex :**
 
 Montrer que $L=\{ a^nb^mc^k \mid n\neq{m} \text{ ou } m\neq k\}$ n'est pas regulier.
-
 
 **Preuve :**
 
@@ -47,7 +44,6 @@ Soient \space x,y,z \space tq \space w=xyz,\space y\neq \epsilon \space et \spac
 \text{On a } xy^iz \notin L
 $$
 
-
 **Exo :**
 
 Transformer ce Language en grammaire $L=\{a^ib^jc^k \mid i=j \text{ ou }j=k\}$
@@ -59,7 +55,6 @@ $L=\{a^ib^j \mid i=j\}. \{c^k \mid k>=0\} \cup ...$
 $X \to aXb \mid \epsilon ,\space C \to cC\mid \epsilon\\S \to AC$
 
 #finir
-
 
 **Prop :**
 
@@ -73,7 +68,6 @@ $\exists $ les grammaires :
 
 - $G_*$ tq $L(G_*) = (L(G_1))^*$
 
-
 **Preuve :**
 
 On fixe $G_1=(V_1,\Sigma,R_1,S_1) \space et \space G_2=(V_2,\Sigma,R_2,S_2) \space avec \space V_1 \cap V_2 =\emptyset$
@@ -86,11 +80,9 @@ On definit :
 - $G_. =(V_1 \cup V_2 \cup \{ S\},\Sigma,R_1 \cup R_2 \cup \{S \to S_1S_2\},S)$
 - $G_* =(V_1 \cup \{ S\},\Sigma,R_1 \cup \{S \to SS \mid \epsilon \},S)$
 
-
 **Corollaire :**
 
 Tout language regulier est génere par une grammaire 
-
 
 **Preuve :**
 
@@ -103,20 +95,17 @@ heredite:
 
 Si $L=L_1 \cup L_2 \text{ ou } L=L_1 . L_2 \text{ ou } L=L_1^*$ consequece dde la prop precedente.
 
-
 **Remarque :**
 
 La reciproque est fausse : $S \to aSb \mid \epsilon$
 
 ---
 
-
 **Prop :** 
 
 $$
 L \space regulier \iff \exists G \text{ est regulier a droite tq }L=\mathcal{L}(G)
 $$
-
 
 **Preuve :**
 
@@ -164,11 +153,9 @@ regle : si $X \in \mathcal{A}$et $\exists \alpha,\beta,\gamma$ tq $X\to  \alpha\
 
 ---
 
-
 **Proposition :**
 
 Si $G$ est une grammaire alors il existe $G'$ tq $\mathcal{L}(G') = \overleftarrow{\mathcal{L}(G)}$
-
 
 **Preuve :**
 
@@ -185,7 +172,6 @@ Par récurence : $\space S \xrightarrow{n} \alpha_1X\alpha_3 \in G'$ et $X \to \
 d'ou $S \xrightarrow{n+1} \overleftarrow{\alpha_1} \space \overleftarrow{\alpha_2} \space \overleftarrow{\alpha_3} = \overleftarrow{\alpha} \in G'$  
 Pareil pour $\impliedby$ car le mirroir est involutif
 
-
 **Definition :**
 
 Soit $G=(V,\Sigma,R,S)$ une grammaire.  
@@ -196,18 +182,15 @@ Un arbre de derivation de $G$ est un arbre ordonné (dont les fils d'un meme per
 - les feuilles par $\Sigma \cup \{\epsilon\}$
 - si $\alpha_1,\alpha_2,...,\alpha_r$ sont les etiquette des fils d'un noeud etiqueté par $X$ alors $X \to \alpha_1\alpha_2...\alpha_r$ est une regle
 
-
 **Definition :**
 
 La frontiere d'un arbre de derivation est le mot sur $\Sigma$ formé par les etiquette des feuilles prises dans l'ordre de visite d'un parcours préfixe.
-
 
 **Proposition :**
 
 $w$ est la frontiere d'un rabre de derivation de $G \text{ ssi } w \in \mathcal{L}(G)$ 
 
 ---
-
 
 **Transformer un AEF en Grammaire linéaire a droite :**
 
@@ -221,7 +204,6 @@ $$
 
 ---
 
-
 **Definition :**  
 Un automate à pile (non-deterministe)(APND) est un sixtuplet $(Q,\Sigma,\Gamma,\delta,I,F)$ avec :
 
@@ -234,7 +216,6 @@ Un automate à pile (non-deterministe)(APND) est un sixtuplet $(Q,\Sigma,\Gamma,
 
 Depuis $p$ lire $\sigma \in (\Sigma \cup \{\epsilon\})$, déplacer $\alpha \in (\Gamma \cup \{\epsilon\})$, empile $\beta \in (\Gamma \cup \{\epsilon\})$ entrer $q$.
 
-
 **Definition :**
 Une configuration d'un APND $(Q,\Sigma,\Gamma,\delta,I,F)$ est une paire dans $Q \times \Gamma^*$
 
@@ -242,7 +223,6 @@ Une configuration d'un APND $(Q,\Sigma,\Gamma,\delta,I,F)$ est une paire dans $Q
 - configuration finale: $F \times \Gamma^*$
 
 Exemple : $\boxed{p,12112}$
-
 
 **Definition :**
 $\delta$ induit une collection sur les configuration indexe par $\Sigma \cup \{\epsilon\} : \boxed{p,u} \space \xrightarrow{\sigma} \space \boxed{q,v}$
@@ -253,7 +233,6 @@ On etand $\xrightarrow{\sigma}$ à $\xrightarrow{w}$ pour $w \in \Sigma^*$
 
 Base: $\boxed{p,u} \space \xrightarrow{\epsilon} \space \boxed{q,v}; \space \forall p \in Q,\forall u \in \Gamma^*$
 Regle: si $\boxed{p,u} \space \xrightarrow{x} \space \boxed{q,v}$ et $\boxed{q,v} \space \xrightarrow{\sigma} \space \boxed{r,w}$ alors $\boxed{p,u} \space \xrightarrow{x\sigma} \space \boxed{r,w}$
-
 
 **Definition :**
 $w\in \Sigma^*$ est accepte par l'APND si il existe $\boxed{q_i,\epsilon}$ une configuration initiale et $\boxed{q_f,\epsilon}$ une configuration finale tq $\boxed{q_i,\epsilon} \xrightarrow{w} \boxed{q_f,\epsilon}$ .  
@@ -271,11 +250,9 @@ $L=\{a^{n+k}b^n | n,k\geq0\}$
 
 ---
 
-
 **Theoreme :**
 
 Soit $L \subseteq \Sigma^*$,$L$ est genere pas une grammaire hors contexte ssi $L$ est reconnu par un automate a pile non deterministe.
-
 
 **Def :**
 
@@ -318,7 +295,6 @@ X,P0'e-->X,ee
 X,ee-->epsilon
 ```
 
-
 **Def :** Forme normal de Chomsky
 
 Une grammaire hors contexte $(V,\Sigma,R,S)$ est un FNC si:
@@ -333,7 +309,6 @@ Une grammaire hors contexte $(V,\Sigma,R,S)$ est un FNC si:
   
   - Soit $\alpha = \epsilon \space et \space X=S$ $(S \to \epsilon)$ 
 
-
 **Propriete :** Toute GHC est equivalente a une GHC en FNC
 
 $$
@@ -346,7 +321,6 @@ $$
 
 ![](C:\Users\ronan\cours\L3\S5\Language_regulier\Automate\FNC1.png)
 
-
 **Prop :**
 
 Soit $\alpha \in V^* \space \alpha \xrightarrow{*}u\beta$ par une derivation a gauche ssi $(m,\overleftarrow{\alpha} \xrightarrow{u} m,\overleftarrow{\beta})$
@@ -356,7 +330,6 @@ E \to E+E | E\times E | (E) | N\\
 N \to 0|1C\\
 C \to 0C|1C|\epsilon
 $$
-
 
 **Rappel FNC :** 
 
@@ -371,7 +344,6 @@ $$
 - $S$ n'apparait pas a droite d'un regle 
 
 - la grammaire est reduite
-
 
 **Prop :** Toute GHC admet une GHC en FNC equivalente.
 
@@ -513,7 +485,6 @@ Z \to AB\\
 A\to a \\
 B \to  b
 $$
-
 
 # Lemme de pompage HC
 
