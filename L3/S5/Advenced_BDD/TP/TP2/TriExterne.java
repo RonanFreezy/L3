@@ -13,8 +13,7 @@ public class TriExterne {
 
     public TriExterne (String path, String[] colonnes) throws FileNotFoundException, IOException {
         this.path = path;
-        this.fichierInit = new BufferedReader(new FileReader(path));
-        // liste des noms de colonnes du fichier CSV
+        this.fichierInit = new BufferedReader(new FileReader(path));// liste des noms de colonnes du fichier CSV
         this.entete = fichierInit.readLine().split(";");
 
         int[] indices = new int[colonnes.length]; // indice dit a quel position dans entete se trouve la valuer de tri dans colone . ex Triexterne([id,nom,prenom],[prenom,nom]) : indice = [2,1]
@@ -42,7 +41,7 @@ public class TriExterne {
         Arrays.sort(this.cache,0,taille,comparateur);
     }
 
-    // écrit une ligne dans un fichier CSV pour les stocker les valeurs
+    // écrit une ligne dans un fichier CSV pour stocker les valeurs
     private static void ecrireLigneCSV(FileWriter fw, String[] valeurs) throws IOException {
         for (int i = 0; i < valeurs.length; i++) {
             fw.write(valeurs[i]);
@@ -76,7 +75,7 @@ public class TriExterne {
                 sauvegardeCache(nomDeFragment(0, (nb_nuplet/M)-1), entete, M);
             }
         }
-        int nb_restant = nb_nuplet%(M);
+        int nb_restant = nb_nuplet%M;
         if(nb_restant!=0){
                 trierCache(nb_restant);
                 sauvegardeCache(nomDeFragment(0, nb_nuplet/M), entete, nb_restant);
@@ -90,11 +89,12 @@ public class TriExterne {
 
         clearCache();
         
-        BufferedReader[] files = new BufferedReader[nombre];//initialiser tout les fragment de se niveau
+        //initialiser tout les fragment de se niveau
+        BufferedReader[] files = new BufferedReader[nombre];
         for (int i = 0; i < nombre; i++) {
             files[i] = new BufferedReader(new FileReader(nomDeFragment(niveau, i)));
         }
-        int nbMaxFusion = (nombre%(M-1)==0) ? nombre/(M-1): nombre/(M-1)+1;
+        int nbMaxFusion = (nombre%(M-1)==0) ? nombre/(M-1): nombre/(M-1)+1; // arrondie a l'entier superieur
 
         for (int numFusion = 0; numFusion < nbMaxFusion; numFusion++) {
 
@@ -111,7 +111,7 @@ public class TriExterne {
                 cache[M-1]=null;
 
                 tempLine = getLineFromFileAtIndex(files, numFusion, iMin);
-                cache[iMin] = (tempLine != null) ? tempLine.split(";") : null;
+                cache[iMin] = (tempLine != null) ? tempLine.split(";") : null;// si null ca veux dire que l'on a fini de s'occuper de se fragment
             }
             fw.close();
         }
@@ -120,14 +120,13 @@ public class TriExterne {
 
     private void initCache(BufferedReader[] files, int numFusion,int nbFragment) throws IOException{
         for (int numFragment = 0; numFragment < nbFragment; numFragment++) {
-                getLineFromFileAtIndex(files, numFusion, numFragment);// enleve les entete des ficheir
+                getLineFromFileAtIndex(files, numFusion, numFragment);// enleve les entete des fichier
                 cache[numFragment]=getLineFromFileAtIndex(files, numFusion, numFragment).split(";"); // remplie le cache avec le premier n_uplet du fichier
             }
     }
 
-    private String getLineFromFileAtIndex(BufferedReader[] files,int numFusion,int numFragment) throws IOException{
+    private String getLineFromFileAtIndex(BufferedReader[] files,int numFusion,int numFragment) throws IOException{// une simple fonction pour gere les indice afin de faire le moins d'erreur d'inattention
         return files[numFusion*(M-1)+numFragment].readLine();
-
     }
 
     private int min(){// ecrit a ladresse M-1 le minimun de cache et renvoie l'indice du min

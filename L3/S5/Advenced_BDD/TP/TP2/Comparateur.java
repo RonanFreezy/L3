@@ -13,7 +13,7 @@ class Comparateur implements Comparator<String[]> {
     @Override 
     public int compare(String[] t1, String[] t2) {
         for (int indice : indices) {
-            try {
+            try {// implementation un peu moche pour des entier
                 int i1 =Integer.parseInt(t1[indice]);
                 int i2 =Integer.parseInt(t2[indice]);
 
