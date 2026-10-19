@@ -1,3 +1,4 @@
+#include <stdlib.h>
 #include <sys/socket.h>
 #include <netinet/in.h>  
 #include <stdio.h>
@@ -44,27 +45,63 @@ void f(){
     }
 }
 
+void affiche_message(int sock){
+
+    char buffer[1024];
+    struct sockaddr_in rcv;
+    socklen_t taille_rcv=sizeof(rcv);
+
+    while(1){
+        int res =recv(sock,&buffer,1024,0);
+        if (res>0){
+            if(buffer[0]=='q'&& buffer[1]=='u'&& buffer[2]=='i'&& buffer[3]=='t'){
+                printf("fermeture du serveur\n");
+                close(sock);
+                exit(0);
+                return;
+            }
+            buffer[res]='\0';
+            printf("%s",buffer);
+        }
+    }
+
+}
+
 void g(){
     int sock = socket(AF_INET,SOCK_STREAM, 6);
 
-        struct sockaddr_in sin;
-        sin.sin_family = AF_INET;
-        sin.sin_port = htons(12345);
+    struct sockaddr_in sin;
+    sin.sin_family = AF_INET;
+    sin.sin_port = htons(44444);
         sin.sin_addr.s_addr = htonl(INADDR_ANY);
-        
-        int i, ret;
-        for (i=0; i<8; i++) {
+    
+    int i, ret;
+    for (i=0; i<8; i++) {
         sin.sin_zero[i] = 0;
         }
 
+    ret = bind(sock, (struct sockaddr *)&sin, sizeof(struct sockaddr_in));
+    if (ret<0) printf("error"); 
 
-        ret = biwindow.autoDetectColorSchemend(sock, (struct sockaddr *)&sin, sizeof(struct sockaddr_in));
-        if (ret<0) {
-        printf("error");
-        } 
+    listen(sock, 5);
+    
+    struct sockaddr_in rcv;
+    socklen_t taille_rcv=sizeof(rcv);
+
+    int so = accept(sock,(struct sockaddr *)&rcv, &taille_rcv);
+    switch (fork()){
+        case 0:close(sock);affiche_message(so);
+        case 1: exit(-1);
+        default: close(so);
+    
+    }
+    printf("fin");
 }
 
+
+
 int main(){
-    f();
+    //f();
+    g();
     return 0;
 }
