@@ -1,40 +1,59 @@
-$100 million to develop a product to enhance human intelligence
+\# $100 million project to make intelligence boosting brain implant.
 
 
 
-firstly to improve memory
+https://www.prepabellevue.org/index.php?module=Site\&voir=document\&id\_document=3979
 
 
 
-look after hippocampus
+\## Definition :
+
+* hippocampus = memory part our brain
+* prosthetic = artificial element integrated into the body to replace a damaged function
 
 
 
-study persons who have already implants
+\## Key words and sentences :
 
 
 
-examine the behavior to imitate them later
+* $100 million to develop a product to enhance human intelligence
 
 
 
-already tested on animals and it's a successful test
+* firstly to improve memory
 
 
 
-prosthetic to restore memory of people with memory disorders
+* look after hippocampus
 
 
 
-and next to improve memory for all of us.
+* study persons who have already implants
 
 
 
-little and easy to implement
+* examine the behavior to imitate them later
 
 
 
-next this experiment enhances another part of our brain
+* already tested on animals and it's a successful test
+
+
+
+* prosthetic to restore memory of people with memory disorders
+
+
+
+* and next to improve memory for all of us.
+
+
+
+* little and easy to implement
+
+
+
+* next this experiment enhances another part of our brain
 
 
 
@@ -42,7 +61,7 @@ next this experiment enhances another part of our brain
 
 
 
-
+\## Abstract :
 
 
 
@@ -52,7 +71,7 @@ This $100 million project, led by entrepreneur Bryan Johnson, aims to develop a 
 
 
 
-opinon:
+\## Opinion :
 
 I chose this topic because transhumanism is featured in a lot of science fiction, and I found it really interesting to explore further. Neural implants are a great solution for treating people affected by brain diseases. If we cannot heal biologically, why not create a part to replace the defective area, just like a car part? If this proves to be possible and effective on humans, it would be amazing. However, if this technology expands to everyone—and not just patients—it could become problematic, as only the wealthiest people would gain a massive advantage over others, which would further widen inequalities, much like in Cyberpunk 2077.
 
