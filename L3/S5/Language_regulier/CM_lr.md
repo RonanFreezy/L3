@@ -60,7 +60,7 @@ $X \to aXb \mid \epsilon ,\space C \to cC\mid \epsilon\\S \to AC$
 
 Soient $G_1$ et $G_2$ deux grammaires. 
 
-$\exists $ les grammaires :
+$\exists$ les grammaires :
 
 - $G_\cup$ tq $L(G_\cup) = L(G_1) \cup L(G_2)$
 
@@ -72,7 +72,7 @@ $\exists $ les grammaires :
 
 On fixe $G_1=(V_1,\Sigma,R_1,S_1) \space et \space G_2=(V_2,\Sigma,R_2,S_2) \space avec \space V_1 \cap V_2 =\emptyset$
 
-Soit $S \notin V_1 \cup V_2 $
+Soit $S \notin V_1 \cup V_2$
 
 On definit :
 
@@ -88,8 +88,8 @@ Tout language regulier est génere par une grammaire
 
 base :
 
-si $L=\empty $ alors $ G_\empty = S \to S$  
-si $L=\{a\} $ pour $a\in \Sigma$ alors $ G_a = S \to a$
+si $L=\empty$ alors $G_\empty = S \to S$  
+si $L=\{a\}$ pour $a\in \Sigma$ alors $G_a = S \to a$
 
 heredite:
 
@@ -109,7 +109,7 @@ $$
 
 **Preuve :**
 
-$ \implies :$
+$\implies :$
 
 init : $S\to S \space et \space S\to a$
 
@@ -280,7 +280,7 @@ $R$: depuis $X_{p,q}$:
 
 - $X_{p,q} \to aX_{r,q}$ si il existe une a transition de $p$ à $r$.
 
-- $X_{p,q} \to X_{r,s}$ si $p\xrightarrow{\epsilon,\epsilon,x}r $ et $ s\xrightarrow{\epsilon,x,\epsilon}t$
+- $X_{p,q} \to X_{r,s}$ si $p\xrightarrow{\epsilon,\epsilon,x}r$ et $s\xrightarrow{\epsilon,x,\epsilon}t$
 
 ```mermaid
 graph
@@ -302,12 +302,12 @@ Une grammaire hors contexte $(V,\Sigma,R,S)$ est un FNC si:
 - La grammaire est reduite.
 
 - $X \to \alpha \in R$ alors 
-  
+
   - Soit $\alpha \in (V \backslash \{S\})^2$ $(X \to YZ \text{ avec }Y\neq S \space et \space Z \neq S)$
-  
+
   - Soit $\alpha \in \Sigma$ $(X \to a)$
-  
-  - Soit $\alpha = \epsilon \space et \space X=S$ $(S \to \epsilon)$ 
+
+  - Soit $\alpha = \epsilon \space et \space X=S$ $(S \to \epsilon)$
 
 **Propriete :** Toute GHC est equivalente a une GHC en FNC
 
@@ -334,16 +334,18 @@ $$
 **Rappel FNC :** 
 
 - une regle est de la forme 
-  
+
   - $X \to YZ$
-  
+
   - $X \to a$
-  
+
   - $X \to \epsilon$ a condition que $X=S$
 
 - $S$ n'apparait pas a droite d'un regle 
 
 - la grammaire est reduite
+
+
 
 **Prop :** Toute GHC admet une GHC en FNC equivalente.
 
@@ -366,13 +368,13 @@ $$
    supprimer $V \to T$
 
 5. binarise: pour chaque $V \to \alpha$ avec $|\alpha|<2$
-   
+
    1. choisir une factorisation $\alpha_1 \alpha_2=\alpha$
-   
+
    2. cree des variable $X_{\alpha_1} \ et \ X_{\alpha_2}$
-   
+
    3. ajouter $X_{\alpha_1} \to \alpha_1 \ et \ X_{\alpha_2} \to \alpha_2$
-   
+
    4. remplacer $V \to \alpha$ par $V \to X_{\alpha_1}X_{\alpha_2}$
 
 Ex:
@@ -421,8 +423,6 @@ W \to AWZ | AZ\\
 Z \to AB\\
 A\to a \\
 B \to  b
-
-
 $$
 
 devient par l'etape 4.1$(X \to W)$:
@@ -490,4 +490,4 @@ $$
 
 Si $L$ est HC alors :
 
-- $\exist N>0 $
+- $\exist N>0$
