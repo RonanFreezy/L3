@@ -3,6 +3,8 @@
 #include <netinet/in.h>  
 #include <stdio.h>
 #include <unistd.h>
+#include <arpa/inet.h>
+
 
 
 void f(){
@@ -55,13 +57,10 @@ void affiche_message(int sock){
         int res =recv(sock,&buffer,1024,0);
         if (res>0){
             if(buffer[0]=='q'&& buffer[1]=='u'&& buffer[2]=='i'&& buffer[3]=='t'){
-                printf("fermeture du serveur\n");
-                close(sock);
-                exit(0);
                 return;
             }
             buffer[res]='\0';
-            printf("%s",buffer);
+            printf("%s\n",buffer);
         }
     }
 
@@ -72,8 +71,8 @@ void g(){
 
     struct sockaddr_in sin;
     sin.sin_family = AF_INET;
-    sin.sin_port = htons(44444);
-        sin.sin_addr.s_addr = htonl(INADDR_ANY);
+    sin.sin_port = htons(12345);
+    sin.sin_addr.s_addr = htonl(INADDR_ANY);
     
     int i, ret;
     for (i=0; i<8; i++) {
@@ -81,24 +80,34 @@ void g(){
         }
 
     ret = bind(sock, (struct sockaddr *)&sin, sizeof(struct sockaddr_in));
-    if (ret<0) printf("error"); 
+    if (ret<0){
+        printf("error\n"); 
+        exit(-1);
+    } 
 
-    listen(sock, 5);
+    listen(sock, 1);
     
     struct sockaddr_in rcv;
     socklen_t taille_rcv=sizeof(rcv);
 
     int so = accept(sock,(struct sockaddr *)&rcv, &taille_rcv);
     switch (fork()){
-        case 0:close(sock);affiche_message(so);
-        case 1: exit(-1);
-        default: close(so);
+        case 0:{
+            close(sock);
+            affiche_message(so);
+            close(so);
+            printf("fermeture client");
+        break;
+        }
+        case -1: exit(-1);break;
+        default: {
+            close(so);
+            printf("fin du listen\n");
+        }
     
     }
-    printf("fin");
+    exit(0);
 }
-
-
 
 int main(){
     //f();
