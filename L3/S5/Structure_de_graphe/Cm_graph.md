@@ -7,7 +7,7 @@
 - [Decomposition en cycle](#decomposition-en-cycle-)
 
 - [Parcours de graphe](#parcours-de-graphe-)
-  
+
   - [générique](#parcours-generique-)
   - [en largeur](#parcous-en-largeur)
   - [en profondeur](#parcours-en-profondeur-)
@@ -101,7 +101,7 @@ On dit qu'un graphe est  $k$-régulier si tous les sommets ont des degrés ident
 ## Chemins et Cycles
 
 **Chemins :**
-$P = (v_1,v_2,v_3,...,v_k), \forall{i} \in{[1,k-1]},v_i \neq v_{i+1} \text{ et } {v_i,v_{i+1}}\in{E(G)}$
+$P = (v_1,v_2,v_3,...,v_k), \forall{i} \in [1,k-1],v_i \neq v_{i+1} \text{ et } \{v_i,v_{i+1}\}\in{E(G)}$
 
 **Ex:** 
 
@@ -133,11 +133,11 @@ $K_{1,n}$ un sommet dominant $n$ sommets
 
 Si le graphe n'est pas connexe on peut partitioner l'ensemble des sommets de $G$ en composantes connexe
 
-$C \subseteq V(G)$ est une composante connexe si le sous graphe Induit epar $C$ est connexe et est un ensemble maximal.
+$C \subseteq V(G)$ est une composante connexe si le sous graphe Induit par $C$ est connexe et est un ensemble maximal.
 
 La partition en composant connexe est unique.
 
-Pour n'importe quel graphe à $n$ sommets , le nombre de composante connexe esst au plus $n$.  
+Pour n'importe quel graphe à $n$ sommets , le nombre de composante connexe est au plus $n$.  
 Nombre min = 1 $\implies$ le graphe est connexe 
 
 > Etoile $\subseteq$ Arbre $\subsetneq$ Foret $\subsetneq$ Bipartie
@@ -299,7 +299,7 @@ While deg_F(x) != None :
     retrun w
 ```
 
-$e =\{x,y\}$ est une arrete deconectante si el nombre de composante connexe de $G-e$ est strictement plus grande que celui de $G$
+$e =\{x,y\}$ est une arrete deconectante si le nombre de composante connexe de $G-e$ est strictement plus grande que celui de $G$
 
 #graphe
 
@@ -391,7 +391,7 @@ $$
 
 **Calcul de distance avec le BFS :**
 
-Notation longeur de PCC : $\sigma(u,v) $= nombre d'arete pour aller de $u$ à $v$. ($\sigma(u,u)=0$)
+Notation longeur de PCC : $\sigma(u,v)$= nombre d'arete pour aller de $u$ à $v$. ($\sigma(u,u)=0$)
 
 **Lemme :**
 
@@ -412,7 +412,7 @@ Soit $G=(V,E)$ un graphe et $s$ un sommet de depart. A la fin de l'algorithme on
 Par reccurence sur le nombre de sommet inserer dans la liste  
 Base : $l[s] = 0$ donc on a $l[v] >= \sigma(s,s)$  
 Recurrence:  
-Pour tous les sommet $v_j$ deja inserer dans al liste on a $l[v_j]\sigma(s,v_j)$  
+Pour tous les sommet $v_j$ deja inserer dans la liste on a $l[v_j]=\sigma(s,v_j)$  
 On ajoute $v_i$ à la liste $(i>j);\space l[v_i]=1+l[v_{j'}]$  
 par hypothese de recurence  
 $l[v_{j'}] \ge \sigma(s,v_{j'})$  
@@ -422,7 +422,7 @@ Donc $l[v_{j'}]\ge \sigma(s,v_i)$
 **Lemme :**
 Soit $G(V,E)$ un graphe et soient $(v_1,v_2,...,v_r)$ les sommets present dans la liste:
 
-1. $l[v_{i}]\leq l[v_{i+1}];\space \forall \space 1\le i <r $
+1. $l[v_{i}]\leq l[v_{i+1}];\space \forall \space 1\le i <r$
 2. $l[v_{r}] \leq l[v_{1}]+1$
 
 **Theoreme :**
@@ -439,9 +439,9 @@ Induction: Par l'absurde
 On suppose qu'il existe un sommet v pour lequel la propriete n'est pas verifie $l[s] \neq \delta(s,v)$  
 Donc $l[v]> \delta(s,v)$  
 On considere $v$ le premier sommet insere dans la liste pour laquel on a cet inegalite.  
-Pour tous les sommets qui ont ete inserer avant , els sommet $w$ ont la propiete $l[w] = \delta(s,w)$  
+Pour tous les sommets qui ont ete inserer avant , les sommet $w$ ont la propriete $l[w] = \delta(s,w)$  
 On considere  le plus court chemin de $s$ à $v$.   
-pour $u$, par el choix de $v$ on a $l[u] = \delta(s,u)$  
+pour $u$, par le choix de $v$ on a $l[u] = \delta(s,u)$  
 $\delta(s,v) = \delta(s,u) + 1$. Vrai car $\delta(s,v) > \delta(s,u)$.  
 $l[v] > \delta(s,v) = \delta(s,u) +1 = l[u] +1$  
 Donc $l[v] > l[u] +1$ au moment ou on supprime $u$ de la liste.
@@ -491,7 +491,7 @@ Identifier les composante connexe
 Composante fortement connexe (Graphe oriente)
 
 Chaque sommet est traite exactement une fois.  
-L'appel recursiff pour chauqe sommet est execute une seule fois.  
+L'appel recursiff pour chaque sommet est execute une seule fois.  
 Donc le cout total des different appel recursif est borné par $n+2m$.
 
 Donc $O(n+m)$
@@ -614,7 +614,7 @@ L'ajout d'une insertion d'un sommet dans une liste se fait en $O(1)$.
 **Preuve de correction :**
 
 Pour tout arc $(u,v)$ on a $u$ qui a été insere dans la liste. On souhaite que $u$ apparaisse avant $v$ dans la liste $L : ...u...v...$.  
-Donc $u$ a ete insere apres $v$ dans al liste (car on insere au debut).  
+Donc $u$ a ete insere apres $v$ dans la liste (car on insere au debut).  
 On doit montrer que pour tout arc $(u,v)$ on a $f[u] > f[v]$.  
 Pour l'arc $(u,v)$ on se place sur $u$ au moment ou l'on considere l'arc $(u,v)$.  
 
@@ -622,13 +622,13 @@ Pour l'arc $(u,v)$ on se place sur $u$ au moment ou l'on considere l'arc $(u,v)$
 
 - Si $v$ est blanc, $v$ est un descendant de $u$ et le traitement de $v$ sera terminé avant celui de $u$ donc $f[u] > f[v]$.  
 
-- Si $v$ est noir $v$ à deja une date de fin, on a $d[u] > f[v]$ donc $f[u] > f[v]$. 
+- Si $v$ est noir $v$ à deja une date de fin, on a $d[u] > f[v]$ donc $f[u] > f[v]$.
 
 ## Composante Fortement Connexe
 
 un graphe $D=(V,A)$ est fortement connexe si pour toutes paires de sommet $(x,y)$, il existe un chemin qui va de $x$ à $y$ et de $y$ à $x$.
 
-### Algorithme CFC
+### Algorithme Kosaraju
 
 Input $G=(V,A)$
 
@@ -642,7 +642,7 @@ Output $p$[ ] arborescence couvrante.
 
 4. return $p$[ ].
 
-$G$ posède au moins 1 cc donc est fortement connexe. Et au plus n cc donc $G$ est un graphe sans circuit.
+$G$ posède au moins une CC donc est fortement connexe. Et au plus n cc donc $G$ est un graphe sans circuit.
 
 *Notation :* graphe des composante fortement connexe $G^{CFC}$.
 
@@ -651,7 +651,7 @@ chaque sommet represente une CFC de $G$. On met un arc de $C_i$ vers $C_j$ si il
 Remarque:  $G^{CFC}$ est sans circuit.
 
 ```mermaid
-graph LR
+graph 
     a((a)) --> b((b))
     b --> c((c))
     c --> a
@@ -714,8 +714,8 @@ graph LR
 
 **Def :**
 
-Soit $G=(V,E)$ un couplage $M$ de $G$ est un emseble d'arrete.  
-$e_1,e_2,...,e_k$ on a $V(e_i)\cap V(ej)\neq \empty$
+Soit $G=(V,E)$ un couplage $M$ de $G$ est un ensem    ble d'arrete.  
+$e_1,e_2,...,e_k$ on a $V(e_i)\cap V(ej)= \empty$
 
 On cherche a trouve un couplage.  
 On notera $\alpha'(G)$ la taille du couplage maximum.  
@@ -765,7 +765,7 @@ Couplage dans les graphes Bipartis $G=(X\cup Y,E)$.
 
 Peut on trouve une condition necessaire et suffisante pour couvrir tous les sommet de $X$?
 
-**Theoreme (Hall 1935):**
+## Theoreme (Hall 1935):
 
 Soit $G=(X,Y,E)$ un graphe bipartie, il existe un couplage qui couvre tous les sommet de $X$ ssi $\forall S \subseteq X$ on a $|N(S)|\geq|S|$
 
@@ -780,7 +780,7 @@ $\impliedby :$ Soit $G$ un graphe bipartie tq'il n'existe aucun couplage $M$ qui
 On considere $M^*$ un couplage de cardinalite maximum. Soit $u$ un sommet non couvert par $M^*$. On designe l'ensemble $Z$ tous les sommet accesible depuis $u$ par un chemin $M^*$-alternant.  
 On peut couper $Z$ en 2 :
 
-- $R=X\cap Y$
+- $R=X\cap Z$
 
 - $B=Y\cap Z$
 
@@ -793,23 +793,23 @@ On a construit un ensemble $R$ tq $|N(R)|<|R|$.
 
 On peut trouver un couplage minimum dans les graphes bipartis en utilisant le flot maximum $\to$ Algo polinomial.
 
-**Vertex Cover/Couverture d'arete par des sommet**
+## Vertex Cover/Couverture d'arete par des sommet
 
 Probleme :
 
 Input : $G=(V,E)$  
 Output : $S\subseteq V$ tq $\forall e \in E(G)$ on a $S\cap e \neq \empty$.  
 On note $\beta(G)$ la taille du plus petit vertex cover de $G$.  
-$\Beta(G) \leq 2 \times \alpha'(G)$.
+$\beta(G) \leq 2 \times \alpha'(G)$.
 
-**Theoreme Egevary konig :**
+## Theoreme Egevary konig :
 
-Si $G=(X,Y,Z)$ est biparti alors on a $\beta(G)= \alpha'(G)$.
+Si $G=(X,Y,E)$ est biparti alors on a $\beta(G)= \alpha'(G)$.
 
 **Preuve :**
 
 On considere $M$ un couplage de cardinalite maximum.  
-On considere l'nsemble des sommet de X non couvert par $M$.  
+On considere l'ensemble des sommet de X non couvert par $M$.  
 On considere l'ensemble $V$ accesible à partir de sommet de $u$ par des chemins $Y$ $M^*$-alternant.  
 $V'$ on le decompose en 2 parties, $X'=X\cap V'$ et $Y'=Y\cap V'$ avec $X$ couvert par $Y'$.  
 Si on suppose qu'il existe $y_k$ dans le voisinage de $X'$ qui n'est pas couple alors le chemin qui relie à  $u$ est augmentant .**Pas possible**
