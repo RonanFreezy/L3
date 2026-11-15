@@ -246,7 +246,7 @@ $L=\{a^nb^{n+k} | n,k\geq0\}$
 
 $L=\{a^{n+k}b^n | n,k\geq0\}$
 
-![AAP2.png](C:\Users\ronan\cours\L3\S5\Language_regulier\Automate\AAP2.png)
+![AAP2.png]("C:\Users\ronan\git\L3\L3\S5\Language_regulier\Automate\AAP2.png")
 
 ---
 

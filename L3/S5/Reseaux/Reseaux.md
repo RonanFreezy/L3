@@ -235,7 +235,7 @@ Broadcast 2.255.255.255
 
 **Notation hexadécimale** : 2001:0db8:0000:0000:8a2e:0000:0370:7334
 
-## Structure d'un paquet IP / Datagramme IP
+## Structure d'un paquet IP / Datagramme IP (bits)
 
 ```mermaid
 packet
@@ -879,6 +879,7 @@ Basé sur la notion de vecteur de distance. On a les meme Information : @reseaux
 Les protocole de routage doivent permetrre de router les paquets/datagramme qui leurs sont envoyés. Mettre a jour les Information des table de routage.
 
 Comme le reseaux evolue au cours du temps, un routeur peut etre ajoute, des equipement peuvent tombe en panne.  
+Comme le reseaux evolue au cours du temps, un routeur peut etre ajoute, des equipement peuvent tombe en panne.  
 En cas de panne les routeur qui etait connues peuvent devenir obsoletent.
 
 Vecteur de distance pour mettre a jour sa table de routage, le routeur R va l'envoyer à ses voisin direct. Et va attendre des ses voisins les tables de routage.  
@@ -893,7 +894,7 @@ $R_1$ envoie sa table de routage a $R_2$ et juste apres son interface connecte s
 
 ## Open Shortest Path First.
 
-Au lieu d'envoyer les table de routage. chaque routeur va envoyer l'etat de ses liens. chaque message sera de taille plus compacte que l'integralite de la table. Par schema de diffusion, chaque routeur propagera les etat des liens des autres Routeur.  
+Au lieu d'envoyer les table de routage, chaque routeur va envoyer l'etat de ses liens. Chaque message sera de taille plus compacte que l'integralite de la table. Par schema de diffusion, chaque routeur propagera les etat des liens des autres Routeur.  
 Au final chaque routeur aura une cartographie global du reseau, il pourra determiner le meilleur chemin en fonction de la demande:
 
 - maximiser le debit
