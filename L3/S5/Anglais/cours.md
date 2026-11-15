@@ -29,3 +29,8 @@ Video gaming has a negligible impact on global warming.
 9. Would you be willing to lower your game settings (e.g., from 4K to 1080p) to reduce your device's energy consumption?
 
 10. Have you ever read or heard about the energy cost of data centers or mineral extraction for high-tech equipment?
+
+# 21/10
+
+driverless car : what are the challenge and hurdle of driverless car
+
