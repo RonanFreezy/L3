@@ -1,1066 +1,646 @@
-Objectif : apprendre les different concept d'un compilateur ici on se restreint a:
+**Objectif :** Apprendre les différents concepts d'un compilateur. Ici, nous nous restreignons à :
+- certaines constructions des langages de programmation ;
+- certaines étapes d'un compilateur :
+  - analyse lexicale ;
+  - analyse syntaxique ;
+  - analyse sémantique ;
+  - génération de code.
 
-- à certain contruction des language de programation
-
-- à certain etape de'un compilateur
-
-  - analyse lexicale
-
-  - analyse syntaxique
-
-  - analyse sementique
-
-  - generation de code
-
-compilateur = traducteur d'un language $L$ vers un language $L'$ 
+$$\text{Compilateur} = \text{traducteur d'un langage } L \text{ vers un langage } L'$$
 
 **Pratique :**
+- Le langage en entrée du compilateur est $L$ : un langage conçu par l'étudiant intégrant les constructions demandées.
+- Le langage cible $L'$ est le langage d'une machine virtuelle appelée *Machine Virtuelle à Programmer* (MVaP).
+- L'outil de génération du compilateur est **ANTLR**, et les langages d'écriture seront : **Java** et **ANTLR**.
+- La syntaxe du langage de programmation à concevoir sera décrite avec une grammaire hors-contexte. Certaines constructions étant ambiguës, nous verrons des heuristiques pour les rendre non ambiguës.
 
-Un language en entre du compilateur est $L$ : language concu par l'etudiant avec en entree des contruction demandées 
-
-Language cilce $L'$ = language d'une machine virtuelle apelle Machine Virtuelle a Programer.
-
-Outil de generation du compilateur = ANTRL, les language d'ecriture seront : java, ANTRL.
-
-La syntaxe du language de programation à concevoir sera decrite avec une grammaire hors-contexe. Certaines contruction sont ambigue, on va voir des heuritiques pour les rentre non-ambigues
+---
 
 # Analyse lexicale
 
 ```mermaid
 graph LR
-
-a["Code source"] -->|flux de charactere| b["Analyseur Lexical"]
-b -->|Tokens| c["Analyseur Syntaxique"] 
+    a["Code source"] -->|Flux de caractères| b["Analyseur Lexical"]
+    b -->|Tokens| c["Analyseur Syntaxique"] 
 ```
 
-Un **token** est un ensemble de'information qui caracterise un objet terminale de la grammaire hors contexte decrivant le language.
+- Un **token** (jeton) est un ensemble d'informations qui caractérise un objet terminal de la grammaire hors-contexte décrivant le langage.
+- Un **lexème** est une suite de caractères.
+- Une **unité lexicale** est un ensemble de lexèmes.
 
-Un **lexeme** = suite de charactere.
+**Exemples :** 
+Soit la grammaire : $E \to E + E \mid E * E \mid nb$
+Code source : `nb + nb + nb * nb * nb + nb`
 
-une **unite lexicale** = un ensemble de lexèmes.
+On a **11 lexèmes** : 
+- 6 occurrences de `nb`
+- 3 occurrences de `+`
+- 2 occurrences de `*`
 
-**Exemples :** $ E \to E+E|E*E|nb$
+On a **2 unités lexicales** (ou 3 selon si `+` et `*` sont regroupés en `OP`) :
+- une correspondant au lexème `nb` ;
+- une correspondant aux lexèmes `+` et `*`.
 
-code source : nb + nb + nb \* nb \* nb + nb
+Autre exemple : $F \to F * F \mid F + F \mid I \ ; \quad I \to 0I \mid 1I \mid \epsilon$
+Exemple de mot : `0+1*01+110+111`
 
-On a 11 lexeme : 
+Un **Token** est composé de :
+- l'unité lexicale $T$ ;
+- le lexème de $T$ ;
+- d'autres informations utiles :
+  - numéro de ligne, numéro de colonne ;
+  - valeur entière associée (si le lexème représente un entier).
 
-- 6 ocurence de nb
+Un analyseur lexical produit un flux de tokens pour l'analyseur syntaxique.
 
-- 3 occurence de +
+**Comment faire :**
+- Chaque unité lexicale du langage est décrite par une expression régulière.
+- Un analyseur lexical correspond à l'union des automates à états finis associés aux unités lexicales, complétée par des actions permettant de construire les jetons reconnus.
 
-- 2 occurence de \*
+## Cas de l'intersection des unités lexicales
 
-On a 2 unite lexicale :
+L'analyseur lexical doit résoudre le problème de l'intersection de deux unités lexicales (laquelle choisir lorsqu'un mot appartient à deux langages réguliers distincts).
 
-- un correspond au lexeme nb
+**Solution facile :**
+- Ordonner les règles des unités lexicales.
+- Lorsqu'un lexème appartient à plusieurs unités lexicales, choisir la règle la plus prioritaire (souvent la première définie).
 
-- un correspond au lexeme + et \*
+**Dans ANTLR :**
+L'ordre choisi par ANTLR est l'ordre d'écriture des règles dans le fichier.
+```antlr
+BEGIN : 'begin';
+ID    : [a-z]+;
+```
+Il y a 2 unités lexicales : `BEGIN` et `ID`. Le lexème `"begin"` sera considéré comme un lexème de `BEGIN` car sa règle apparaît en premier.
 
-$F \to F*F|F+F|I; \ \ I\to 0I|1I|\epsilon$
+## Cas d'un lexème préfixe d'un autre
 
-ex: 0+1*01+110+111
+- **Greedy (glouton) :** On lit le lexème le plus long possible (solution par défaut d'ANTLR).
+- **Non-Greedy (non glouton) :** On prend le lexème le plus petit (dès qu'une suite de caractères est acceptée, on arrête la lecture).
 
-#arbre de derivation
-
-un **Token** est compose de :
-
-- unite lexical T
-
-- lexeme de T
-
-- d'autre inforamation pour aider :
-
-  - numero de ligne, numero de colone
-
-  - valeur entiere pour un lexeme 
-
-  - representer un entier
-
-Un analyseur lexical va produire un flux de token pour l'anaylseur syntaxique 
-
-Comment faire:
-
-- chaque unite lexicale du language est decrite par une expression reguliere
-
-- un analyseur lexical = union des automates à etat finis associe aux unite lexicale + des action permettant de calculer les jetons de $n$-ème reconnus
-
-## Cas de l'intersection des unite lexicales
-
-solution facile :
-
-- ordonner les regle des unite lexicales 
-
-- lorsqu' un lexeme appartient a plusieur unite lexicale, choisir la plus petite.
-
-ANTLR :
-
-l'ordre choisi par ANTLR = l'ordre d'ecriture de regle.
-
-Ex: BEGIN : 'begin'; ID:[a-z]+
-
-2 unite lexicales: BEGINet ID le lexere "begin" sera considere comme lexeme de BEGIN 
-
-## Cas lexeme prefixe d'un autre
-
-- Greedy:on lit le lexeme le plus long possible. (solution par default de ANTLR)
-
-- Non-Greedy: prendre le lexeme le plus petit .(des qu' une suite de caractere est accepte, on arrete la lecture)
+**Exemples :**
+1. `beginner` avec la méthode gloutonne sera reconnu comme un seul lexème de `ID`. Avec une approche non gloutonne, on pourrait obtenir 2 lexèmes : `"begin"` et `"ner"`.
+2. `STRING : '"' .* '"' ;` sur l'entrée `"m1""m2"` :
+   - **Glouton :** 1 seul lexème `"m1""m2"`.
+   - **Non glouton** (`STRING : '"' .*? '"' ;`) : 2 lexèmes `"m1"` et `"m2"`.
+3. Si l'on veut autoriser les guillemets échappés comme caractères dans une chaîne :
+   ```antlr
+   STRING : '"' (ESC | .)* '"' ;
+   ESC    : '\\"' | '\\\\' ;
+   ```
+   Exemple : `"w1\"w2"` sera reconnu comme un seul lexème valide.
 
 ---
-
-L'analyseur lexical doit resoudre 2 probleme :
-
-- l'intersection de 2 unite lexicales. Laquelle choisir
-
----
-
-EX : beginner avec la methode gloutone sera reconnue comme un lexeme de ID.  
-avecc la methode non-gloutone, on pourrait avoir 2 lexeme "begin" et "non".
-
-EX2 : STRING : ' " ' \* ' " ' ; "m1""m2".  
-
-- glouton 1 seule lexeme "m1""m2"  
-
-- non gloutone : 2 lexeme "m1" et "m2"
-
-EX3: 
-
-STRING : ' ".\*" ' mot "w1""w2" lexele associe "w1""w2"
-
-Si on veux le mode non glouton  STRING :' ".\*?" ' les lexeme sont "w1" et "w2"
-
-EX4: Si on veux des guillemet comme caractere : STRING ' "(ESC|.)\*" '
-
-ESC : ' \\\" ' | ' \\\\ \\\ ' 
-
-ex: "w1\\\"w2" le lexeme sera "w1"w2"
 
 # Analyse syntaxique
 
 ```mermaid
-graph 
-
-a["Code source"] -->|flux de charactere| b["Analyseur Lexical"]
-b -->|Tokens| c["Analyseur Syntaxique"] 
-c -->|arbre de derivation| d[" "]
+graph LR
+    a["Code source"] -->|Flux de caractères| b["Analyseur Lexical"]
+    b -->|Tokens| c["Analyseur Syntaxique"] 
+    c -->|Arbre de dérivation| d["Analyse Sémantique"]
 ```
 
-La syntaxe d'un language de programation est decrite avec une grammaire hors contexte.  
-On demande à l'analyseur syntaxique de calculer quelques valuer, pour chaque noeud de l'arbre de derivarion, ces valeur sont appelées attribut. C'est l'annotation de la gramaire hors contexte qui permet de calculer ces valeur on parlera de grammaire annotée.
+La syntaxe d'un langage de programmation est décrite avec une grammaire hors-contexte.  
+On demande à l'analyseur syntaxique de calculer quelques valeurs pour chaque nœud de l'arbre de dérivation : ces valeurs sont appelées **attributs**. C'est l'annotation de la grammaire hors-contexte qui permet de calculer ces valeurs ; on parlera alors de **grammaire annotée** (ou attribuée).  
+*(Exemple : annoter une parenthèse ouvrante avec un numéro pour indiquer si elle possède une parenthèse fermante correspondante).*
 
-ex : anote une parentrese avec un numero pour dire si elle en a une fermermante.
+Ce sera **ANTLR** qui générera l'analyseur lexical et syntaxique. Il suffit de lui fournir la grammaire (annotée ou non) et les unités lexicales. Les unités lexicales sont généralement données en fin de fichier et leur nom est écrit en `MAJUSCULE`.
 
-Ce sera ANTLR qui generera l'analyseur lexical et syntaxique. Il suffit de lui donner la grammaire (anote ou non) et les unités lexicales. Les unite lexicales sont données en fin de fichier et leur nom en MAJUSCULE.
+**Exemple dans ANTLR :**
+```antlr
+grammar Ex_parser; // Ex_parser = nom de la grammaire / du compilateur
 
-Exemple dnas ANTLR:
+// Règles de l'analyseur syntaxique
+expr       : (NUMBER | ID) suite_expr ;
+suite_expr : OP (NUMBER | ID) suite_expr | ;
 
-**grammar** Ex_parser; // Ex_parser=som du compilateur.
+// Règles de l'analyseur lexical
+NUMBER : ('0'..'9')+ ;
+ID     : ('a'..'z')+ ;
+OP     : '+' | '*' | '/' | '-' ;
+```
 
-//regle de l'analyseur syntaxique
+**Exemple d'exécution sur `12+gol` :**
+On a 3 lexèmes : `12`, `+`, `gol`.
 
-expr:(NUMBER | ID) suite_expr;
+Liste des tokens générés par ANTLR :
+- `[@0,0:1='12',<1>,1:0]` :
+  - `@0` : numéro du token ;
+  - `0:1` : intervalle d'indices des caractères du lexème ;
+  - `'12'` : valeur (texte) du lexème ;
+  - `<1>` : numéro de l'unité lexicale (`NUMBER`) ;
+  - `1:0` : numéro de ligne, numéro de colonne.
+- `[@1,2:2='+',<3>,1:2]`
+- `[@2,3:5='gol',<2>,1:3]`
 
-suite_expr : OP(NUMBER | ID ) suite_expr | ;
-
-// regle de l'analyseur lexical
-
-NUMBER : ('0' ... '9')+ ;
-
-ID : ('a' ... 'z')+;
-
-OP: '+' | '\*' | '/' | '-';
-
----
-
-Ex: 12 + gol
-
-on a 3 lexeme :
-
-- 12
-
-- + 
-
-- gol
-
-Liste des lexemes :
-
-- **[@0,0:1='12',<1>,1:0] :**
-
-  - @0  numero du token
-
-  - 0:1 intervalle de caracte du lexeme
-
-  - '12' valuer du lexeme
-
-  - <1> numero de l'unite lexicale
-
-  - 1:0 numero de ligne , numero de colone
-
-- [@1,2:2='+',<3>,1:2] 
-
-- [@3,3:5='gol',<2>,1:3]
-
-Arbre de derivation:
-
+**Arbre de dérivation :**
 ```mermaid
-graph
+graph TD
+    expr --> NUMBER
+    expr --> suite_expr
 
-expr-->NUMBER
-expr-->suite_expr
+    NUMBER --> 12
+    suite_expr --> OP
+    suite_expr --> ID
+    suite_expr --> s2["suite_expr"]
 
-NUMBER-->12
-suite_expr-->OP
-suite_expr-->ID
-suite_expr-->Suite_expr
-
-OP-->+
-ID --> gol
-Suite_expr --> vide
+    OP --> +
+    ID --> gol
+    s2 --> vide["ε (vide)"]
 ```
 
 ---
 
-En cours de grammaire vous avez l'equivalence entre une grammaire hors contexte et automate à pile. La contruction est polynomiale en la taille dela grammaire. Mais l'automate est non-deterministe et donc on a par default un algorithme en temps $d(G)^n$ pour $n$ la taille du mot en entree et $d(G)$ la taille maxiamle de'une regle.
+En cours de théorie des langages, on voit l'équivalence entre une grammaire hors-contexte et un automate à pile. La construction est polynomiale en la taille de la grammaire, mais l'automate est non déterministe, ce qui donne par défaut un algorithme en temps exponentiel $O(d(G)^n)$ pour $n$ la taille du mot en entrée et $d(G)$ la taille maximale d'une règle.
 
-**Theoreme :** 
+**Théorème (Algorithme CYK / Earley) :** 
+Il existe un algorithme $\mathcal{A}$ tel que :
+- **Entrée :** une grammaire hors-contexte $G$ et un mot $u$.
+- **Sortie :** $u \in L(G)$ (et un arbre de dérivation) ou $u \notin L(G)$.
+- **Complexité :** $\mathcal{A}$ s'exécute en temps $O(f(|G|) \cdot |u|^3)$.
 
-Il exite un algorithme $\mathcal{A}$ tq :
+Si $G$ était « déterministe », nous aurions un algorithme en temps linéaire $O(|u|)$, mais ce n'est pas le cas de toutes les grammaires.
 
-- entrée : 
+**Solution :** Utiliser des heuristiques pour calculer en temps linéaire un arbre de dérivation sur des sous-classes de grammaires. On distingue 2 grandes familles :
+- **LL(k) :** dérivation gauche, on lit $k$ tokens à l'avance (lookahead) pour choisir la règle sans ambiguïté (méthode utilisée par défaut par ANTLR).
+- **LR(k) :** dérivation droite inversée (ascendante), on lit $k$ tokens à l'avance.
 
-  - une grammaire hors contexte $G$.
+---
 
-  - un mot de $u$
+# Grammaires attribuées (ou annotées)
 
-- suite : $(u \in L(G) et 1 arbre de derivation ou u \notin L(G))$
+**Définition :** Une grammaire attribuée est une grammaire hors-contexte où l'on associe à chaque symbole (terminal ou non-terminal) des étiquettes appelées **attributs**.  
+L'annotation de la grammaire consiste à donner les règles sémantiques de calcul des valeurs de ces attributs pour chaque nœud de l'arbre de dérivation.
 
-$\mathcal{A}$ s'execute en temps $f(|G|). |u|³$
-
-Cet algorithme si $G$ etait "deterministe" on aurait un algorithme linéaire.  
-Mais pas le cas de toutes les grammaires.
-
-Solution : heuristique pour calculer en temps lineaire un arbre de derivation.
-
-2 familles :
-
-- LL(k) derivation gauche et on lit k caractere et on n'a plus le choix de la regle. (defaut ANTLR)
-
-- LR(k)
-
-# Grammaire Attribuées (ou annotées)
-
-**Definition :** Une grammaire attribuées est un grammaire hors contexte ou on associe à chaque non-terminal des etiquettes, appelée attributs.  
-L'annotation de la grammaire consistera à donner les regles de calcul des valuer des attributs.
-
-Les règles de calcul permettront d'associer à chaque occurence de la variable et donc chaque noeud de l'arbre de derivation associe a cette variable, les valeur des attribut de la variable.
-
-Ex:
-
+**Exemple (Évaluation d'expressions arithmétiques) :**
 $$
-E \to E +T |T \\
-T \to T*F|F\\
-F\to (E)|NB\\
-NB\to (0...9)+
+\begin{aligned}
+E &\to E + T \mid T \\
+T &\to T * F \mid F \\
+F &\to (E) \mid NB \\
+NB &\to (0\dots9)+
+\end{aligned}
 $$
 
-ex: 12+5*7+7
-
+Arbre de dérivation pour `12+5*7+7` :
 ```mermaid
-graph
-a["E"]-->e1["E"]
-a-->p1["+"]
-a-->t1["T"]
+graph TD
+    a["E"] --> e1["E"]
+    a --> p1["+"]
+    a --> t1["T"]
 
-e1-->e2["E"]
-e1--> p2["+"]
-e1 --> t2["T"]
-t1--> f1["F"]
+    e1 --> e2["E"]
+    e1 --> p2["+"]
+    e1 --> t2["T"]
+    t1 --> f1["F"]
 
-e2--> t3["T"]
-t2-->t4["T"]
-t2-->m1["*"]
-t2-->f2["F"]
-f1-->nb1["NB"]
+    e2 --> t3["T"]
+    t2 --> t4["T"]
+    t2 --> m1["*"]
+    t2 --> f2["F"]
+    f1 --> nb1["NB"]
 
-t3-->f3["F"]
-t4-->f4["F"]
-f2-->nb3["NB"]
-nb1-->71["7"]
+    t3 --> f3["F"]
+    t4 --> f4["F"]
+    f2 --> nb3["NB"]
+    nb1 --> v7_1["7"]
 
-f3-->nb4["NB"]
-f4-->nb5["NB"]
-nb3-->7
+    f3 --> nb4["NB"]
+    f4 --> nb5["NB"]
+    nb3 --> v7_2["7"]
 
-nb4-->12
-nb5-->5
+    nb4 --> 12
+    nb5 --> 5
 ```
 
-on assosie a chaque varriable dans cet exemple un atribut  nomme val, de type entier.
+On associe à chaque variable un attribut nommé `val`, de type entier (on indice les variables redondantes dans une même règle pour les distinguer) :
+- $E \to E_1 + T \quad \{E.val = E_1.val + T.val\}$
+- $E \to T \quad \{E.val = T.val\}$
+- $T \to T_1 \times F \quad \{T.val = T_1.val \times F.val\}$
+- $T \to F \quad \{T.val = F.val\}$
+- $F \to (E) \quad \{F.val = E.val\}$
+- $F \to NB \quad \{F.val = NB.val\}$
+- $NB \to (0\dots9)+ \quad \{NB.val = \text{ObtenirEntier}(NB.txt)\}$
 
-$E \to E_1+T \space \{E.val =E_1.val+T.val\}$
+On distingue **2 types d'attributs** :
+1. **Attribut synthétisé :** Attribut dont la valeur est calculée à partir des attributs des nœuds fils (ex. : `val` dans l'exemple précédent).
+2. **Attribut hérité :** Attribut calculé à partir des attributs du nœud père ou des frères (ex. : propagation du type dans une déclaration de variables).
 
-$E \to T \space \{E.val=T.val\}$
+**Exemple d'attribut hérité :**
+$$
+\begin{aligned}
+D &\to T \ L \\
+T &\to \text{int} \mid \text{float} \\
+L &\to L, Id \mid Id \\
+Id &\to (a\dots z)+
+\end{aligned}
+$$
 
-$T \to T_1 \times F \space \{T.val=T_1.val \times F.val\}$
-
-$T \to F \space \{T.val = F.val\}$
-
-$F \to (E) \space \{F.val = (E.val)\}$
-
-$F \to I \space \{F.val = I.val\}$
-
-$I \to (0...9)+ \space \{I.val=ObtenirEntier(I.txt)\}$
-
-on numerote les variable redoant=dante pour quelle soit unique.
-
-On distingue 2 type d'atribut:
-
-- attribut synthetise = atribut dont les valuer peuvent etre calcule a partir des attribut des fils.  
-  ex : attrb.val de l'exemple precedent
-
-- attributs herite: attribue calcule a partir d'atribut du pere.  
-  ex : $D \to T L \\ T \to int | float\\ L \to L,Id|Id\\Id \to (a...z)^+$
-
-"int x,y,zt"
-
+Pour `"int x,y,zt"` :
 ```mermaid
-graph
+graph TD
+    d1["D"] --> t1["T"]
+    d1 --> l1["L"]
 
-d1["D"]--> t1["T"]
-d1--> l1["L"]
+    t1 --> e["int"]
+    l1 --> l2["L"]
+    l1 --> id1["Id"]
 
-t1--> e["entier"]
-l1-->l2["L"]
-l1-->id1["Id"]
+    l2 --> l3["L"]
+    l2 --> id2["Id"]
+    id1 --> zt
 
-l2-->l3["L"]
-l2-->id2["Id"]
-id1-->zt
+    l3 --> id3["Id"]
+    id2 --> y
 
-l3-->id3["Id"]
-id2-->y
-
-id3-->x
+    id3 --> x
 ```
 
-On veut assurer à chaque var qon type.
-
-On vas associer une chaine de caratere au var Id,T et L
-
-$\{D.T=T.t\}$                $T=\{T.t="E"\}|\{T.t= "R"\}$
-
-$\{L.T=D.t\}$               $\{L_1.t=Id.t=L.t\}|\{Id.t=L.t\}$
+On veut associer à chaque variable son type (sous forme de chaîne de caractères, attribut `t`) :
+- $T \to \text{int} \ \{T.t = \text{"E"}\} \mid \text{float} \ \{T.t = \text{"R"}\}$
+- $D \to T \ L \ \{L.t = T.t\}$
+- $L \to L_1, Id \ \{L_1.t = L.t \ ; \ Id.t = L.t\}$
+- $L \to Id \ \{Id.t = L.t\}$
 
 ## Calcul des attributs
 
-- La grammaire est dite S-atribue si elle ne contient que des attribut shynthetiques  
-  Proposition : ce calcul des attribut d'une grammaire S-attribuee se fait de feuille à la racine
-
-- Une grammaire est L-attribuee si le calcul de chaque attribut herité d'un noeud ne depend que des attibut des noeud avant lui dans l'ordre prefixe  
-  Proposition : ce calcul des valuer herite peut etre calculé en meme temps que l'on calcul un arbre de derivation si on faitune derivation gauche.
-
-Une grammair S-attribue est aussi L-attribuée
-
-# Heuristique pour analyse synthaxique
-
-Rappel : pour une grammaire on peut decider si $w \in L(G)$ en temps $f(|G|).|w|^3$
-
-2 type d'algo le reconaissant
-
-## Top-Down :
-
-On commence par la variable de depart S, et on essaie de trouver la sequence des regle pour genere w.
-
-## Bottom-Up :
-
-On part des prefixe/suffixes et on essai de trouve les regles qui permettent de les obtenir et oncontinue j'usqua obtenir la racine S.
-
-Ex: w=aacba
-
-$S\to aX|aaY$
-
-$X\to aX|bY$
-
-$Y\to cbY|a$
-
-$S\to aaY \to aacbY\to aacba$
-
-$S \to aX$ :
-
-```mermaid
-graph
-S --> a
-S --> X
-```
-
-$X\to aX$ :
-
-```mermaid
-graph
-S --> a
-S --> X
-X--> a1["a"]
-X --> x1["X"]
-```
-
-$X\to aX$ :
-
-```mermaid
-graph
-S --> a
-S --> X
-X--> a1["a"]
-X --> x1["X"]
-x1-->a2["a"]
-x1-->x2["x"]
-```
-
-Probleme ! , on remonte et on teste tout les possibilite.
-
-$X\to bY$ :
-
-```mermaid
-graph
-S --> a
-S --> X
-X--> a1["a"]
-X --> x1["X"]
-x1-->a2["b"]
-x1-->x2["x"]
-```
-
-On continue jusqua trouve le bon resultat.
+- Une grammaire est dite **S-attribuée** si elle ne contient que des attributs synthétisés.  
+  *Proposition :* Le calcul des attributs d'une grammaire S-attribuée se fait de manière ascendante (des feuilles vers la racine).
+- Une grammaire est dite **L-attribuée** si le calcul de chaque attribut hérité d'un nœud ne dépend que des attributs de son père et des nœuds situés à sa gauche (avant lui dans l'ordre préfixe).  
+  *Proposition :* Ces attributs peuvent être calculés en même temps que la construction de l'arbre lors d'une dérivation gauche.
+- *Remarque :* Toute grammaire S-attribuée est également L-attribuée.
 
 ---
 
-Ex : Analyse bottom-up
+# Heuristiques pour l'analyse syntaxique
 
-On part des feuille pour remonter jusqua la racine pour former le mot.
+Rappel : Pour une grammaire quelconque, on peut décider si $w \in L(G)$ en temps $O(f(|G|) \cdot |w|^3)$.
 
-Ce genre de parser donne plus de language que les Top-down 
+Il existe **2 grandes approches** d'analyse :
+1. **Top-Down (descendante) :** On commence par l'axiome (variable de départ $S$), et on essaie de trouver la séquence de règles permettant de générer $w$.
+2. **Bottom-Up (ascendante) :** On part des feuilles (le mot $w$) et on essaie de réduire les sous-chaînes à l'aide des règles jusqu'à remonter à la racine $S$. *(Ce genre d'analyseur, comme LR(k), reconnaît une classe plus large de grammaires déterministes que les analyseurs Top-Down).*
 
-Ex de parser: bottom-up : LR(k)
+## 1. Top-Down avec backtracking (retour sur trace)
 
-1. Top down cavec backtracking  
-   Calculer un arbre de dérivation, en suivant les règles suivantes.
+Principe pour construire un arbre de dérivation :
+1. Toujours dériver le non-terminal le plus à gauche en testant les règles dans un ordre fixe.
+2. Lorsqu'on est bloqué (échec de correspondance), on revient en arrière et on essaie la règle suivante.
 
-   1. toujours faire une derivation et choisir dans un ordre fixe avant de commencer
+**Exemple :** $w = aacba$ avec $S \to aX \mid aaY$, $X \to aX \mid bY$, $Y \to cbY \mid a$.
+L'analyseur essaie d'abord $S \to aX \to aaX \to aaaX$ (échec), revient en arrière pour tester $S \to aX \to aaX \to aabY$ (échec), puis remonte jusqu'à $S$ pour finalement trouver la bonne dérivation : $S \to aaY \to aacbY \to aacba$.
 
-   2. Lorsque l'on ne peut pas continuer, on retourne en arriere et on essaie une nouvelle regle.
+```mermaid
+graph TD
+    S --> a1["a"]
+    S --> X1["X"]
+    X1 --> a2["a"]
+    X1 --> X2["X"]
+    X2 --> b["b (échec, retour arrière)"]
+```
 
-Probleme :
+**Problèmes :**
+- Cet algorithme s'exécute en temps **exponentiel** dans le pire des cas.
+- Si $G$ est **récursive à gauche** ($A \to^* A\alpha$), l'algorithme boucle à l'infini sans pouvoir dériver.
 
-- Cette algorithme s'execute en temps exponentiel au pire des cas.
+**Proposition :** Pour toute grammaire $G$, il existe une grammaire $G'$ non récursive à gauche telle que $L(G) = L(G')$.
 
-- Si $G$ est recursive a gauche, on ne peut pas deriver. Une varriable est dite recursive gauche si $A \to^* A\alpha$. On dit que $G$ est recursive gauche si il existe une varriable recursive gauche.
+### Algorithme d'élimination de la récursivité à gauche
 
-**Proposition :** Pour toute grammaire $G$,il existe une grammaire $G'$ non recursive gauche avec $L(G)=L(G')$. Deplus $G'$ se calcule a partir e $G$.
+Soit $A$ une variable admettant une récursivité à gauche directe :
+$$A \to A\alpha_1 \mid A\alpha_2 \mid \dots \mid A\alpha_p \mid w_1 \mid \dots \mid w_l$$
+(où les $w_i$ ne commencent pas par $A$).
+- On ajoute une nouvelle variable $Z$.
+- On remplace les règles de $A$ par :
+  - $A \to w_1 Z \mid \dots \mid w_l Z$ *(ou sans $Z$ si $Z \to \epsilon$)*
+  - $Z \to \alpha_1 Z \mid \alpha_2 Z \mid \dots \mid \alpha_p Z \mid \epsilon$
 
-**Preuve :**
+Pour éliminer la récursivité à gauche générale (indirecte), on numérote les variables $A_1, A_2, \dots, A_n$ (en supposant qu'il n'y a pas de cycles $A \to^* A$) :
+```text
+Pour i de 1 à n Faire
+    Pour j de 1 à i-1 Faire
+        Remplacer chaque règle Ai -> Aj α par les règles Ai -> β1 α | β2 α | ...
+        (où Aj -> β1 | β2 | ... sont toutes les règles actuelles de Aj)
+    Fin Pour
+    Éliminer la récursivité à gauche directe de Ai
+Fin Pour
+```
 
-Algorithme d'elimination de la recursivite gauche.   
-$X$ admet une recursive gauche direct si $X\to X\alpha$ est un regle.  
-Prenon $A$ recursive gauche direct : $A\to A\alpha_1|A\alpha_2|...|A\alpha_p|w_1|...|w_l$.
+**Exemple :**
+$S \to Xa \mid b$
+$X \to Sd \mid Xc \mid \epsilon$
+- Pour $i=1$ ($S$) : pas de variable d'indice inférieur, pas de récursivité directe.
+- Pour $i=2$ ($X$) : on substitue $S$ dans $X \to Sd$, ce qui donne $X \to Xad \mid bd \mid Xc \mid \epsilon$.
+- On élimine la récursivité directe sur $X$ en introduisant $Z$ :
+  $$G'' : \begin{cases} S \to Xa \mid b \\ X \to bdZ \mid Z \\ Z \to adZ \mid cZ \mid \epsilon \end{cases}$$
 
-- On ajoute une nouvelle variable, nomons la $Z$ .
+## 2. Factorisation à gauche et Top-Down prédictif
 
-- On enleve toutes les regles de A, recursivesgauche direct de $A$ ou pas
+Pour éviter le backtracking exponentiel, on cherche à deviner la règle à appliquer en lisant uniquement les $k$ prochains tokens. On peut **factoriser à gauche** la grammaire pour repousser les choix vers les feuilles.
 
-- On ajoute les regles suivantes:
+Soit $A \to \alpha w_1 \mid \dots \mid \alpha w_k$ où $\alpha \neq \epsilon$ est le plus long préfixe commun. On réécrit :
+- $A \to \alpha A'$
+- $A' \to w_1 \mid \dots \mid w_k$
 
-  - $A \to w_1|...|w_l$
+Si la lecture de $k$ tokens suffit toujours à décider de manière unique quelle règle appliquer, la grammaire est dite **LL(k)**.  
+*(Exemple : $S \to *EE \mid +EE \mid a$ est dans $LL(1)$).*
 
-  - $Z \to \alpha_1Z|\alpha_2Z|...|\alpha_pZ|\epsilon$
-1. On numerote les variables $A_1,A_2,...,A_n$
-
-2. execute l'algorithme suivant.
-
-   ```
-   Pour i de 1 à n Faire
-       Pour j de 1 à i-1 Faire
-           enlever les regles Ai-> Aj a
-           ajouter les regles Ai -> ba lorsque Aj -> b est une regle
-       enlever la recursivite gauche direct de Ai
-   ```
-
-Cet algorithme suppose que la grammaire n'a pas de cycles(que l'on peut enlever en transformant en FNC)
-
-EX: 
-
-$S \to Xa|b$
-
-$X \to Sd|Xc|\epsilon$
-
-$i=1$ : pas de variable plus petite que $S$ (on entre pas dans le 2nd boucle). $S$ n'est pas recursive a gauche direct.
-
-$i=2$ : 
-
-- on enleve la regle $X \to Sd$
-
-- on ajoute les regles $X \to Xad| bd$
-
-$G' = S \to Xa|b; X \to Xad|Xc|bd|\epsilon$ 
-
-on a bien $L(G')=L(G)$
-
-on enleve la recursivite gauche direct sur $X$ 
-
-on ajoute $Z$
-
-$X\to bdZ|Z$
-
-$Z \to adZ|cZ|\epsilon$
-
-$G''= S\to Xa|b;\ X\to bdZ|Z; \ Z\to adZ|cZ|\epsilon$ est non recursive a gauche.
-
-Comme l'algorithme peut etre exponentiel, on essaie de deviner la prochaine regle tout en evitant de refaire laprochaine regle tout en evitant de refaire des calculs.
-
-Comment : On peut factoriser la grammaire , ceci repousse les choix vers les feuilles.
-
-Ex:
-
-- $S \to$ : si $E$ alors $S$|si $E$ alors $S$ sinon $S$ | a
-- $E \to c$
-
-### Factorisation gauche
-
-$A \to \alpha_1|...|\alpha_k$
-
-Notons $\alpha$ le prefixe maximum commun des $\alpha_i$
-
-Donc on a comme regles : $A \to \alpha w_1|...|\alpha w_k$ ou $\alpha_i = \alpha w_i$
-
-La factoriastion, supposant $\alpha \neq \epsilon$:
-
-- enlever $A \to \alpha_i; \ \forall i$
-
-- ajouter $A \to \alpha A'; \ A' \to w_1|...|w_k$
-
-### Top-down Predictif
-
-- On lit quelque lettre et c'est suffisant pour decider la prochaine regle.
-
-- Si on a besoin que de k lettre, on dit que la grammaire est dans LL(k)
-
-ex : $*EE|+EE|a\in LL(1)$
+---
 
 # Résoudre certaines ambiguïtés
 
-**Theoreme :** On ne peut pas decider si pour un language (donnée par une grammaire) admet une grammaire non ambigue.
+**Théorème :** Il est indécidable de savoir si un langage algébrique (donné par une grammaire) admet une grammaire non ambiguë (certains langages sont inhéremment ambigus).
 
-On vas regarder 3 cas d'ambiguite:
+Nous allons étudier 3 cas classiques d'ambiguïté et comment les résoudre :
+1. L'associativité
+2. La priorité des opérateurs
+3. Le parenthésage (ex. : le *dangling else*)
 
-- associativite
+## 1. Associativité
+Une opération est associative si l'ordre d'exécution n'affecte pas le résultat mathématique, mais en compilation, il faut fixer un ordre (généralement l'associativité à gauche) pour construire un arbre unique.
 
-- priorite
+**Grammaire ambiguë :** $E \to E + E \mid (E) \mid nb$
 
-- parenthesage
+**Solution (forcer l'associativité à gauche) :** Introduire une nouvelle variable $F$ représentant l'opérande de droite :
+$$E \to E + F \mid F \ ; \quad F \to (E) \mid nb$$
 
-## Associativité
+## 2. Priorité des opérateurs
+**Grammaire ambiguë :** $E \to E + E \mid E * E \mid (E) \mid nb$
 
-Une operation est associative = l'ordre d'execution n'est pas important
+**Règles :**
+- On fixe une associativité (ex. : à gauche) pour chaque opérateur.
+- On stratifie la grammaire : les opérations de plus faible priorité sont dérivées en premier (près de la racine), tandis que les opérations de plus haute priorité sont dérivées plus bas (près des feuilles).
 
-Ex: $E \to E+E|(E)|nb$
+**Grammaire non ambiguë :**
+$$
+\begin{aligned}
+E &\to E + T \mid T \\
+T &\to T * F \mid F \\
+F &\to (E) \mid nb
+\end{aligned}
+$$
 
-Résoudre cette ambiguite consiste a choisir 1 ordre d'execution.
+## 3. Parenthésage (Problème du « Si ... Alors ... Sinon »)
+**Grammaire ambiguë :**
+$$I \to \text{si } E \text{ alors } I \mid \text{si } E \text{ alors } I \text{ sinon } I \mid a \quad (\text{avec } E \to c)$$
 
-Comment forcer l'associativite a gauche:
+**Problème :** Dans `si c1 alors si c2 alors a sinon a`, à quel `si` est rattaché le `sinon` ?  
+**Solution :** Faire un choix autoritaire (par convention dans les langages comme C ou Java, un `sinon` est toujours rattaché au `si` ouvert le plus proche).
 
-Introduire une nouvelle variable,notons la $F$ et cette variable representera la partie la plus a droite de la derivation.
+**Grammaire non ambiguë :**
+$$
+\begin{aligned}
+I &\to A \mid B \\
+A &\to \text{si } c \text{ alors } A \text{ sinon } A \mid a \quad (\text{instructions « fermées » / complètes}) \\
+B &\to \text{si } c \text{ alors } I \mid \text{si } c \text{ alors } A \text{ sinon } B \quad (\text{instructions « ouvertes »})
+\end{aligned}
+$$
 
-$E\to E+F|F; \ \ F\to (E)|nb$
+---
 
-## Priorite
-
-$E \to E+E|E*E|(E)|nb$
-
-Regles:
-
-- On fixe une associativite gauche pour chaque operation associative
-
-- On force les priorités: la derivation doit toujours commencer les operation de haute priorite
-
-Ex: $E \to E+T |T; \ \ T\to T*F|F; \ \ F\to (E)|nb$
-
-## Parenthesage
-
-$I \to$ : si $E$ alors $I$|si $E$ alors $I$ sinon $I$ | a
-$E \to c$
-
-Probleme: le Sinon va avec quel Si
-
-Solution : faire un choix autoritaire
-
-ex : 
-
-- dernier sinon avec le 1er Si
-
-- 1er sinon avec le 1er Si
-
-Grammaire non ambigue:
-
-$I \to A|B$
-
-$A \to \text{Si c alors }A \text{ Sinon }A|a$
-
-$B \to \text{Si c alors }I|\text{ Si c alors }A \text{ Sinon }B$
-
-# Analyse sémantique et generation de code
+# Analyse sémantique et génération de code
 
 ```mermaid
 graph LR
-
-a["Analyse Syntaxique"] -->|arbre annoté| b["Analyse sémentique"]
-b -->|arbre annoté| c["Generation de code"]
+    a["Analyse Syntaxique"] -->|Arbre annoté| b["Analyse Sémantique"]
+    b -->|Arbre annoté vérifié| c["Génération de code"]
 ```
 
-## Analyse Semantique
+## Analyse Sémantique
 
-**Objectif :** controleque l'on ne peut pas faire avec la grammaire. On donne du sens aux constructiondu language.  
-La grammaire attribuee dit permettre/ facilite ces verification sémantique.
+**Objectif :** Effectuer les contrôles que la grammaire hors-contexte ne peut pas exprimer et donner du sens aux constructions du langage. La grammaire attribuée facilite ces vérifications.
 
-Exemple de verification sementique:
+**Exemples de vérifications sémantiques :**
+1. **Vérification des types :**
+   - `x + 5` : `x` est-il bien un entier ?
+   - `f(5, 6)` : `f` est-elle bien une fonction ? Prend-elle 2 arguments de type entier ?
+2. **Affectation (assignation) :**
+   - `x = 7` : la variable `x` a-t-elle été déclarée ? Est-elle compatible avec le type de `7` ?
+3. **Résolution des identifiants :** Récupérer l'adresse mémoire d'une variable ou l'étiquette (adresse) d'une fonction.
 
-1. verification des types:  
-   x+5; x entier ?  
-   x(5,6); x fonction ?,argument de type entier?
+## Génération de code
 
-2. assignation:  
-   x=7; x existe ?, x est un entier?
+$$\text{Code source} \longrightarrow \text{Langage machine (MVaP)}$$
 
-3. recuperer la valeur d'une variable
+**Principe :** Parcours de l'arbre de dérivation attribué (généralement *bottom-up*) pour synthétiser les instructions machines.  
+**Prérequis :** Comprendre la gestion de la mémoire de la machine cible et son jeu d'instructions.
 
-4. recupere l'adresse d'un fonction
+### La machine virtuelle MVaP
 
-## Generation de code
+- Utilise une **pile adressable** comme mémoire principale.
+- Chaque instruction prend ses opérandes au sommet de la pile et y empile son résultat.
+- Dispose d'instructions de calcul arithmétique, logique, de manipulation de mémoire et de saut.
 
-Codes source −−−> language machine
+#### Mémoire de la MVaP
+- La mémoire est divisée en mots (la taille d'un mot correspond à la taille d'un entier).
+- Chaque mot est adressé par un entier ($0$ à $\text{taille mémoire} - 1$).
+- Elle est divisée en 2 zones : le **bloc d'instructions** (programme) et le **bloc mémoire de données** (pile).
+- Pas d'allocation dynamique : exécution séquentielle et mono-programme.
+- **Registres spéciaux :**
+  - `pc` (*Program Counter*) : compteur ordinal (adresse de l'instruction courante).
+  - `sp` (*Stack Pointer*) : pointeur de sommet de pile (taille actuelle de la pile).
+  - `gp` (*Global Pointer*) : adresse de base pour les variables globales.
+  - `fp` (*Frame Pointer* / `lp`) : adresse de base pour le contexte local d'une fonction.
 
-Instruction −−−> ensemble d'instruction machine
-
-Comment: parcours de l'arbre de deriavation attribue (bottom-up)
-
-Pre-requis: 
-
-- gestion de la memoire de la machine
-
-- connaitre le language machine
-
-### Machine MVaP
-
-- Utilise une pile adressable comme mémoire
-
-- Chaque instruction prend ses argument dans la pile et peut modifier la pile
-
-- Instruction de calcul arithmetique et de saut
-
-#### Memoire MVaP
-
-- La memoire est divisée en mots
-
-- Chaque mot est adressé par un entier (0 à nb mots)
-
-- la taille d'un mot est la taille d'un entier
-
-- Memoire est divise en 2 blocs
-
-  - bloc d'instruction
-
-  - bloc memoire programme
-
-- La taille de chaque instruction est connue avant d'execution: vpas de memoire dynamique
-
-- mono-programme et execution sequentielle
-
-- il y a :
-
-  - un compteur ordinal (numero desinstruction)
-
-  - un numero de taille de pile
-
-  - registre speciaux pour la memoire globale (gp), memoire local(lp)
-
-#### Execution machine MVap
-
-On dispose de simulateur de cette machine.
-
+#### Exécution sur MVaP
 ```mermaid
 graph LR
-
-a["Generation de code"] -->|Code MVaP| b["Assembleur MVaP"]
-b-->|Code executable| c["Machine virtuelle"]
+    a["Génération de code"] -->|Code .mvap| b["Assembleur MVaP"]
+    b -->|Code exécutable .cbap| c["Machine virtuelle CBaP"]
 ```
 
-Les simulateur sont ecrit en java + assembleur
-
-Java MVap Assembleur code.mvap construit le code executable nomme code.mvap.cbap
-
-`java CBaP -d code.mvap.cbap` avec `-d` le debug mode.
-
-#### Quelques instruction MVaP
-
-- READ : lecture standard et emplacement valeur
-
-- WRITE : ecriture standard tete de pile
-
-- Operation arithmetique : ADD,SUP,DIV,MUL  
-  Prend al tete de pile et la valeur en dessous de la tete de pile et effectue l'operation arithmetique sur ces 2 operandes
-
-- PUSHI n : empile la valuer n
-
-- POP : depile
-
-- JUMP n : Saut vers l'adresse n
-
-- ...
-
-ex: 5 \* 3 + 2 / 7
-
+Commandes d'exécution :
+```bash
+java MVaPAssembleur code.mvap       # Génère le fichier code.mvap.cbap
+java CBaP -d code.mvap.cbap         # Exécute le programme (-d pour le mode debug)
 ```
-PUSHI 7
-PUSHI 2
-DIV
+
+#### Quelques instructions MVaP
+- `READ` : lit un entier sur l'entrée standard et l'empile.
+- `WRITE` : écrit la valeur au sommet de la pile sur la sortie standard (sans dépiler, selon les versions, ou suivi de `POP`).
+- **Opérations arithmétiques et comparaisons :** `ADD`, `SUB`, `DIV`, `MUL`, `EQUAL`, `SUP`, `INF`, etc.  
+  *(Dépilent les 2 valeurs au sommet, effectuent l'opération `sous_sommet op sommet`, et empilent le résultat).*
+- `PUSHI n` : empile la constante entière `n`.
+- `POP` : dépile le sommet de la pile.
+- `JUMP n` : saut inconditionnel vers l'étiquette/adresse `n`.
+- `HALT` : arrête l'exécution de la machine.
+
+**Exemple 1 :** Calcul de $5 \times 3 + 2 / 7$
+```text
 PUSHI 5
 PUSHI 3
 MUL
+PUSHI 2
+PUSHI 7
+DIV
 ADD
 HALT
 ```
 
-ex2: 
+**Exemple 2 (Grammaire attribuée pour la génération de code) :**
+- $E \to E_1 + E_2 \quad \{E.code = E_1.code + E_2.code + \text{"ADD}\backslash{n}"\}$
+- $E \to E_1 * E_2 \quad \{E.code = E_1.code + E_2.code + \text{"MUL}\backslash{n}"\}$
+- $E \to INT \quad \{E.code = \text{"PUSHI "} + INT.text + "\backslash{n}"\}$
 
-$E\to E_1+E_2$
+---
 
-$E\to E_1*E_2$
+### Traduction des 4 constructions principales
 
-$E \to INT$
+#### 1. Expressions arithmétiques et booléennes
+On suit l'arbre de dérivation de bas en haut. La machine MVaP ne possède pas de type booléen natif : on utilise donc les entiers (`0` pour Faux, `1` pour Vrai) et des opérations arithmétiques :
+- **Faux** $\to$ `0`
+- **Vrai** $\to$ `1`
+- **ET logique (`&&`)** $\to$ multiplication (`MUL`)
+- **OU logique (`||`)** $\to$ addition (`ADD`), suivie d'une comparaison (`PUSHI 1`, `SUPEQ` ou similaire) pour ramener toute valeur $\ge 1$ à `1`.
+- **Négation (`!`)** $\to$ `1 - valeur` (ex. : `PUSHI 1`, empiler la valeur, `SUB`).
 
-$\{E.code=E_1.code+E_2.code+ADD\}$
-
-$\{E.code=PUSHI+INT.text\}$
-
-4 Construction :
-
-- expression arithmetique et booleennes
-
-- structure de controle(Si Sinon et boucles)
-
-- Varriables
-
-- Fonctions
-
-#### Expression arithmetique et booléennes :
-
-On suit l'arbre de derivation de bas en haut (des feuilles aux racines).  
-La machine MVaP n'a pas de booleens => le code MVaP des booleens utilise les operation arithmethiques
-
-ex:  
-Faux -> 0 
-
-Vrai -> 1
-
-et -> produit
-
-ou −> addition(et on revient a 1 lorsque c'est sperieur a 1)
-
-negation -> 1-valeur c
-
-ex : $B \to B \ or\ B|B \ et\ B|Vrai|Faux$
-
-$B \to Vrai$ {\$code="PUSH 1\n";}
-
-$B \to Faux$ {\$code="PUSH 0\n";}
-
-$B \to B_1 \ or\ B_2$ {\$code=\$B1.code + \$B2.code+"ADD\n" + "code pour revenir à 1";}
-
-$B \to B_1 \ et\ B_2$ {\$code=\$B1.code + \$B2.code+"MUL\n";}
-
-#### Variables :
-
-On fait comme en C : chaque variable correspond à un espace mémoire: le contenue sera la valeur de la variable.
-
-3 Question :
-
-- comment declarer un espace memire
-
-- commetn y acceder 
-
-- commet gerer les type
-
-##### Comment declarer un espace memoire :
-
-On a 2 categorie de varraibles : 
-
-- Les variables locales : ne sont visibles que dans un bloc. (variable dans une fonction, variable dans un bloc d'une boucles,...)
-
-- Les variables globales: communes à toutes les parties du code correspondant , on s'interesse aux variables gobales, on verra les variable locale avec les fonctions.
-
-##### Comment y acceder :
-
-On a 2 instructionde MVaP. :
-
-- PUSHG n : prend la valuer qui se trouve à l'adresse n et va l'empiler.  
-  si une variable se trouve à l'adresse 100, on fait PUSHG 100 permet d'acceder à la valeur.
-
-- STOREG n: prend la tete de pile, le stocke à l'adresse n et depile.  
-  ex : PUSHI 5; STOREG 10;
-
-ex : x=x+5
-
+**Exemple en ANTLR :**
+```antlr
+exprBool returns [String code]
+    : 'Vrai'               { $code = "PUSHI 1\n"; }
+    | 'Faux'               { $code = "PUSHI 0\n"; }
+    | b1=exprBool 'et' b2=exprBool { $code = $b1.code + $b2.code + "MUL\n"; }
+    | b1=exprBool 'ou' b2=exprBool { $code = $b1.code + $b2.code + "ADD\nPUSHI 1\nSUPEQ\n"; }
+    ;
 ```
-PUSHG 10 //suposant x est a l'adresse 10
+
+#### 2. Variables globales et Table des Symboles
+Comme en C, chaque variable correspond à un emplacement mémoire dont le contenu est la valeur de la variable.
+- **Variables globales :** visibles partout, allouées au tout début de la pile (à partir de l'adresse relative `0`).
+- **Variables locales :** visibles uniquement dans le bloc/la fonction courante (gérées via le registre `fp`).
+
+**Instructions d'accès aux variables globales :**
+- `PUSHG n` : lit la valeur située à l'adresse globale `n` et l'empile.
+- `STOREG n` : dépile le sommet de pile et le stocke à l'adresse globale `n`.
+
+**Exemple :** `x = x + 5` (en supposant `x` à l'adresse `10`) :
+```text
+PUSHG 10
 PUSHI 5
 ADD
 STOREG 10
 ```
 
-##### Reservation memoire variable globale
+**Allocation mémoire et Table des Symboles :**
+La machine dispose d'une MMU (*Memory Management Unit*) qui traduit les adresses relatives en adresses physiques. Pour connaître l'adresse attribuée à chaque variable, le compilateur effectue toutes les déclarations globales au début du programme (en empilant des valeurs initiales avec `PUSHI 0` ou `PUSHF 0.0`) et incrémente un compteur d'adresse.
 
-Du point de vue du compilateur, les 2 vues sont les memes et le programmes à l'adressse relative 0.
+*Exemple d'adresses :*
+- `int x, y;` $\to$ `x` à l'adresse `0`, `y` à l'adresse `1` (1 mot chacun).
+- `float z;` $\to$ `z` à l'adresse `2` (occupe 2 mots sur MVaP).
+- `int t;` $\to$ `t` à l'adresse `4`.
 
-La machine dispose d'un MMU(traducteur des adresse) qui transformechaque adresse relative en adresse physique.  
-Pour allouer une adresse pour une variable, le compilateur a besoin de savoir l'adresse quelle a alloué en retour. La machine MVaP ne nous la donne pas, on triche et on effectue les declaration au debut du programme et on garde une variable pour connaitre l'adresse de la prohaine variable si besoin.
+Ces informations (nom, type, adresse) sont stockées dans une **Table des Symboles** (ex. : `HashMap` en Java) pour permettre les vérifications sémantiques et la génération des adresses.
 
-Ex:
+**Exemple en ANTLR :**
+```antlr
+grammar ExParser;
 
-int x,y;   x->0,y->1
-
-float z; z->2
-
-int t; t->4 car z prend 2 mots
-
-Pister la taille de la pile pour avoir les informations 0,1,2,4
-
-##### Comment gerer l'allocation:
-
-- Utiliser une operation d'empilement (PUSHI pour les entier, PUSHF pour les flottants)
-
-- Stocker dans une table d'association, appelée table des symboles, les informations suivantes au minimum:
-
-  - type de la variable
-
-  - son som
-
-  - son adresse
-
-##### Utilisation :
-
-utiliser la table des symboles pour faire l'analyze sémantique
-
-ex: x=y+5 :
-
-- verifier que x et y existent
-
-- verifier que x et y sont des entiers.
-
-- recuperer les adresse de x et de y dans la table des symboles pour generer le code MVaP associé
-
-EX dans ANTLR:
-
-```antlr4
-grammar Ex-Parser;
-@members {
-    Hashmap <String,Integer> Tab = new Hashmap<String,Integer>();
-    String code = new String(); //accumulateur pour le code MVaP
+@header {
+    import java.util.HashMap;
 }
-@header {import java.util.Hashmap;}
+
+@members {
+    HashMap<String, Integer> tableSymboles = new HashMap<String, Integer>();
+    int adresseCourante = 0;
+}
+
+start : declaration* instruction* EOF ;
+
+declaration 
+    : TYPE ID ';' {
+        tableSymboles.put($ID.text, adresseCourante++);
+        // Génère PUSHI 0 pour réserver l'emplacement
+    }
+    ;
+
+instruction returns [String code] : /* ... */ ;
 ```
 
-    start:
-        declaration *
-        instruction * EOF;
-    declaration: TYPE ID "i";
-    instruction returns [String Code]: //la regle instruction a un attribut
-                                       //qui s'appelle code et qui est un Str
-    
-    
-    
-    int x        PUSHI 0        (x,0) dans Tb
-    int y        PUSHI 0        (y,1) dans Tb
-    int z        PUSHI 0        (z,2) dans Tb
-    z=x+y        PUSHG 0
-                 PUSHG 1
-                 ADD
-                 STOREG 2
-    x=z-x        PUSH 2
-                 PUSH 0
-                 SUB
-                 STOREG 0
+**Trace de compilation :**
+```text
+// Code source      // Code MVaP      // Table des symboles
+int x;              PUSHI 0           (x -> 0)
+int y;              PUSHI 0           (y -> 1)
+int z;              PUSHI 0           (z -> 2)
 
-```mermaid
-graph
-a["assignation"] -->ID
-a--> b["="]
-a-->e["expression"]
-ID --> x
-e-->id1["ID"]
-e-->r["-"]
-e-->id2["ID"]
+z = x + y;          PUSHG 0
+                    PUSHG 1
+                    ADD
+                    STOREG 2
+
+x = z - x;          PUSHG 2
+                    PUSHG 0
+                    SUB
+                    STOREG 0
 ```
 
-#### Structure de Controle Pour modifier le flux d'execution d'un programme.
+#### 3. Structures de contrôle (Conditionnelles et Boucles)
+Pour modifier le flot d'exécution, on utilise des **étiquettes** (`LABEL n`) et des **instructions de saut** :
+- `LABEL n` : marque une position dans le code (l'assembleur associera un numéro d'instruction à `n`).
+- `JUMP n` : saut inconditionnel vers `LABEL n`.
+- `JUMPF n` : saut conditionnel. Dépile le sommet de pile : si la valeur est fausse (`0`), saute à `LABEL n` ; sinon (vraie), continue séquentiellement.
 
-Pour modifier le flux d'execution d'un programme 
-
-- Si ... Sinon
-
-- Boucles 
-
-- Appels de fonctions
-
-Ceci est fait avec les instruction de Saut.
-
-On a 2 categorie:
-
-- Saut conditionel
-
-- Saut non conditionelle(appel de fonction, retour de fonction,...)
-
-Les 2 se font avec un systeme d'etiquetage et des instruction de MVaP.
-
-On etiquette les bouts de code ou on veut faire un saut.
-
-LABEL n // n entier
-
-// Code MVaP
-
-Pour la machine : le code qui va suivre, on lui associe une adresse calculée à l'assemblage.
-
-On a 2 instruction:
-
-- JUMP n : saut non conditionelle à l'adresse associe à l'etiquette n.
-
-- JUMPF n: Saut conditionelle, Si la tete de pile est Vraie, On execute ce qui se trouve apres le JUMPF Sinon on fait un saut vers l'adresse n.  
-  On l'utilise pour les Si...Sinon et les boucles
-
-Ex: 
-
-    int x
-    si 5==6 alors
-        x=5
-    sinon
-        x=7
-
-```mermaid
-graph
-
-s[start]-->d[declaration]
-s-->i[instruction]
-
-d-->type
-d-->ID
-d-->d1[declaration]
-
-type-->int
-ID-->x
-d1--> None
-
-i-->SiSinon
-i-->i2[instruction]
-
-i2 --> n[None]
-
-Sisinon-->Cond
-Sisinon --> i3[instruction]
+**Exemple (`Si ... Alors ... Sinon`) :**
+```text
+int x;
+si 5 == 6 alors
+    x = 5;
+sinon
+    x = 7;
 ```
 
-#completer
-
-Le resultat de la compilation est  la valeurde code à start= concatenation du code des declaration et du code des instruction.
-
-```
+Code MVaP généré :
+```text
+PUSHI 0      // Déclaration de x (adresse 0)
 PUSHI 5
 PUSHI 6
-EQUAL
-JUMPF 0
-PSUHI 5
+EQUAL        // Empile 0 (faux)
+JUMPF 0      // Si faux, sauter au bloc sinon (LABEL 0)
+PUSHI 5
 STOREG 0
-JUMP 1
+JUMP 1       // Sauter à la fin du Si (LABEL 1)
 LABEL 0
 PUSHI 7
 STOREG 0
-JUMP 1
 LABEL 1
-HALT 
+HALT
 ```
 
-#### Fonctions
+#### 4. Fonctions
+Une fonction est un bloc de code identifié par un nom (associé à une étiquette `LABEL n`), prenant des paramètres en entrée et retournant un résultat.
 
-une fonction =bout d'un programme qui a un nom et des entrées.
+**Mécanisme matériel de MVaP (`CALL` et `RETURN`) :**
+- `CALL n` : sauvegarde l'adresse de retour (`pc + 1`) et l'ancien pointeur de base (`fp`) sur la pile, fixe le nouveau `fp` au sommet de pile actuel (`sp`), puis saute à `LABEL n`.
+- `RETURN` : restaure l'ancien `fp` et retourne à l'adresse sauvegardée.
 
-Pour utiliser ce bout de programme:
+**Convention d'appel (protocole entre appelant et appelée) :**
+1. **Avant l'appel (code de l'appelant) :**
+   - Réserver un emplacement sur la pile pour la **valeur de retour** (ex. : `PUSHI 0`).
+   - Empiler les **arguments** dans l'ordre de déclaration.
+   - Exécuter `CALL n`.
+2. **Dans la fonction (code de l'appelée) :**
+   - Accéder aux arguments et à la valeur de retour via des adresses relatives à `fp` :
+     - `PUSHL k` : empile la valeur située à l'adresse `fp + k`.
+     - `STOREL k` : dépile le sommet et l'écrit à l'adresse `fp + k`.
+   - *(Note : `fp - 1` et `fp - 2` contiennent généralement les sauvegardes système de `fp` et `pc`, les arguments se trouvent donc aux décalages négatifs précédents, ex. `fp - 3`, `fp - 4`, etc., et la valeur de retour juste avant).*
+   - Terminer par `RETURN`.
+3. **Après l'appel (code de l'appelant) :**
+   - Dépiler les arguments devenus inutiles (`POP` autant de fois qu'il y a d'arguments) afin que la valeur de retour se retrouve au sommet de la pile.
 
-- on utilise le nom
+**Exemple d'appel d'une fonction à 2 arguments retournant le premier :**
+```text
+// Code de l'appelant
+PUSHI 0      // Réservation pour la valeur de retour
+PUSHI 5      // Empilement argument 1
+PUSHI 6      // Empilement argument 2
+CALL 5       // Appel de la fonction étiquetée 5
+POP          // Nettoyage argument 2
+POP          // Nettoyage argument 1 (la valeur de retour reste au sommet)
+// ...
 
-- on donne des valuer aux entrées.
-
-Ceci pose 2 probleme:
-
-- Comment donner des entrées
-
-- Comment retourner la valeur calculée(et revenir au programme appelant)
-
-L'instruction Label nous permet d'associer une fonction à une etiquette
-
-La machine va proposer des instruction speciales pour appeler 1 fonction appelante.  
-A partir de ca, le compilateur decide de la politique d'appel de fonction. La machine utilise la pile d'execution.
-
-Comment fait la machinne :
-
-- elle stocke la memoire de la fonction appelante (comme la mèmoire est une pile, c'est juste stocker la taille de la pile).
-
-- elle stocke l'instruction (son adresse) ou elle doit retourner
-
-- elle fixe une adresse de base (considere comme l'adresse 0) de la fonction => on peut avoir des varriables locales
-
-La machine propose :
-
-- CALL : pour appeler une fonction  
-  ex: CALL n : n = etiquette de la focntion appelée
-
-- RETURN : derniere instruction MVaP de chaque fonction qui permet de retourner à la fonction appelante.
-
-Il reste à definir laconvention entre fonction appelante et fonction appelée pour recuperer les valeur des arguments et la valeur de retour:
-
-- la fonction apelante allou de la memoire pour la valuer de retour et donne dans la pile les argument (ordre=orde de la fonction appelée)
-
-- la fonction pourra recuperer ces valuer et/ou y stocker des valuer en utilisant des instruction de variable locales
-
-La machine vas proposer des instruction speciales  pour appeler une fonction et retourner vers la fonction appelante. A partir de ca, le compilateur decide de la politique d'appel de la fonction. La machine utilise la pile d'execution.
-
-Pour resumer :
-
-valeur de sp et le numero de l'instruction sont stockées lorsque l'on fait CALL 5.(5 etiquette de f).  
-Avant le CALL, le compilateur doit reserve un espace pour la valuer de retour et stocker les 2 argument.
-
-ex: 
-
-```
-PUSHI 0  //espace valeur de retour
-PUSHI 5  //empilement argument 1
-PUSHI 6  //empilement argument 2
-CALL 5
-LABEL 5:
-    PUSHL -1
-    PUSHL -2
-    STOREL -3
+// Code de la fonction (LABEL 5)
+LABEL 5
+    PUSHL -4     // Récupère l'argument 1 (selon l'architecture exacte de la frame MVaP)
+    STOREL -5    // Écrit le résultat dans l'espace de retour réservé
     RETURN
 ```
-
-ici on a retourne la valeur du premier argument
-
-PUSHL n : si l'adresse de depart de la fonction f est stockée dans le registre fp, alors PUSHL n empile la valeur de l'adresse fp+n
-
-STOREL n : ecrit dans fp+n la tete de pile
-
-Comme la fonction appelante a empilé, les argument pour la fonction appelée, les premiere instruction apres un CALL doivent etre le depilement de ces argument (pour acceder a la valuer de retour)
-
-dans cet exemple:
-
-    PUSHI 0
-    PUSHI 5
-    PUSHI 6
-    CALL 5
-    POP
-    POP
