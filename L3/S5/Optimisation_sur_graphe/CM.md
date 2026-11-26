@@ -421,6 +421,158 @@ On selectionne une des deux chaines SPDG celle de x. On echange les couleur $c_x
 En faisant l'inversion, la couleur de $c_y$ qui etait dispo en $y$ est maintenant aussi dispo en $x$ donc on peut colorier $e$ avec $c_y$.
 
 Cas 2.2  
-Si Les 2 chaines de Kempe se rejoignent, la longeur du chemin est pair. En ajoutant on ferme un cycle de longeur Impaire or le cyle est bipartie donc pas de cycle impair
+Si Les 2 chaines de Kempe se rejoignent, la longeur du chemin est pair. En ajoutant on ferme un cycle de longeur Impaire or le cyle est bipartie donc pas de cycle impaire.
+
+# Flot maximum
+
+**Probleme** de flot sur reseaux 
+
+Graphe oriente : D=(V,A,c) :
+
+- c : $A \to \R$ fonction de capacite
+
+- s somment de depart
+
+- t sommet d'arrivée
+
+On shouaite faire transiter un flot sur un reseau pour chaque Arc(u,v) : $f(u,v)\leq c(u,v)$.
+
+**Loi de Kirchoff:**
+
+Pour chaue sommet v different de s et t, on a $\Sigma_{u\in \N^-(v)} f(u,v)=\Sigma_{w\in \N^+(v)} f(v,w)$.  
+Quand un flot $f$ respecte la conservation et la contrainte de capacité on dit que leflot est realisable.   
+**Objectif :** Maximiser le flot qui transite sur le reseaux.
+
+---
+
+Pour un ensemble S ou $s\in S$ et $\bar{S} = V\backslash S$ on note pa $c(S,\bar{S})=\Sigma_{u\in S,v \in \bar{S}}c(u,v)$
+
+au plus $2^{n-2}$ coupes.
+
+**Theoreme (Coupe min/flot max) :**
+
+les conditions suivantes sont equivalentes :
+
+1. $f$ est un flot maximum
+
+2. le reseaux residuel n'a plus de chemin de s à t
+
+3. $|f|=c(S,\bar{S})$ pour une certaine Coupe
+
+**Preuve :**
+
+$1 \implies 2$: Par contraposé  
+Si $G_f$ admet un chemin P de s à t on peut ameliorer d'une veluer k le flot le long du chemin P.Donc $f$ n'est pas maximum.
+
+$2 \implies 3$:  
+Dans $G_f$ on va construire $S$ commee etanttous les sommets accesible depuis s.  
+Si on n'a pas d'arc dans $G_f$ qui vont de $S$ vers $\bar{S}$ , chaque arc(u,v), $u\in S$et $v\in \bar{S}$. On a$f(u,v)=c(u,v)$donc finalement la valuer du flot est égale à la capacite de la coupe $c(s,\bar{s})$
+
+$3 \implies 1$ :  
+Si on a un flot qui sature une coupe $(S,\bar{S})$ avec pour valuer $c(S,\bar{S})$ on ne pourra pas ameliorer la valuer du flot donc $f$ est maximum.
+
+**Food & Fulkuson :**
+
+Trouver un chemin ameliorant tant que c'est possible  
+Complexite : psuedo-polynomiale
+
+**Edmond & Karp :**
+
+Trouver à chaque fois un chemin ameliorant avec le moins d'arrete possibles(plus court chemin ameliorant)
+
+On peut trouver le plus court en nombre d'arrete avec un parcours en largeur -> la complexite de l'algo est Polynomiale.
+
+Couplage dans un graphe bipartie comme un probleme de flot.
+
+G admet un flot de valeur $k \in \N$ ssi il existe un couplage de taille $k$.
+
+$\implies si$ le reseaux a un flot de valuer k, alors chause arc (u,v) ou on a $f(u,v)=1$. Cet arc participe au couplage.
+
+On peut garantir qu'aucune arrete soit incidente à u car la capacite s,u est egale a 1.  
+de maniere symetrique personne d'autre n'arrive sur v car le flot est sature sur (v,t)
+
+$\impliedby$ SI on a un couplage M ou |M|=k 
+
+# Conexite version arrete
+
+**Definitions Chemin disjoint :**
+
+On a deux sommet $s$ et $t$. 2 chemins $P_1$ et $P_2$ allant de $s$ à $t$ sont disjoint si $V(P_1)\cap V(P_2)=\{s,t\}$
+
+**Remarque :**
+
+On peut calculer le nombre maximum de chemins disjoint avec un Probleme de flot max.
+
+**Definitions Connectivite local :**
+
+On note $p(x,y)$ le maximum de chemins disjoint qui relient $x$ à $y$
+
+Connectivite globale:
+
+$K(G)=\min\{p(u,v)|u,v\in V(G)\}$
+
+$K(K_n)=n-1$
+
+**Definition Seprateur :**
+
+Soit $G=(V,E)$ un graphe et $S$ un sous ensemble de sommet. $S$ est un separateur si $G-S$ a strictement plus de composante connexe que $G$.  
+Un $(a,b)-$separateur: $a$ et $b$ sont dans 2 composante connexe differente de $G-S$.
+
+**Def Taille separateur minimum :**
+
+note $c=(x,y)$ Taille du plus petit separateur qui separe $x$ de $y$
+
+## Theoreme de Menger:
+
+Soit $G=(V,E)$ un graphe pour toute paires de sommet $x,y$ ou $x$ et $y$ sont pas adjacent  
+
+$$
+p(x,y)=c(x,y)
+$$
+
+**Graphe $k-$connexe** si lorsque l'on supprime $k-1$ sommet , le graphe reste connexe
+
+**Lemme :**
+
+Soit $G=(V,E)$ un graphe $k-$connexe.  
+
+Soit $H$ le graphe obtenu en ajoutant un sommet $y$ à $G$ et $y$ est connecte à au moins $k$ sommet de $G$ alors $H$ est $k-$connexe
+
+**Preuve :**
+
+Soit $X$ un ensemble de $k-1$sommet de $H$:
+
+1. $y \in X$
+    $H\backslash X$ Connexe ? 
+    $|X\cap V(G)|=k-2$ 
+    $G\backslash X= H \backslash X$ donne $k-2$ donc $G\backslash X$ est connexe
+
+2. $y \notin X$
+
+   $|X|=k-1$  
+   $G\backslash X$ Connexe.  
+   $y$ par construction a au moins $k$ voisin dans $G$ il reste au moins un sommet $z$ dans le voisinage de $y qui n'est pas dans $X$ donc $G\backslash X \cup \{y\}$ est Connexe.
+
+**Lemme :**
+
+Soit $G=(V,E)$ un graphe $k-$Connexe et soient $X$ et $Y$ deux ensemble de sommet de  $taille\geq k$. Alors il existe $k$ chemin disjoint qui relient $k$ sommet de $X$ à $k$ sommet de $Y$.
+
+$k-Fan$ un sommet $x$ et un ensemble $Y$ tq $|Y|\geq k$ il existe $k$ chemin disjoint de $x$ vers $y$.
+
+**Theoreme :**
+
+Soit $G=(V,F)$ un graphe $k-connexe$ et soit $S$ un ensemble de sommet de taille $k$ il existe un cycle $c$ qui passe par tous les sommet de $S$.
 
 
+
+**Preuve par induction :**
+
+Base pour $k=2$ Vrai , sera fait en TD
+
+Recurence :
+
+Soit $S$ u  ensemble de $k$ sommet. Comme $G$ est $k-$Connexe, il est $k-1$ connexe $S'=S-\{v\}$ par hypothese de recurence il existe un cycle $c'$ qui passe par tous les sommet de $S'$
+
+1. Si $v\in c$ on a termine car on a $c$ qui contient $S$
+
+2. $v \notin c$ Si $|c|\geq k$ on aura un $(v,c)-Fan$ de taille $k$ donc il y a au moins un segment qui est touche par 2 chemin.
