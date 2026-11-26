@@ -10,23 +10,15 @@
 
 - Une issue du jeu = definition de ce qur chaque joueurs obtient à la fin du jeu
 
-
-
 Remarque : Les strategie peuvent etre tres complique ou tres simples. On peut en avoir beaucoup mais en nobre fini.
 
-
-
 Pour 2 joueurs I et II on aura n strategie pour I : i= 1,...,n  et m strategie pour II, j =1,...,m. L'issue du jeu est donne par une valeur qui comprend au choix de la strategie i pour I et j pour II.
-
-
 
 2 Type de Jeu : 
 
 - Simultanée
 
 - Sequentiels
-
-
 
 ## Representation du jeu Simultané :Forme normal du Jeu
 
@@ -35,8 +27,6 @@ Pour 2 joueurs I et II on aura n strategie pour I : i= 1,...,n  et m strategie p
 Les 2 joueurs choisissent une stategie en meme temps , i pour I et j pour II: la valeur $a_{ij}$ et la valeur gagnée ou perdue par I et son opposé est la valeur perdu ou gagne par II -> c'est le cas d' un jeu à somme nulle.
 
 La representation de ce jeu est une matrice du jeu à n ligne et m colones.(I gagne $a_{ij}$ et II le perd)
-
-
 
 #### Exemple : Pierre Feuille Ciseaux
 
@@ -51,8 +41,6 @@ La representation de ce jeu est une matrice du jeu à n ligne et m colones.(I ga
   - -1 perte
 
   - 0 neutre
-
-
 
 |       | P   | F   | C   |
 | ----- | --- | --- | --- |
@@ -82,15 +70,11 @@ Le jeu est simultané :
 
 Si I choisit le mois 2 et II choisit le mois 3 => I gagne 0,9 et II gagne 0,1 . La constante est égale à 1.
 
-
-
 ### Jeu sequentieles : forme extensive
 
 Les joueurs jouent leu strategies chacun à son tour.
 
 La representation se fait sur un arbre appelé l'arbre de Kuhn.
-
-
 
 ### Exemple Jeu de Nim 2*2:
 
@@ -120,11 +104,7 @@ a-->f["0_0"]
 c-->g["0_0"]
 ```
 
-
-
 Sur l'arbre 1 chemin de 2_2 à 0_0 respresente une suite de strategie alterne entre I et II
-
-
 
 Strategie de I :
 
@@ -135,3 +115,17 @@ b) jouer 1_2 et si II 0_2 alors 0_0
 c) jouer 0_2
 
 farie apreil pour II
+
+#Acompleter
+
+---
+
+Jeu a somme nulle à 2 joueurs:
+
+Cas de jeux simultannée representé par une matrice de jeu :
+
+- I joueuer en ligne avec son ensemble de strategie {1,...,n}
+
+- II joueur en colone avec son ensemble de strategie {1,...,n}
+
+La matrice $A=(a_{ij});i,j\in [1,n]$ 
